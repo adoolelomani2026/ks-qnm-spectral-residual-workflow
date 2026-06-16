@@ -364,7 +364,6 @@ def plot_convergence(rows: list[ModeResult], output: Path) -> None:
     for ax in axes:
         ax.grid(alpha=0.25)
         ax.legend(frameon=False, fontsize=8)
-    fig.suptitle("Direct spectral convergence: fundamental scalar mode")
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)
@@ -400,7 +399,6 @@ def plot_deformation_trend(
     for ax in axes:
         ax.grid(alpha=0.25)
         ax.legend(frameon=False, fontsize=8)
-    fig.suptitle("Baseline versus direct spectral residual")
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)

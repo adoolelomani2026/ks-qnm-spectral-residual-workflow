@@ -436,7 +436,6 @@ def plot_sensitivity_heatmap(summaries: list[BranchSummary], output: Path) -> No
         rotation=35,
         ha="right",
     )
-    axis.set_title(r"Endpoint sensitivity at $a/M=1$: $|\Delta\omega|/|\omega_0|$")
     colorbar = fig.colorbar(image, ax=axis)
     colorbar.set_label("fractional shift (%)")
     for i in range(data.shape[0]):
@@ -489,7 +488,6 @@ def plot_l2_spectroscopic_ratios(ratio_rows: list[SpectroscopicRatioRow], output
     axis.axhline(0.0, color="black", linewidth=0.8, alpha=0.35)
     axis.set_xlabel(r"$a/M$")
     axis.set_ylabel("Schwarzschild-relative ratio shift (%)")
-    axis.set_title(r"Scalar $\ell=2$ dimensionless spectroscopic ratios")
     axis.grid(alpha=0.25)
     axis.legend(frameon=False, fontsize=8)
     fig.tight_layout()
@@ -541,7 +539,6 @@ def plot_l2_fractional_shifts(trend_rows: list[PhysicsTrendRow], output: Path) -
         axis.axhline(0.0, color="black", linewidth=0.8, alpha=0.35)
         axis.grid(alpha=0.25)
         axis.legend(frameon=False, fontsize=7)
-    fig.suptitle(r"KS deformation shifts for $\ell=2$ catalogue branches")
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)

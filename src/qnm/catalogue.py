@@ -316,8 +316,6 @@ def plot_mode_trajectories(rows: list[CatalogueRow], figures_dir: Path) -> list[
             axes[0].set_ylabel(r"$\mathrm{Re}(M\omega)$")
             axes[1].set_xlabel(r"$a/M$")
             axes[1].set_ylabel(r"$-\mathrm{Im}(M\omega)$")
-            title = f"{perturbation_type.capitalize()} mode trajectories, ell={ell}"
-            fig.suptitle(title)
             for axis in axes:
                 axis.grid(alpha=0.25)
                 axis.legend(frameon=False, fontsize=8)

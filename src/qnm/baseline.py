@@ -199,7 +199,6 @@ def plot_waveform(
     ax.set_xlim(0, 220)
     ax.set_xlabel(r"$t/M$")
     ax.set_ylabel(r"$\Psi(t,r_*^{obs})$")
-    ax.set_title(f"KS scalar ringdown baseline, a/M={a:g}, ell={ELL}")
     ax.grid(alpha=0.25)
     ax.legend(loc="upper right", frameon=False)
     fig.tight_layout()

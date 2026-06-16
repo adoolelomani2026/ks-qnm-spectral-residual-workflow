@@ -29,4 +29,3 @@ equation, compact coordinate, endpoint factorization, and potential model.
 The continued-fraction residual is reported row-by-row; high-deformation second
 overtones can have larger CF residuals because the finite Frobenius recurrence
 reduction is less well conditioned there.
-
