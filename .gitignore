@@ -1,0 +1,40 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Local paper previews and layout-reference scratch renders.
+outputs/layout_reference/
+outputs/paper_previews/
+
+# Archived exploratory material and private revision notes kept locally.
+legacy/
+papers/proposal/
+algorithm_reframing_report.md
+reference_audit_report.md
+docs/TECHNICAL_AUDIT.md
+docs/TOP_TIER_GR_ROADMAP.md
+
+# Deprecated resource-accounting outputs from an earlier project framing.
+outputs/results/algorithm_update_report.md
+outputs/results/pauli_resource_table.csv
+outputs/results/resource_estimates.csv
+outputs/results/residual_operator_report.md
+papers/manuscript/results/algorithm_update_report.md
+papers/manuscript/results/pauli_resource_table.csv
+papers/manuscript/results/resource_estimates.csv
+papers/manuscript/results/residual_operator_report.md
+
+# Editor and OS noise.
+.DS_Store
+Thumbs.db

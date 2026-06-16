@@ -1,0 +1,690 @@
+\documentclass[10pt,letterpaper,twocolumn]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.72in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath,bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{1.45em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{0.25in}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.1em,topsep=0.2em}
+\setlist[enumerate]{leftmargin=1.35em,itemsep=0.1em,topsep=0.2em}
+\emergencystretch=3em
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\tablename}{Table}
+\captionsetup{font=small,labelfont=bf,labelsep=space}
+
+\titleformat{\section}
+  {\normalsize\bfseries}
+  {\thesection}
+  {0.65em}
+  {}
+\titleformat{\subsection}
+  {\normalsize\bfseries}
+  {\thesubsection}
+  {0.55em}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\itshape}
+  {\thesubsubsection}
+  {0.45em}
+  {}
+\titlespacing*{\section}{0pt}{1.1em}{0.55em}
+\titlespacing*{\subsection}{0pt}{0.85em}{0.3em}
+\titlespacing*{\subsubsection}{0pt}{0.75em}{0.25em}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+\twocolumn[
+\begin{center}
+{\large\bfseries A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes}\\
+\vspace{1.15em}
+{\normalsize Adel H. Al-Yoorby}\\
+\vspace{0.25em}
+{\itshape Department of Physics, Khalifa University of Science and Technology,}\\
+{\itshape P.O. Box 127788, Abu Dhabi, United Arab Emirates}\\
+{\itshape ORCID: \href{https://orcid.org/0009-0000-1935-4392}{0009-0000-1935-4392}}\\
+{\itshape Corresponding author: Adel H. Al-Yoorby, \href{mailto:100063397@ku.ac.ae}{100063397@ku.ac.ae}}
+\end{center}
+\begin{quote}
+\small
+\noindent\textbf{Abstract.}
+Can non-Hermitian black-hole quasinormal-mode (QNM) resonance conditions be handled through a Hermitian residual minimization workflow in a concrete quantum-deformed spacetime? This paper studies that question for Kazakov--Solodukhin (KS) quantum-deformed Schwarzschild black holes. After compactifying the radial equation and factoring the QNM asymptotics, Chebyshev collocation gives a polynomial operator \(P_N(\omega)\bm{u}=0\). For each trial frequency the method forms the Hermitian positive-semidefinite residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), searches for minima of \(\sigma_{\min}(P_N(\omega))\), and accepts candidates after convergence checks and Leaver-style continued-fraction validation. The workflow is presented as a KS-specific implementation grounded in existing singular-value and pseudospectrum ideas, not as a claim to invent residual singular-value theory. The Schwarzschild scalar \(\ell=2\) fundamental mode is recovered at \(N=96\) with relative error \(1.462\times10^{-10}\). The validated catalogue covers scalar and lapse-deformed axial-gravitational \(\ell=2,3,4\) modes through the second overtone. Across \(a/M=0,0.2,0.5,1.0\), sampled branches soften monotonically. For scalar \(\ell=2,n=0\), the \(a/M=1\) endpoint shifts are \(-7.29\%\) in oscillation frequency, \(-2.59\%\) in damping magnitude, and \(-4.83\%\) in quality factor.
+\end{quote}
+\vspace{1.0em}
+]
+\thispagestyle{empty}
+
+\section{Introduction}
+
+The ringdown phase of a perturbed black hole is governed by a discrete set of complex resonant frequencies known as quasinormal modes. In the classical picture, these frequencies depend only on the parameters of the final black hole and on the field or metric perturbation being considered. Their real parts set the oscillation frequencies, while their imaginary parts determine damping or instability. QNMs have therefore become a privileged language for connecting mathematical relativity, black-hole stability, and gravitational-wave astronomy \cite{Kokkotas1999,Berti2009,Konoplya2011}.
+
+The first direct detection of gravitational waves from a binary black-hole merger established ringdown as an observationally relevant strong-field regime \cite{Abbott2016Observation}. Subsequent black-hole spectroscopy studies have used ringdown harmonics and overtones to test the Kerr hypothesis and the no-hair theorem \cite{Berti2006,Isi2019}. These developments motivate increasingly precise calculations of QNM spectra not only in general relativity, but also in quantum-corrected, modified-gravity, and exotic compact-object backgrounds.
+
+The Kazakov--Solodukhin (KS) metric is a quantum-deformed Schwarzschild geometry originally derived from an effective two-dimensional dilaton-gravity reduction of spherically symmetric quantum fluctuations \cite{Kazakov1994}. It modifies the Schwarzschild interior by replacing the classical center with a finite-radius structure and has since been used as a phenomenological model for quantum-corrected black-hole physics \cite{Berry2021,Konoplya2020,Bolokhov2025}. Recent QNM studies of the KS spacetime suggest that fundamental modes may remain close to Schwarzschild values while overtones and evaporation-related quantities can be more sensitive to quantum deformation \cite{Konoplya2020,Bolokhov2025}. This makes the model a useful target for computational experiments: it is close enough to Schwarzschild to permit strong benchmarking, yet different enough to probe quantum-gravity phenomenology.
+
+At the same time, QNM computation is intrinsically a non-Hermitian resonance problem. The boundary conditions are outgoing or ingoing rather than self-adjoint, the frequencies are complex, and the numerical spectrum can be sensitive to discretization and operator perturbations. The methodological question asked here is therefore not only ``what are the KS QNM frequencies?'' but also ``can non-Hermitian QNM resonance conditions be reformulated as Hermitian residual minimization problems?'' The paper answers this question operationally: construct the spectral QNM operator \(P_N(\omega)\), form \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), search for minima of \(\sigma_{\min}(P_N(\omega))\), and validate the resulting branches against convergence and an independent Leaver-style discretization.
+
+This framing should be read carefully. Spectral, pseudospectral, and pseudospectrum methods already provide powerful QNM tools, and black-hole pseudospectrum studies explicitly connect non-self-adjoint QNM operators, Chebyshev discretizations, and singular-value diagnostics \cite{Jansen2017,Jaramillo2021,Cao2024}. Smallest-singular-value methods are also established in the broader nonlinear eigenvalue literature \cite{Sadkane2023}. This manuscript does not claim priority for singular-value, pseudospectrum, or residual formulations. Its goal is to implement, audit, and apply a concrete Chebyshev--Leaver spectral residual workflow for KS QNMs, then separate the resulting algorithmic, numerical, and physics claims.
+
+The scope of this manuscript is a direct spectral residual algorithm for the scalar \(\ell=2\) KS model, where ``algorithm'' means an application workflow rather than a claim of general theoretical invention. It combines a KS-specific Chebyshev residual implementation, a Leaver-style independent-discretization validation layer, a branch-status hierarchy for fundamentals and overtones, and a scalar/axial-gravitational catalogue for \(\ell=2,3,4\). The matrix-pencil workflow is preserved only as a baseline diagnostic. The axial gravitational KS sector is modeled with a lapse-deformed Regge--Wheeler potential and should be read as a validation-oriented extension rather than a full gauge-invariant treatment of all gravitational sectors.
+
+\section{Literature Context}
+
+\subsection{Quasinormal modes and black-hole spectroscopy}
+
+The theory of black-hole perturbations begins with the Regge--Wheeler analysis of Schwarzschild perturbations \cite{Regge1957} and early numerical recognition of damped black-hole ringing \cite{Vishveshwara1970}. Modern reviews emphasize that QNM spectra provide information about stability, boundary conditions, late-time behavior, and possible observational tests of general relativity \cite{Kokkotas1999,Berti2009,Konoplya2011}. In gravitational-wave astronomy, QNM spectroscopy is especially important because detecting multiple ringdown tones can test whether the remnant is described by the Kerr family \cite{Berti2006,Isi2019}.
+
+\subsection{Quantum-corrected Schwarzschild geometries}
+
+Kazakov and Solodukhin proposed a quantum deformation of the Schwarzschild solution in which the radial center is displaced to a Planck-scale surface through a spherically symmetric quantum correction \cite{Kazakov1994}. Later geometric analyses have clarified that the original construction improves some regularity properties but does not automatically remove all curvature singular behavior in the sense usually meant in general relativity \cite{Berry2021}. Phenomenological work on KS black holes has studied QNMs, scattering, shadows, Hawking radiation, and overtone sensitivity \cite{Konoplya2020,Bolokhov2025}. These studies motivate higher-accuracy spectral calculations and systematic comparisons across deformation parameters.
+
+\subsection{Spectral approaches to QNM computation}
+
+Spectral methods are attractive for QNM problems because they approximate smooth functions globally, often producing exponential convergence when the boundary conditions and coordinate compactifications are chosen well. Leaver's Frobenius continued-fraction method remains a standard independent benchmark for black-hole QNM calculations \cite{Leaver1985}. Jansen's QNM spectral package demonstrates how differential QNM equations can be discretized and solved as generalized eigenvalue problems over a wide class of asymptotics \cite{Jansen2017}. More recent studies by Batic, Dutykh, and collaborators use spectral formulations to revisit noncommutative Schwarzschild black holes, Lee--Wick black holes, and Morris--Thorne wormholes, correcting or sharpening conclusions obtained from lower-order approximation methods \cite{Batic2024Noncomm,Batic2024LeeWick,Batic2024Wormhole}. Pseudospectral and pseudospectrum analyses also highlight that QNM spectra can be sensitive to operator perturbations, an important caution for finite-resolution spectral discretizations \cite{Jaramillo2021}. Cao et al. recently applied this pseudospectrum perspective to a quantum-corrected Schwarzschild black hole, which is especially relevant background for the present KS calculation \cite{Cao2024}.
+
+\subsection{Residual and singular-value viewpoints}
+
+The residual formulation used here belongs to a broader numerical landscape rather than standing outside it. For a nonlinear spectral operator \(P(\omega)\), exact QNMs satisfy \(P(\omega)u=0\) for a nonzero state \(u\). At finite resolution this condition can be tested by the smallest singular value of the discretized operator, and the associated Hermitian residual \(P^\dagger P\) converts the defect into a positive-semidefinite object. Smallest-singular-value methods for nonlinear matrix eigenvalue problems are established independently of black-hole physics \cite{Sadkane2023}. Closely related singular-value diagnostics appear in pseudospectrum analyses of non-self-adjoint QNM operators, where contours of resolvent norms or smallest singular values measure spectral sensitivity \cite{Jaramillo2021,Cao2024}. The present work uses this existing viewpoint as a practical KS computation and validation workflow: locate residual minima, refine them with the spectral operator, and check them against branch convergence and a Leaver-style continued-fraction solver.
+
+\section{Kazakov--Solodukhin Perturbation Problem}
+
+A commonly used static, spherically symmetric form of the KS quantum-corrected Schwarzschild metric can be written as
+\begin{equation}
+\begin{aligned}
+\dd s^2 &=
+-f_a(r)\dd t^2 + f_a(r)^{-1}\dd r^2
++ r^2 \dd\Omega^2,\\
+f_a(r)&=\frac{\sqrt{r^2-a^2}}{r}-\frac{2M}{r},
+\end{aligned}
+\label{eq:ksmetric}
+\end{equation}
+where \(M\) is the mass parameter, \(a\) is a quantum-deformation scale, and \(a\to0\) recovers the Schwarzschild lapse \(f_0(r)=1-2M/r\). The coordinate domain is restricted by \(r\geq a\). The precise physical interpretation of \(a\) depends on the quantum-correction model; in phenomenological applications it is usually treated as a small deformation parameter.
+
+For a test field or master perturbation variable \(\Psi\), separation of variables typically leads to a Schrodinger-like radial equation
+\begin{equation}
+\frac{\dd^2\Psi}{\dd r_*^2}+
+\left[\omega^2 - V_{s\ell}(r;a)\right]\Psi=0,
+\qquad
+\frac{\dd r_*}{\dd r}=f_a(r)^{-1},
+\label{eq:qnmwave}
+\end{equation}
+where \(s\) labels the spin or perturbation sector, \(\ell\) is the angular number, and \(V_{s\ell}\) is an effective potential derived from the background and perturbation equations. QNM boundary conditions select solutions that are purely ingoing at the horizon and purely outgoing at spatial infinity. These conditions make the eigenvalue \(\omega\) complex and the associated differential operator non-self-adjoint.
+
+For scalar perturbations, the implemented potential is
+\begin{equation}
+V_{0\ell}(r;a)=f_a(r)\left[\frac{\ell(\ell+1)}{r^2}+\frac{1}{r}\frac{\dd f_a}{\dd r}\right],
+\label{eq:scalarpotential}
+\end{equation}
+while the axial gravitational extension uses the KS-lapse-deformed Regge--Wheeler form
+\begin{equation}
+V_{\mathrm{RW},\ell}(r;a)=f_a(r)\left[\frac{\ell(\ell+1)}{r^2}-\frac{6M}{r^3}\right].
+\label{eq:reggewheelerpotential}
+\end{equation}
+For \(a=0\), Eq.~\eqref{eq:reggewheelerpotential} reduces to the standard Schwarzschild axial gravitational Regge--Wheeler potential.
+
+\section{Numerical Method}
+
+The implementation now contains two deliberately separated paths. The first is a baseline diagnostic: the scalar wave equation is evolved in time, a ringdown window is fitted, and a matrix-pencil frequency is extracted from the waveform. The second is the application-specific contribution of this paper: a direct Chebyshev pseudospectral discretization of the KS perturbation equation, followed by construction and audit of the Hermitian residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\). The matrix-pencil operator is not used as the final QNM operator.
+
+\subsection{Baseline time-domain diagnostic}
+
+The baseline evolves the radial wave equation in tortoise coordinate \(x=r_*\),
+\begin{equation}
+\frac{\partial^2\Psi}{\partial t^2}
+-
+\frac{\partial^2\Psi}{\partial x^2}
++
+V_{0\ell}(r(x);a)\Psi=0.
+\label{eq:timedomain}
+\end{equation}
+The computational domain is \(x/M\in[-250,500]\), with \(\Delta x=0.1M\), \(\Delta t=0.05M\), \(t_{\max}=320M\), and observation point \(x_{\mathrm{obs}}=20M\). A Gaussian pulse \(\Psi(0,x)=\exp[-(x/4M)^2]\) is evolved with first-order outgoing boundary conditions. The interval \(60M\leq t\leq160M\) is fitted by
+\begin{equation}
+\Psi_{\mathrm{fit}}(t)=A e^{-\alpha(t-t_0)}
+\cos(\omega_R t+\phi)+C_0,
+\qquad
+\omega_{\mathrm{fit}}=\omega_R-\ii\alpha.
+\end{equation}
+A rank-four matrix-pencil reduction is also applied to the fitted waveform as a diagnostic frequency extractor. This path is useful because it gives a physically intuitive check on the deformation trend, but it is no longer the operator used in the residual calculation.
+
+\subsection{Chebyshev spectral discretization}
+
+The direct spectral method compactifies the horizon-to-infinity domain with
+\begin{equation}
+s=1-\frac{r_h}{r},\qquad x=2s-1,\qquad x\in[-1,1],
+\end{equation}
+where \(r_h=\sqrt{4M^2+a^2}\). Chebyshev-Gauss collocation points
+\begin{equation}
+x_j=\cos\left(\frac{\pi(j+1/2)}{N}\right),\qquad j=0,\ldots,N-1,
+\end{equation}
+are mapped to \(s_j=(x_j+1)/2\), excluding the two singular endpoints. Barycentric differentiation matrices \(D\) and \(D^2\) approximate \(\partial_s\) and \(\partial_s^2\).
+
+The QNM boundary behavior is imposed analytically by factoring
+\begin{equation}
+\Psi(r)=
+e^{\ii\omega r}\,
+r^{2\ii M\omega}\,
+s^{-\ii\omega/f_a'(r_h)}\,u(s).
+\label{eq:factoredfield}
+\end{equation}
+The exponential and power-law factors enforce outgoing behavior at infinity and ingoing behavior at the horizon, while \(u(s)\) is regular on the collocation grid. Substitution into Eq.~\eqref{eq:qnmwave} gives a quadratic polynomial eigenvalue problem
+\begin{equation}
+P_N(\omega)\bm{u}
+\equiv
+\left(A_0+\omega A_1+\omega^2A_2\right)\bm{u}=0.
+\label{eq:polynomialproblem}
+\end{equation}
+The matrices \(A_0,A_1,A_2\) are built directly from \(f_a(r)\), \(f_a'(r)\), the selected potential \(V_{0\ell}\) or \(V_{\mathrm{RW},\ell}\), and the chain-rule factors relating \(r\) and \(s\).
+
+\subsection{Spectral Residual Algorithm}
+
+The algorithmic object of the paper is the residual map
+\begin{equation}
+\omega \mapsto \sigma_{\min}\!\left(P_N(\omega)\right),
+\end{equation}
+where \(P_N(\omega)\) is the finite-dimensional Chebyshev discretization of the factored QNM equation. The workflow is:
+
+\textbf{Input.}
+\begin{itemize}
+\item a perturbation equation and QNM boundary conditions, such as Eq.~\eqref{eq:qnmwave};
+\item a spectral size \(N\), which fixes the Chebyshev grid and matrix dimension;
+\item a search region in complex \(\omega\), chosen from Schwarzschild references, continuation in \(a/M\), or a physically damped frequency window.
+\end{itemize}
+
+\textbf{Procedure.}
+\begin{enumerate}
+\item Build the polynomial spectral operator \(P_N(\omega)=A_0+\omega A_1+\omega^2A_2\).
+\item Construct the Hermitian residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\).
+\item Compute \(\sigma_{\min}(P_N(\omega))\), equivalently the square root of the smallest eigenvalue of \(R_N(\omega)\) when roundoff is controlled.
+\item Search for local minima of \(\sigma_{\min}(P_N(\omega))\) in the selected complex-frequency region and use generalized-eigenvalue roots as initialization when available.
+\item Validate candidate frequencies by convergence in \(N\), branch continuation in \(a/M\), residual size, and comparison with the Leaver-style continued-fraction solver.
+\end{enumerate}
+
+\textbf{Output.} The accepted outputs are QNM frequencies \(M\omega_{\ell n}(a/M)\), together with residual norms, branch labels, and validation status.
+
+\subsection{Generalized eigenproblem and residual}
+
+Equation~\eqref{eq:polynomialproblem} is linearized as
+\begin{equation}
+\begin{pmatrix}
+0&I\\
+-A_0&-A_1
+\end{pmatrix}
+\begin{pmatrix}
+\bm{u}\\
+\omega\bm{u}
+\end{pmatrix}
+=
+\omega
+\begin{pmatrix}
+I&0\\
+0&A_2
+\end{pmatrix}
+\begin{pmatrix}
+\bm{u}\\
+\omega\bm{u}
+\end{pmatrix},
+\label{eq:linearizedspectral}
+\end{equation}
+and solved classically with \(\texttt{scipy.linalg.eig}\). These generalized-eigenvalue roots supply efficient initial candidates for the residual search. The fundamental scalar \(\ell=2\) mode is selected by proximity to the Schwarzschild reference frequency; overtones are tracked by continuity, branch diagnostics, and validation status rather than by proximity alone.
+
+The residual framework is unchanged. The direct spectral residual is
+\begin{equation}
+R_N(\omega)=P_N(\omega)^\dagger P_N(\omega).
+\label{eq:directresidual}
+\end{equation}
+It is Hermitian and positive semidefinite by construction, up to numerical roundoff. The residual norm reported below is the smallest singular value of \(P_N(\omega)\), and the residual-minimized frequency is obtained by locally minimizing this singular value over complex \(\omega\). In the tables below this residual is used as a classical diagnostic together with condition-number estimates; small residuals are not interpreted as precision guarantees without convergence and Leaver validation.
+
+\subsection{Independent Leaver-style validation}
+
+The Chebyshev spectral operator remains the primary algorithm, but a Leaver-style validation module is added. It uses the same compact coordinate \(s=1-r_h/r\) and the same QNM endpoint factorization, but does not use Chebyshev collocation, matrix-pencil data, or the residual observable. Instead it writes
+\begin{equation}
+\Psi(r)=e^{\ii\omega r}r^{2\ii M\omega}s^{-\ii\omega/f'(r_h)}u(s),
+\end{equation}
+and expands the regular factor as a Frobenius series,
+\begin{equation}
+u(s)=\sum_{n=0}^{\infty} a_n s^n.
+\end{equation}
+Substitution into the factored radial equation gives
+\begin{equation}
+B_2(s)u''+B_1(s)u'+B_0(s)u=0,
+\end{equation}
+where the \(B_j(s)\) are generated by formal power-series algebra from the KS metric functions. The Taylor-truncated Frobenius equations define a multi-term recurrence for the coefficients \(a_n\). Gaussian elimination reduces this recurrence to the three-term form
+\begin{equation}
+\alpha_n a_{n+1}+\beta_n a_n+\gamma_n a_{n-1}=0,
+\end{equation}
+and the minimal-solution condition is imposed through Leaver's continued fraction,
+\begin{equation}
+\beta_0-\frac{\alpha_0\gamma_1}{\beta_1-\dfrac{\alpha_1\gamma_2}{\beta_2-\cdots}}=0.
+\label{eq:leaver}
+\end{equation}
+Roots of Eq.~\eqref{eq:leaver} are found by solving the real and imaginary parts of the continued-fraction residual. This validation layer is classical and independent of \(R_N(\omega)\).
+
+\section{Results}
+
+\subsection{Schwarzschild validation}
+
+The known scalar Schwarzschild \(\ell=2\) fundamental frequency is
+\begin{equation}
+M\omega_{\mathrm{ref}}=0.483643872224-0.096758776024\,\ii.
+\end{equation}
+At \(N=96\), the direct spectral calculation gives
+\begin{equation}
+M\omega_{\mathrm{spec}}=0.483643872189-0.096758775961\,\ii,
+\end{equation}
+with relative error \(1.462\times10^{-10}\). This is substantially sharper than the baseline time-domain fit, \(0.483642480-0.096758919\,\ii\), and the waveform matrix-pencil diagnostic, \(0.483653530-0.096763421\,\ii\).
+
+The Leaver-style solver gives
+\begin{equation}
+M\omega_{\mathrm{Leaver}}=0.483643872211-0.096758775978\,\ii
+\end{equation}
+for the Schwarzschild fundamental mode, with relative error \(9.652\times10^{-11}\) against the same reference. This confirms that the direct spectral branch is not an artifact of waveform fitting, matrix-pencil reduction, or the residual minimization layer, while still relying on the same physical equation and endpoint factorization.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/spectral_convergence.png}
+\caption{Chebyshev convergence of the direct spectral fundamental mode for \(N=16,32,48,64,96\). The Schwarzschild branch is stable to high precision through moderate \(N\); the \(N=96\) values are retained for the final comparison table.}
+\label{fig:spectralconvergence}
+\end{figure}
+
+\subsection{Leaver continued-fraction comparison}
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.14}
+\begin{tabular}{llrrr}
+\toprule
+\(a/M\) & mode &
+\(\mathrm{Re}(M\omega_{\mathrm{Leaver}})\) &
+\(\mathrm{Im}(M\omega_{\mathrm{Leaver}})\) &
+\(\Delta_{\mathrm{rel}}(\mathrm{spec},\mathrm{Leaver})\)\\
+\midrule
+0.0 & fundamental & 0.483643872 & -0.096758776 & \(7.914\times10^{-13}\)\\
+0.0 & first overtone & 0.463850579 & -0.295603937 & \(1.814\times10^{-9}\)\\
+0.2 & fundamental & 0.482033688 & -0.096653861 & \(6.084\times10^{-13}\)\\
+0.2 & first overtone & 0.462165587 & -0.295311297 & \(1.788\times10^{-9}\)\\
+0.5 & fundamental & 0.473886926 & -0.096109183 & \(6.219\times10^{-13}\)\\
+0.5 & first overtone & 0.453642746 & -0.293790180 & \(1.808\times10^{-9}\)\\
+1.0 & fundamental & 0.448362409 & -0.094248179 & \(6.341\times10^{-13}\)\\
+1.0 & first overtone & 0.426971490 & -0.288572913 & \(1.747\times10^{-9}\)\\
+\bottomrule
+\end{tabular}
+\caption{Leaver-style continued-fraction validation against targeted Chebyshev spectral results at \(N=32\). The Leaver solver avoids Chebyshev collocation, matrix-pencil data, and residual minimization, while sharing the same perturbation equation and endpoint factorization. The automated validation fails if the relative difference exceeds \(10^{-6}\); the largest observed difference is \(1.814\times10^{-9}\).}
+\label{tab:leavercomparison}
+\end{table*}
+
+\subsection{Axial gravitational catalogue}
+
+The same Chebyshev and Leaver infrastructure is extended to both scalar and axial-gravitational perturbation selectors for \(\ell=2,3,4\) and overtone indices \(n=0,1,2\). The resulting catalogue contains 72 rows covering \(a/M=0,0.2,0.5,1.0\). For the axial gravitational sector, the Schwarzschild entries are checked against literature table values for the Regge--Wheeler spectrum.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.14}
+\begin{tabular}{rrrrr}
+\toprule
+\(\ell\) & \(n\) &
+\(\mathrm{Re}(M\omega_{\mathrm{Leaver}})\) &
+\(\mathrm{Im}(M\omega_{\mathrm{Leaver}})\) &
+literature rel. error\\
+\midrule
+2 & 0 & 0.373671684 & -0.088962316 & \(1.607\times10^{-8}\)\\
+2 & 1 & 0.346710997 & -0.273914875 & \(2.556\times10^{-9}\)\\
+2 & 2 & 0.301053455 & -0.478276983 & \(1.151\times10^{-9}\)\\
+3 & 0 & 0.599443288 & -0.092703048 & \(7.269\times10^{-10}\)\\
+3 & 1 & 0.582643803 & -0.281298113 & \(1.638\times10^{-9}\)\\
+3 & 2 & 0.551684901 & -0.479092751 & \(1.031\times10^{-7}\)\\
+4 & 0 & 0.809178378 & -0.094163961 & \(5.744\times10^{-10}\)\\
+4 & 1 & 0.796631532 & -0.284334349 & \(7.525\times10^{-7}\)\\
+4 & 2 & 0.772709533 & -0.479908175 & \(1.833\times10^{-5}\)\\
+\bottomrule
+\end{tabular}
+\caption{Axial gravitational Schwarzschild validation from the Leaver continued-fraction solver. Literature values are drawn from standard Schwarzschild QNM tables associated with the Berti--Cardoso--Starinets review and Leaver-method ringdown data; the largest relative discrepancy reflects rounded overtone table values.}
+\label{tab:gravitationalcatalogue}
+\end{table*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/mode_trajectories_gravitational_l2.png}
+\caption{Representative axial gravitational \(\ell=2\) mode trajectories versus \(a/M\). The full catalogue also includes scalar and axial gravitational trajectory plots for \(\ell=2,3,4\).}
+\label{fig:gravitationaltrajectory}
+\end{figure}
+
+Across the full Leaver-validated catalogue, the worst spectral--Leaver relative difference is \(1.097\times10^{-5}\), occurring for the axial gravitational \(\ell=2\), \(n=2\) branch at \(a/M=0.5\). This is reported explicitly rather than hidden: second overtones are more sensitive to branch selection and finite continued-fraction truncation than the fundamental and first-overtone branches.
+
+\subsection{Catalogue-level deformation trends}
+
+The catalogue now supports a simple physics-facing analysis: each KS branch is compared against its own Schwarzschild endpoint at \(a/M=0\). Across the current grid, every scalar and lapse-deformed axial branch has a monotonically decreasing real part and a monotonically decreasing damping magnitude as \(a/M\) increases. In physical terms, the KS deformation shifts the validated ringdown branches toward lower oscillation frequencies and slightly longer damping times.
+
+For the scalar \(\ell=2\) fundamental branch, the endpoint \(a/M=1\) shifts are \(-7.29\%\) in \(\mathrm{Re}(M\omega)\), \(-2.59\%\) in \(-\mathrm{Im}(M\omega)\), and \(7.17\%\) in \(|\Delta\omega|/|\omega_0|\). The scalar \(\ell=2\) second overtone has a larger real-frequency shift, \(-9.16\%\), but it also belongs to the more delicate overtone sector. The axial gravitational \(\ell=2\) fundamental shifts by \(-5.61\%\) in \(\mathrm{Re}(M\omega)\) and \(-2.63\%\) in damping magnitude. The largest endpoint fractional frequency shift in the full table is \(7.23\%\), occurring for the scalar \(\ell=4\) fundamental branch.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/catalogue_l2_fractional_shifts.png}
+\caption{Schwarzschild-relative endpoint trends for the \(\ell=2\) catalogue branches. Solid curves show scalar modes and dashed curves show the lapse-deformed axial gravitational model. The real-frequency shifts dominate the damping shifts, and all branches move downward over the sampled deformation range.}
+\label{fig:cataloguephysics}
+\end{figure}
+
+The generated analysis records the sensitivity ranking, dimensionless spectroscopic ratios, and caveats. These trend statements should be read as catalogue diagnostics, not as detectability claims. The gravitational-sector conclusion remains phenomenological until the KS axial and polar perturbation equations are derived in a fully gauge-invariant way.
+
+\subsection{Spectroscopic implications}
+
+At fixed mass scale, the catalogue trend has a direct spectroscopic interpretation. The negative shift in \(\mathrm{Re}(M\omega)\) lowers the ringdown tone, while the negative shift in \(-\mathrm{Im}(M\omega)\) lowers the absolute damping rate and therefore lengthens the damping time. For the scalar \(\ell=2\) fundamental branch, the damping magnitude decreases by \(2.59\%\), corresponding to an approximate \(2.7\%\) increase in damping time. Because the oscillation frequency decreases by a larger fraction, the quality factor decreases by \(4.83\%\): the signal lives slightly longer in absolute time, but it completes fewer oscillations per damping time.
+
+Dimensionless mode ratios sharpen this interpretation because they are less directly absorbable into a simple mass rescaling than individual frequencies. For the scalar \(\ell=2\) branch at \(a/M=1\), the complex ratio \(\omega_0/\omega_1\) changes from \(0.836060+0.324207\,\ii\) to \(0.823241+0.335659\,\ii\), a \(1.92\%\) shift in the complex-ratio plane. The corresponding \(\omega_0/\omega_2\) ratio changes from \(0.579814+0.460140\,\ii\) to \(0.553881+0.464905\,\ii\), a \(3.56\%\) shift. The branch-wise ratio \(\mathrm{Re}(\omega)/[-\mathrm{Im}(\omega)]\) shifts by \(-4.83\%\), \(-5.71\%\), and \(-7.31\%\) for \(n=0,1,2\), respectively; the \(n=2\) value should be read with the overtone caveat already discussed.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/catalogue_l2_spectroscopic_ratios.png}
+\caption{Scalar \(\ell=2\) dimensionless spectroscopy diagnostics. The plot shows Schwarzschild-relative changes in \(\omega_0/\omega_1\), \(\omega_0/\omega_2\), and \(\mathrm{Re}(\omega_0)/[-\mathrm{Im}(\omega_0)]\). These ratios do not by themselves constitute a detectability forecast, but they are closer to spectroscopy observables than individual mode frequencies because they reduce simple mass-scaling degeneracy.}
+\label{fig:spectroscopicratios}
+\end{figure}
+
+This makes the scalar \(\ell=2\) fundamental branch the cleanest spectroscopic signature in the present work. It is the most robustly validated physical sector, it is the branch most directly connected to the dominant ringdown tone, and its endpoint shift is large enough to be a meaningful catalogue-level effect. The ratio diagnostics strengthen the physics interpretation without turning it into an observational claim. The overtone shifts are also informative, especially for branch ratios and deformation sensitivity, but they should not be used as the primary claim until the \(n=2\) uncertainty and high-\(N\) branch tracking are tightened.
+
+The trend should not be interpreted as a detection forecast. A uniform change in mass scale can mimic part of a frequency shift, so a spectroscopy analysis would need dimensionless ratios among modes, simultaneous use of damping information, and eventually a gauge-invariant gravitational perturbation treatment. The present result is therefore a physics diagnostic: within the validated scalar catalogue, KS deformation produces a monotonic, percent-level softening of the ringdown spectrum.
+
+\subsection{Comparison with existing KS literature}
+
+The present results should be read alongside, not as a replacement for, the existing KS QNM literature. Konoplya studied scalar, electromagnetic, and Dirac perturbations of the KS metric using WKB and time-domain methods, together with scattering and shadow diagnostics \cite{Konoplya2020}. Bolokhov, Bronnikov, and Konoplya later emphasized that KS overtones can be considerably more sensitive to quantum deformation than the fundamental branch and used a Frobenius/continued-fraction treatment to study the overtone sector \cite{Bolokhov2025}. Those works establish that the KS deformation has observable spectral consequences in the model and that overtones require special care.
+
+Direct row-by-row numerical comparison is not one-to-one, however, because the tabulated conventions and parameter normalizations differ. In particular, much of the earlier KS QNM literature fixes the horizon radius, while the catalogue here is organized at fixed mass scale and reports \(a/M\). For the lapse in Eq.~\eqref{eq:ksmetric}, a horizon-normalized parameter \(\beta=a/r_h\) corresponds to \(\alpha=a/M=2\beta/\sqrt{1-\beta^2}\), while \(r_h\omega=\sqrt{4+\alpha^2}\,M\omega\). Thus the \(a/M=1\) endpoint in this paper corresponds to \(a/r_h=1/\sqrt{5}\), not to a horizon-normalized \(a/r_h=1\) table row. The useful comparison in the present manuscript is therefore structural: previous work identified KS deformation and overtone sensitivity; the present work adds a fixed-\(M\) Chebyshev--Leaver catalogue, explicit condition and branch-tracking diagnostics, and dimensionless spectroscopy measures designed to separate physical shifts from simple scale changes. Within the literature reviewed here, the distinctive contribution is the combination of fixed-mass KS catalogue generation, Leaver-anchored branch-status discipline, and dimensionless spectroscopy diagnostics in a single spectral residual workflow.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.34\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+Question & Existing KS literature & This work \\
+\midrule
+Fundamental deformation & Konoplya found KS corrections to fundamental QNM branches using WKB and time-domain calculations; signs and magnitudes depend on the chosen normalization. & Confirms fixed-\(M\) scalar softening; for scalar \(\ell=2,n=0\) at \(a/M=1\), \(\Delta\mathrm{Re}(M\omega)=-7.29\%\) and \(\Delta[-\mathrm{Im}(M\omega)]=-2.59\%\). \\
+Overtone sensitivity & Bolokhov--Bronnikov--Konoplya highlighted strong overtone sensitivity and the need for Frobenius/continued-fraction treatment. & Confirms that overtones are the delicate sector; \(n=1\) is publication-facing on the validated \(N=32\) grid and \(n=2\) is treated as a branch diagnostic. \\
+Spectroscopic ratios & Not the primary diagnostic in the cited KS QNM studies. & Reports \(\omega_0/\omega_1\), \(\omega_0/\omega_2\), and \(\mathrm{Re}(\omega)/[-\mathrm{Im}(\omega)]\) shifts. \\
+Quality-factor shifts & Not isolated as a headline KS diagnostic in the cited work. & Reports a \(-4.83\%\) scalar \(\ell=2,n=0\) quality-factor shift at \(a/M=1\). \\
+\bottomrule
+\end{tabularx}
+\caption{Positioning relative to existing KS QNM literature. The comparison is qualitative because earlier tabulations and the present fixed-mass catalogue use different parameter conventions.}
+\label{tab:literaturecomparison}
+\end{table*}
+
+\subsection{Frequency comparison}
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{lrllrrrr}
+\toprule
+\(a/M\) & \(N\) & mode & status &
+\(\mathrm{Re}(M\omega_{\mathrm{fit}})\) &
+\(\mathrm{Re}(M\omega_{\mathrm{pencil}})\) &
+\(\mathrm{Re}(M\omega_{\mathrm{spec}})\) &
+\(\mathrm{Im}(M\omega_{\mathrm{spec}})\)\\
+\midrule
+0.0 & 96 & fundamental & high-\(N\) & 0.483642480 & 0.483653530 & 0.483643872 & -0.096758776\\
+0.0 & 32 & first overtone & validated & -- & -- & 0.463850579 & -0.295603938\\
+0.2 & 96 & fundamental & high-\(N\) & 0.482032392 & 0.482043050 & 0.482033688 & -0.096653861\\
+0.2 & 32 & first overtone & validated & -- & -- & 0.462165587 & -0.295311298\\
+0.5 & 96 & fundamental & high-\(N\) & 0.473886559 & 0.473894587 & 0.473886926 & -0.096109183\\
+0.5 & 32 & first overtone & validated & -- & -- & 0.453642746 & -0.293790181\\
+1.0 & 96 & fundamental & high-\(N\) & 0.448361649 & 0.448362134 & 0.448362409 & -0.094248179\\
+1.0 & 32 & first overtone & validated & -- & -- & 0.426971490 & -0.288572914\\
+\bottomrule
+\end{tabular}
+\caption{Publication-facing scalar comparison. Fundamental branches are reported at \(N=96\); first overtones are frozen at the Leaver-validated \(N=32\) reference grid. Tracked high-\(N\) overtone rows are retained as exploratory diagnostics rather than used as headline results.}
+\label{tab:spectralresults}
+\end{table*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/spectral_deformation_trend.png}
+\caption{Baseline and direct spectral deformation trends for the scalar \(\ell=2\) fundamental mode. The spectral operator reproduces the same qualitative decrease in oscillation frequency with increasing \(a/M\), while avoiding the waveform-derived matrix surrogate.}
+\label{fig:spectraltrend}
+\end{figure}
+
+\subsection{Residual diagnostics}
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.14}
+\begin{tabular}{lrlrrr}
+\toprule
+\(a/M\) & \(N\) & mode & dim & \(\kappa(P_N)\) & \(\sigma_{\min}(P_N)\)\\
+\midrule
+0.0 & 96 & fundamental & 96 & \(2.126\times10^{21}\) & \(1.036\times10^{-19}\)\\
+0.0 & 32 & first overtone & 32 & \(5.079\times10^{19}\) & \(4.271\times10^{-19}\)\\
+0.2 & 96 & fundamental & 96 & \(2.663\times10^{22}\) & \(8.244\times10^{-21}\)\\
+0.2 & 32 & first overtone & 32 & \(6.929\times10^{19}\) & \(3.123\times10^{-19}\)\\
+0.5 & 96 & fundamental & 96 & \(4.251\times10^{21}\) & \(5.098\times10^{-20}\)\\
+0.5 & 32 & first overtone & 32 & \(5.933\times10^{19}\) & \(3.598\times10^{-19}\)\\
+1.0 & 96 & fundamental & 96 & \(5.162\times10^{21}\) & \(4.017\times10^{-20}\)\\
+1.0 & 32 & first overtone & 32 & \(1.861\times10^{20}\) & \(1.096\times10^{-19}\)\\
+\bottomrule
+\end{tabular}
+\caption{Residual diagnostics for the publication-facing spectral branches. The residual column reports \(\sigma_{\min}(P_N)\) at the accepted frequency. All rows exceed the \(10^{14}\) condition-warning threshold, so residual minima should not be read as guaranteeing all displayed frequency digits without convergence and Leaver validation.}
+\label{tab:residualdiagnostics}
+\end{table*}
+
+The code verifies Hermiticity, positive semidefiniteness, and Schwarzschild recovery. Small negative eigenvalues of \(R_N\) can appear at the \(10^{-13}\) level in dense Hermitian eigensolvers because of roundoff; the singular-value residual norm remains nonnegative by construction. The reported condition numbers remain very large even after bounded pencil scaling, so convergence and cross-validation are more reliable indicators than residual size alone.
+
+\section{Discussion}
+
+The central physical pattern is the monotonic softening of the validated KS spectrum. Increasing \(a/M\) lowers both the oscillation frequency and the absolute damping rate for every sampled scalar and lapse-deformed axial branch in the catalogue. The scalar \(\ell=2\) fundamental mode is the safest interpretation of this pattern: at \(a/M=1\), its real frequency is lower by \(7.29\%\), its damping magnitude is lower by \(2.59\%\), and its quality factor is lower by \(4.83\%\).
+
+The numerical framework is what makes that statement credible. The waveform-derived matrix-pencil path is retained only as a sanity check; the final operator is built directly from the perturbation equation. The Schwarzschild check shows that the direct spectral operator resolves the scalar fundamental mode accurately, and the Leaver comparison reproduces the targeted scalar spectral branches to better than \(10^{-6}\) for the fundamental mode and first overtone at the reference grid. The catalogue extends this cross-check to scalar and axial gravitational modes with \(n=0,1,2\); the largest observed spectral--Leaver difference is \(1.097\times10^{-5}\), localized to an axial gravitational second-overtone branch. This is small enough for catalogue-level branch validation, but it also confirms that second overtones are more delicate than fundamental modes. High-\(N\) first-overtone rows are therefore treated as exploratory until branch-by-branch Leaver or higher-precision validation is added.
+
+The algorithmic contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The generalized eigenproblem supplies candidates, but the accepted QNM claim is attached to a small value of \(\sigma_{\min}(P_N(\omega))\), convergence in \(N\), branch tracking, and Leaver comparison. This is a useful way to discuss the KS non-Hermitian resonance problem in Hermitian positive-semidefinite language, but it should not be read as a priority claim for residual singular-value theory.
+
+\section{Limitations and Reproducibility}
+
+\subsection{Interpretive boundaries}
+
+The present calculation is a significant step beyond the matrix-pencil pilot, but it is still not a complete treatment of KS perturbation theory. The scalar sector is the cleanest physics sector in this work because it follows directly from the chosen test-field wave equation on the KS background. By contrast, the axial gravitational catalogue is intentionally phenomenological: it uses a KS-lapse-deformed Regge--Wheeler potential that reduces to the Schwarzschild axial equation at \(a=0\), but it is not a derived gauge-invariant perturbation system for the full KS geometry. The axial entries are therefore useful for validation, comparison, and trend exploration; they should not be read as a final gravitational-wave prediction for KS gravity.
+
+The catalogue-level shifts are also not detectability forecasts. The percent-level scalar shifts indicate a physically meaningful deformation of the dimensionless spectrum, but an observational claim would require a waveform model, detector-noise weighting, parameter covariances, and a treatment of degeneracies with the remnant mass and spin. In particular, part of a frequency shift can be absorbed by a mass rescaling, so robust spectroscopy would need dimensionless mode ratios, damping information, and a gauge-invariant gravitational perturbation treatment.
+
+Finally, the overtone hierarchy remains the numerically weakest part of the catalogue. Fundamental modes are the most stable, first overtones are publication-facing only on the Leaver-validated \(N=32\) grid, and tracked high-\(N\) first-overtone rows are retained as exploratory diagnostics. Second overtones are included because they are scientifically informative, but the largest spectral--Leaver difference occurs on an \(n=2\) branch. They should be interpreted as branch diagnostics until higher-precision continuation and independent validation are added.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\textwidth}{p{0.22\textwidth}p{0.28\textwidth}X}
+\toprule
+Sector or branch & Status & Publication use \\
+\midrule
+Scalar fundamentals, \(n=0\) & Strongest validated sector & Main physics claim: monotonic KS softening and scalar \(\ell=2\) spectroscopic shifts. \\
+Scalar first overtones, \(n=1\) & Leaver-validated at \(N=32\) & Secondary catalogue and ratio diagnostics; high-\(N\) tracked rows remain exploratory. \\
+Second overtones, \(n=2\) & Informative but most delicate & Branch-sensitivity diagnostics only; avoid headline precision claims. \\
+Axial gravitational rows & Phenomenological axial model & Trend comparison only until gauge-invariant KS axial/polar master equations are derived. \\
+\bottomrule
+\end{tabularx}
+\caption{Claim hierarchy used in this manuscript. The table separates publication-facing scalar results from exploratory overtone diagnostics and phenomenological axial-gravitational trends.}
+\label{tab:claimhierarchy}
+\end{table*}
+
+\subsection{Reproducibility}
+
+The implementation is reproducible from the accompanying code package, which includes the spectral solver, the Leaver-style validation layer, catalogue-generation scripts, generated numerical tables, and automated tests.
+
+\section{Conclusion}
+
+The physics contribution is the KS ringdown trend. The validated catalogue shows a coherent, monotonic softening of the sampled spectrum: as \(a/M\) increases, the scalar and lapse-deformed axial branches move to lower oscillation frequency and lower damping magnitude. The cleanest result is the scalar \(\ell=2\) fundamental branch: at \(a/M=1\), its oscillation frequency is shifted by \(-7.29\%\), its damping magnitude by \(-2.59\%\), and its quality factor by \(-4.83\%\) relative to the Schwarzschild endpoint. Dimensionless scalar \(\ell=2\) spectroscopy diagnostics also move, with \(1.92\%\) and \(3.56\%\) endpoint shifts in \(\omega_0/\omega_1\) and \(\omega_0/\omega_2\), respectively.
+
+The numerical contribution is the Chebyshev--Leaver validation framework behind that statement. The matrix-pencil workflow has been demoted to a baseline diagnostic, while the final spectral operator is built directly from the compactified perturbation equation. With scaled generalized pencils and branch-continuation diagnostics, the method recovers the Schwarzschild scalar \(\ell=2\) fundamental mode with relative error \(1.462\times10^{-10}\) at \(N=96\), adds a Leaver-style continued-fraction validation layer, extends the catalogue to scalar and axial gravitational \(\ell=2,3,4\) modes through the second overtone, and reports transparent residual and condition-number diagnostics.
+
+The algorithmic contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The non-Hermitian KS resonance equation \(P_N(\omega)\bm{u}=0\) is tested through the Hermitian positive-semidefinite residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), and candidate modes are treated as minima of \(\sigma_{\min}(P_N(\omega))\) subject to convergence and Leaver validation. The contribution is therefore not a claim of originality for residual singular-value theory. It is the combination of a fixed-mass KS Chebyshev residual implementation, Leaver-style continued-fraction validation, branch-status discipline for fundamentals and overtones, and spectroscopy diagnostics including monotonic softening, quality-factor shifts, and dimensionless mode ratios. The next scientific step is a physics-first study of KS spectroscopic signatures: deeper comparison against published KS parameter conventions, independent validation across perturbation sectors, a gauge-invariant gravitational treatment, and a more careful study of overtone stability.
+
+\section*{Statements and Declarations}
+
+\noindent\textbf{Funding.}
+No funding was received to assist with the preparation of this manuscript.
+
+\noindent\textbf{Competing interests.}
+The author declares no competing interests.
+
+\noindent\textbf{Data and code availability.}
+The source code, generated catalogue tables, and manuscript-supporting figures are available at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
+
+\noindent\textbf{Author contributions.}
+Adel H. Al-Yoorby conceived the study, developed the numerical workflow, performed the calculations, analyzed the results, and wrote the manuscript.
+
+\noindent\textbf{Use of AI tools.}
+AI-assisted editorial and formatting support was used during manuscript preparation.
+The author reviewed and takes responsibility for the final content.
+
+\begin{thebibliography}{99}
+
+\bibitem{Regge1957}
+T. Regge and J. A. Wheeler,
+``Stability of a Schwarzschild singularity,''
+\emph{Physical Review} \textbf{108}, 1063--1069 (1957).
+\url{https://doi.org/10.1103/PhysRev.108.1063}
+
+\bibitem{Vishveshwara1970}
+C. V. Vishveshwara,
+``Scattering of gravitational radiation by a Schwarzschild black-hole,''
+\emph{Nature} \textbf{227}, 936--938 (1970).
+\url{https://doi.org/10.1038/227936a0}
+
+\bibitem{Kokkotas1999}
+K. D. Kokkotas and B. G. Schmidt,
+``Quasi-normal modes of stars and black holes,''
+\emph{Living Reviews in Relativity} \textbf{2}, 2 (1999).
+\url{https://doi.org/10.12942/lrr-1999-2}
+
+\bibitem{Berti2009}
+E. Berti, V. Cardoso, and A. O. Starinets,
+``Quasinormal modes of black holes and black branes,''
+\emph{Classical and Quantum Gravity} \textbf{26}, 163001 (2009).
+\url{https://doi.org/10.1088/0264-9381/26/16/163001}
+
+\bibitem{Konoplya2011}
+R. A. Konoplya and A. Zhidenko,
+``Quasinormal modes of black holes: From astrophysics to string theory,''
+\emph{Reviews of Modern Physics} \textbf{83}, 793--836 (2011).
+\url{https://doi.org/10.1103/RevModPhys.83.793}
+
+\bibitem{Abbott2016Observation}
+B. P. Abbott et al. (LIGO Scientific Collaboration and Virgo Collaboration),
+``Observation of gravitational waves from a binary black hole merger,''
+\emph{Physical Review Letters} \textbf{116}, 061102 (2016).
+\url{https://doi.org/10.1103/PhysRevLett.116.061102}
+
+\bibitem{Berti2006}
+E. Berti, V. Cardoso, and C. M. Will,
+``Gravitational-wave spectroscopy of massive black holes with the space interferometer LISA,''
+\emph{Physical Review D} \textbf{73}, 064030 (2006).
+\url{https://doi.org/10.1103/PhysRevD.73.064030}
+
+\bibitem{Isi2019}
+M. Isi et al.,
+``Testing the no-hair theorem with GW150914,''
+\emph{Physical Review Letters} \textbf{123}, 111102 (2019).
+\url{https://doi.org/10.1103/PhysRevLett.123.111102}
+
+\bibitem{Kazakov1994}
+D. I. Kazakov and S. N. Solodukhin,
+``On quantum deformation of the Schwarzschild solution,''
+\emph{Nuclear Physics B} \textbf{429}, 153--176 (1994).
+\url{https://doi.org/10.1016/S0550-3213(94)80045-6}
+
+\bibitem{Berry2021}
+T. Berry, A. Simpson, and M. Visser,
+``Regularity of a general class of ``quantum deformed'' black holes,''
+\emph{Universe} \textbf{7}, 165 (2021).
+\url{https://doi.org/10.3390/universe7060165}
+
+\bibitem{Konoplya2020}
+R. A. Konoplya,
+``Quantum corrected black holes: Quasinormal modes, scattering, shadows,''
+\emph{Physics Letters B} \textbf{804}, 135363 (2020).
+\url{https://doi.org/10.1016/j.physletb.2020.135363}
+
+\bibitem{Bolokhov2025}
+S. V. Bolokhov, K. A. Bronnikov, and R. A. Konoplya,
+``Overtones' outburst and Hawking evaporation of Kazakov--Solodukhin quantum corrected black hole,''
+\emph{Fortschritte der Physik} \textbf{73}, 2400187 (2025).
+\url{https://doi.org/10.1002/prop.202400187}
+
+\bibitem{Leaver1985}
+E. W. Leaver,
+``An analytic representation for the quasi-normal modes of Kerr black holes,''
+\emph{Proceedings of the Royal Society of London A: Mathematical and Physical Sciences} \textbf{402}, 285--298 (1985).
+\url{https://doi.org/10.1098/rspa.1985.0119}
+
+\bibitem{Jansen2017}
+A. Jansen,
+``Overdamped modes in Schwarzschild-de Sitter and a Mathematica package for the numerical computation of quasinormal modes,''
+\emph{The European Physical Journal Plus} \textbf{132}, 546 (2017).
+\url{https://doi.org/10.1140/epjp/i2017-11825-9}
+
+\bibitem{Batic2024Noncomm}
+D. Batic and D. Dutykh,
+``Quasinormal modes in noncommutative Schwarzschild black holes: A spectral analysis,''
+\emph{The European Physical Journal C} \textbf{84}, 622 (2024).
+\url{https://doi.org/10.1140/epjc/s10052-024-12981-6}
+
+\bibitem{Batic2024LeeWick}
+D. Batic, D. Dutykh, and B. L. Giacchini,
+``Unified spectral approach for quasinormal modes of Lee--Wick black holes,''
+\emph{Physical Review D} \textbf{110}, 084032 (2024).
+\url{https://doi.org/10.1103/PhysRevD.110.084032}
+
+\bibitem{Batic2024Wormhole}
+D. Batic and D. Dutykh,
+``A unified spectral approach for quasinormal modes of Morris--Thorne wormholes,''
+\emph{Classical and Quantum Gravity} \textbf{41}, 215003 (2024).
+\url{https://doi.org/10.1088/1361-6382/ad7cb8}
+
+\bibitem{Jaramillo2021}
+J. L. Jaramillo, R. Panosso Macedo, and L. Al Sheikh,
+``Pseudospectrum and black hole quasinormal mode instability,''
+\emph{Physical Review X} \textbf{11}, 031003 (2021).
+\url{https://doi.org/10.1103/PhysRevX.11.031003}
+
+\bibitem{Cao2024}
+L.-M. Cao, J.-N. Chen, L.-B. Wu, L. Xie, and Y.-S. Zhou,
+``The pseudospectrum and spectrum (in)stability of quantum corrected Schwarzschild black hole,''
+\emph{Science China Physics, Mechanics \& Astronomy} \textbf{67}, 100412 (2024).
+\url{https://doi.org/10.1007/s11433-024-2435-5}
+
+\bibitem{Sadkane2023}
+M. Sadkane,
+``A smallest singular value method for nonlinear eigenvalue problems,''
+\emph{Linear and Multilinear Algebra} \textbf{71}, 16--28 (2023).
+\url{https://doi.org/10.1080/03081087.2021.2017832}
+
+\end{thebibliography}
+
+\end{document}

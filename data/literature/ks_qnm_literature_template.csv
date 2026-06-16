@@ -1,0 +1,3 @@
+enabled,source,reference,perturbation_type,ell,overtone,mode,normalization,a_over_M,a_over_rh,frequency_scale,omega_real,omega_imag,notes
+false,Konoplya2020,replace-with-table-and-row,scalar,2,0,fundamental,fixed_horizon,,0.0,rh,0.967287744448,-0.193517552048,"Disabled Schwarzschild-format example only; replace with a transcribed published row and set enabled=true."
+false,Bolokhov2025,replace-with-table-and-row,scalar,2,1,first_overtone,fixed_horizon,,0.0,rh,0.927701158040,-0.591207873976,"Disabled Schwarzschild-format example only; replace with a transcribed published row and set enabled=true."
