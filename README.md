@@ -58,8 +58,7 @@ Repository URL:
 - `tests/` - pytest-compatible validation checks.
 - `outputs/results/` - generated CSV tables and Markdown reports.
 - `outputs/figures/` - generated waveform, convergence, deformation, sensitivity, and trajectory plots.
-- `papers/research/` - current research paper TeX/PDF.
-- `papers/manuscript/` - self-contained manuscript copy and publication-facing generated assets.
+- `papers/manuscript/` - current manuscript TeX/PDF; figures are loaded from `outputs/figures/`.
 - `papers/followup/` - outline for the next physics-first spectroscopy paper.
 - `docs/` - literature-normalization protocol and project notes.
 
@@ -207,7 +206,5 @@ infrastructure:
 - Develop `papers/followup/spectroscopic_signatures_outline.md` into a scalar-first physics paper using the generated dimensionless ratio diagnostics, the normalization protocol in `docs/LITERATURE_NORMALIZATION_PROTOCOL.md`, and the scaffold in `scripts/prepare_literature_comparison.py`.
 - Axial-polar or gauge-invariant gravitational perturbation analysis for the KS background.
 - Dedicated overtone branch tracking, especially for `n=2`.
-- Use `docs/TOP_TIER_GR_ROADMAP.md` to separate current-paper revision work
-  from the new physics needed for a top-tier GR submission.
 - Conditioning/scaling improvements for high-resolution generalized eigenvalue problems.
 - Pseudospectral sensitivity analysis.
