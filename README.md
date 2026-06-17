@@ -206,6 +206,25 @@ Main outputs:
 - `papers/prl/ks_instability_prl_letter_draft.md`
 - `papers/prl/supplemental_material_outline.md`
 
+Classify the KS scalar stress-test branches by pseudospectral sensitivity:
+
+```powershell
+python scripts/analyze_branch_sensitivity.py
+```
+
+This joins the existing stress-test branch verdicts, endpoint Leaver checks,
+barrier metrics, condition indicators, and finite-`N` spread diagnostics. It
+does not assume universal amplification; it separates robustly increasing,
+weakly increasing, non-monotonic, and numerically inconclusive branches.
+
+Main outputs:
+
+- `outputs/results/branch_sensitivity_classes.csv`
+- `outputs/results/branch_sensitivity_correlations.csv`
+- `outputs/results/branch_sensitivity_predictor_search.csv`
+- `outputs/results/branch_sensitivity_report.md`
+- `outputs/figures/branch_sensitivity_predictors.png`
+
 Run the model-zoo universality test:
 
 ```powershell
@@ -296,6 +315,12 @@ Claim hierarchy:
   for the active oscillatory branches, but only `8/14` branches satisfy the
   stricter usable/supporting criteria. The current verdict is therefore
   PRD/CQG-strength, not PRL-strength.
+- Branch-dependence analysis classifies those active scalar branches into
+  `8` robustly increasing, `3` weakly increasing, `1` non-monotonic, and `2`
+  numerically inconclusive cases. The strongest numerical correlate of gain
+  magnitude is condition-indicator growth, while the empirical overtone-load
+  separator `n/(ell+1/2) <= 2/3` identifies the reliable increasing cases in
+  the current finite sample. This is not a derived scaling law.
 - A KS/Hayward/Bardeen model-zoo universality scan finds only `8/30`
   model-branch verdicts satisfy the stricter support criteria. KS contributes
   all eight supporting branches, while Hayward and Bardeen each have `0/10`
