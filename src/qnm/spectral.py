@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from itertools import product
 from typing import Iterable
 
 import numpy as np
@@ -64,8 +63,6 @@ class ModeResult:
     hermiticity_error: float
     psd_min_eigenvalue: float
     matrix_dimension: int
-    effective_qubits: int
-    pauli_terms: int
     sparsity: float
     condition_number: float
     conditioning_warning: bool
@@ -431,80 +428,14 @@ def minimize_residual(problem: SpectralProblem, omega_initial: complex, radius: 
     return omega, math.sqrt(float(result.fun))
 
 
-def pad_to_qubits(matrix: np.ndarray) -> tuple[np.ndarray, int]:
-    dim = matrix.shape[0]
-    qubits = int(math.ceil(math.log2(dim)))
-    padded_dim = 2**qubits
-    padded = np.zeros((padded_dim, padded_dim), dtype=complex)
-    padded[:dim, :dim] = matrix
-    return padded, qubits
-
-
-def pauli_matrices() -> dict[str, np.ndarray]:
-    return {
-        "I": np.array([[1, 0], [0, 1]], dtype=complex),
-        "X": np.array([[0, 1], [1, 0]], dtype=complex),
-        "Y": np.array([[0, -1j], [1j, 0]], dtype=complex),
-        "Z": np.array([[1, 0], [0, -1]], dtype=complex),
-    }
-
-
-def pauli_basis_matrix(labels: str, paulis: dict[str, np.ndarray]) -> np.ndarray:
-    basis = np.array([[1.0]], dtype=complex)
-    for label in labels:
-        basis = np.kron(basis, paulis[label])
-    return basis
-
-
-def pauli_decomposition(matrix: np.ndarray, tol: float = 1.0e-9) -> tuple[int, dict[str, complex]]:
-    padded, qubits = pad_to_qubits(matrix)
-    dim = padded.shape[0]
-    coeffs: dict[str, complex] = {}
-    labels = list(product("IXYZ", repeat=qubits))
-    row_indices = np.arange(dim)
-
-    for label_tuple in labels:
-        label = "".join(label_tuple)
-        col_indices = row_indices.copy()
-        phases = np.ones(dim, dtype=complex)
-
-        for offset, char in enumerate(label_tuple):
-            bit = qubits - offset - 1
-            bit_values = (row_indices >> bit) & 1
-            if char == "X":
-                col_indices ^= 1 << bit
-            elif char == "Y":
-                col_indices ^= 1 << bit
-                phases *= np.where(bit_values == 1, 1j, -1j)
-            elif char == "Z":
-                phases *= np.where(bit_values == 1, -1.0, 1.0)
-
-        coeff = np.sum(np.conjugate(phases) * padded[row_indices, col_indices]) / dim
-        if abs(coeff) > tol:
-            coeffs[label] = complex(coeff)
-    return qubits, coeffs
-
-
-def reconstruct_from_paulis(qubits: int, coeffs: dict[str, complex]) -> np.ndarray:
-    paulis = pauli_matrices()
-    dim = 2**qubits
-    matrix = np.zeros((dim, dim), dtype=complex)
-    for label, coeff in coeffs.items():
-        matrix += coeff * pauli_basis_matrix(label, paulis)
-    return matrix
-
-
-def resource_analysis(problem: SpectralProblem, omega: complex, tol: float = 1.0e-9) -> dict[str, float | int]:
+def residual_diagnostics(problem: SpectralProblem, omega: complex, tol: float = 1.0e-9) -> dict[str, float | int]:
     residual = residual_operator(problem, omega)
-    qubits, coeffs = pauli_decomposition(residual, tol=tol)
     p = spectral_matrix(problem, omega)
     nnz = int(np.count_nonzero(np.abs(residual) > tol))
     total = residual.size
     condition_number = float(np.linalg.cond(p))
     return {
         "matrix_dimension": problem.n,
-        "effective_qubits": qubits,
-        "pauli_terms": len(coeffs),
         "sparsity": 1.0 - nnz / total,
         "condition_number": condition_number,
         "conditioning_warning": condition_number >= CONDITION_WARNING_THRESHOLD,
@@ -554,7 +485,7 @@ def run_spectral_study(a_values: list[float], sizes: list[int], baseline_targets
 
             for mode_name, selection in selections.items():
                 omega_residual, residual_at_min = minimize_residual(problem, selection.omega)
-                resource = resource_analysis(problem, omega_residual)
+                diagnostics = residual_diagnostics(problem, omega_residual)
                 previous = previous_by_mode.get(mode_name)
                 relative_change = None if previous is None else float(abs(selection.omega - previous) / abs(previous))
                 if mode_name == "fundamental":
@@ -575,14 +506,12 @@ def run_spectral_study(a_values: list[float], sizes: list[int], baseline_targets
                         omega_residual=omega_residual,
                         residual_norm=residual_at_min,
                         relative_change=relative_change,
-                        hermiticity_error=float(resource["hermiticity_error"]),
-                        psd_min_eigenvalue=float(resource["psd_min_eigenvalue"]),
-                        matrix_dimension=int(resource["matrix_dimension"]),
-                        effective_qubits=int(resource["effective_qubits"]),
-                        pauli_terms=int(resource["pauli_terms"]),
-                        sparsity=float(resource["sparsity"]),
-                        condition_number=float(resource["condition_number"]),
-                        conditioning_warning=bool(resource["conditioning_warning"]),
+                        hermiticity_error=float(diagnostics["hermiticity_error"]),
+                        psd_min_eigenvalue=float(diagnostics["psd_min_eigenvalue"]),
+                        matrix_dimension=int(diagnostics["matrix_dimension"]),
+                        sparsity=float(diagnostics["sparsity"]),
+                        condition_number=float(diagnostics["condition_number"]),
+                        conditioning_warning=bool(diagnostics["conditioning_warning"]),
                         selection_score=selection.selection_score,
                         eigenvector_overlap=selection.eigenvector_overlap,
                         branch_status=branch_status,
@@ -614,17 +543,15 @@ def run_self_tests() -> list[TestResult]:
     tests.append(TestResult("R_N positive semidefinite", max(0.0, -psd_min), 1.0e-8, psd_min >= -1.0e-8))
     tests.append(TestResult("Schwarzschild spectral validation", schwarzschild_error, 1.0e-8, schwarzschild_error < 1.0e-8))
 
-    small = np.array(
-        [
-            [2.0, 0.3 + 0.2j, -0.1],
-            [0.3 - 0.2j, 1.5, 0.4j],
-            [-0.1, -0.4j, 0.8],
-        ],
-        dtype=complex,
+    singular_residual = residual_norm(problem, omega)
+    residual_eigenvalue = max(0.0, psd_min)
+    consistency_error = abs(singular_residual * singular_residual - residual_eigenvalue)
+    tests.append(
+        TestResult(
+            "Residual singular-value consistency",
+            consistency_error,
+            1.0e-8,
+            consistency_error < 1.0e-8,
+        )
     )
-    qubits, coeffs = pauli_decomposition(small, tol=1.0e-12)
-    padded, _ = pad_to_qubits(small)
-    reconstruction = reconstruct_from_paulis(qubits, coeffs)
-    reconstruction_error = float(np.linalg.norm(reconstruction - padded))
-    tests.append(TestResult("Pauli decomposition reconstruction", reconstruction_error, 1.0e-10, reconstruction_error < 1.0e-10))
     return tests

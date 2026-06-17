@@ -71,7 +71,7 @@ Interpretation: the mode rings at a lower tone and damps more slowly in absolute
 - Do not claim a full KS gravitational perturbation result.
 - Do not claim detectability with current detectors.
 - Do not claim high-`N` overtone stability without independent branch validation.
-- Keep the residual workflow framed as a numerical diagnostic, not as a hardware or implementation claim.
+- Keep the residual workflow framed as a numerical diagnostic, not as a separate platform claim.
 
 ## Minimum New Work Before Drafting
 

@@ -98,8 +98,6 @@ def write_spectral_results(
                 "spectral_residual_imag",
                 "schwarzschild_reference_relative_error",
                 "matrix_dimension",
-                "effective_qubits",
-                "pauli_terms",
                 "sparsity",
                 "condition_number",
                 "conditioning_warning",
@@ -133,8 +131,6 @@ def write_spectral_results(
                     row.omega_residual.imag,
                     ref_error,
                     row.matrix_dimension,
-                    row.effective_qubits,
-                    row.pauli_terms,
                     row.sparsity,
                     row.condition_number,
                     row.conditioning_warning,
@@ -161,8 +157,6 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                 "relative_change_from_previous_N",
                 "residual_norm",
                 "matrix_dimension",
-                "effective_qubits",
-                "pauli_terms",
                 "sparsity",
                 "condition_number",
                 "conditioning_warning",
@@ -182,54 +176,12 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                     "" if row.relative_change is None else row.relative_change,
                     row.residual_norm,
                     row.matrix_dimension,
-                    row.effective_qubits,
-                    row.pauli_terms,
                     row.sparsity,
                     row.condition_number,
                     row.conditioning_warning,
                     row.branch_status,
                     "" if row.selection_score is None else row.selection_score,
                     "" if row.eigenvector_overlap is None else row.eigenvector_overlap,
-                ]
-            )
-
-
-def write_resource_estimates(output: Path, rows: list[ModeResult]) -> None:
-    with output.open("w", newline="") as handle:
-        writer = csv.writer(handle)
-        writer.writerow(
-            [
-                "a_over_M",
-                "N",
-                "mode",
-                "matrix_dimension",
-                "effective_qubits",
-                "pauli_terms",
-                "sparsity",
-                "condition_number",
-                "conditioning_warning",
-                "residual_norm",
-                "hermiticity_error",
-                "psd_min_eigenvalue",
-                "branch_status",
-            ]
-        )
-        for row in rows:
-            writer.writerow(
-                [
-                    row.a,
-                    row.n,
-                    row.mode,
-                    row.matrix_dimension,
-                    row.effective_qubits,
-                    row.pauli_terms,
-                    row.sparsity,
-                    row.condition_number,
-                    row.conditioning_warning,
-                    row.residual_norm,
-                    row.hermiticity_error,
-                    row.psd_min_eigenvalue,
-                    row.branch_status,
                 ]
             )
 
@@ -251,102 +203,6 @@ def write_run_metadata(output: Path) -> None:
         ),
     }
     output.write_text(json.dumps(metadata, indent=2) + "\n")
-
-
-def write_residual_operator_report(
-    output: Path,
-    baselines: dict[float, BaselineResult],
-    rows: list[ModeResult],
-) -> None:
-    publication_rows = publication_mode_rows(rows)
-    fundamental_rows = final_fundamental_rows(rows)
-    fundamental_zero = next(row for row in fundamental_rows if row.a == 0.0)
-    rel_error = abs(fundamental_zero.omega - SCHWARZSCHILD_SCALAR_L2) / abs(SCHWARZSCHILD_SCALAR_L2)
-
-    lines = [
-        "# Spectral Residual Operator Report",
-        "",
-        "This update preserves the baseline time-domain and matrix-pencil workflow, but no longer treats",
-        "the waveform-derived matrix-pencil operator as the final QNM operator.",
-        "",
-        "## Baseline Workflow",
-        "",
-        "`time-domain evolution -> waveform fitting -> matrix-pencil reduction`",
-        "",
-        "This path remains useful for diagnostics and for checking the expected deformation trend.",
-        "It is not used as the final residual operator.",
-        "",
-        "## Direct Spectral Residual Workflow",
-        "",
-        "`KS perturbation equation -> Chebyshev pseudospectral discretization -> P_N(omega) -> R_N(omega)`",
-        "",
-        "The scalar perturbation equation is discretized directly after compactifying the horizon-to-infinity",
-        "domain and factoring the QNM asymptotic behavior. The residual operator",
-        "`R_N(omega)=P_N(omega)^dagger P_N(omega)` is Hermitian and positive semidefinite by construction.",
-        "Candidate modes are accepted only after residual, convergence, branch-status, and Leaver-style validation checks.",
-        "",
-        "## Schwarzschild Check",
-        "",
-        f"- Reference scalar l=2 mode: `{SCHWARZSCHILD_SCALAR_L2.real:.12f} {SCHWARZSCHILD_SCALAR_L2.imag:+.12f}i`.",
-        f"- Direct spectral N={FINAL_SPECTRAL_N}: `{fundamental_zero.omega.real:.12f} {fundamental_zero.omega.imag:+.12f}i`.",
-        f"- Relative error: `{rel_error:.3e}`.",
-        "",
-        "## Publication-Safe Spectral Results",
-        "",
-        "The fundamental branch is reported at N=96. The first-overtone branch is",
-        f"reported at the Leaver-validated reference grid N={OVERTONE_PUBLICATION_N};",
-        "tracked high-N overtone rows are written separately as exploratory diagnostics.",
-        "",
-        "| a/M | N | mode | status | baseline fit | matrix pencil | spectral | spectral residual |",
-        "|---:|---:|---|---|---:|---:|---:|---:|",
-    ]
-
-    for row in publication_rows:
-        baseline = baselines[row.a]
-        if row.mode == "fundamental":
-            fit = f"`{baseline.omega_fit.real:.9f}{baseline.omega_fit.imag:+.9f}i`"
-            pencil = f"`{baseline.omega_pencil.real:.9f}{baseline.omega_pencil.imag:+.9f}i`"
-        else:
-            fit = ""
-            pencil = ""
-        lines.append(
-            f"| {row.a:.1f} | {row.n} | {row.mode} | {row.branch_status} | {fit} | {pencil} | "
-            f"`{row.omega.real:.9f}{row.omega.imag:+.9f}i` | "
-            f"`{row.omega_residual.real:.9f}{row.omega_residual.imag:+.9f}i` |"
-        )
-
-    lines += [
-        "",
-        "## Conditioning Diagnostics",
-        "",
-        f"Rows with `cond(P_N) >= {CONDITION_WARNING_THRESHOLD:.1e}` are flagged because",
-        "ill-conditioning limits how many digits should be interpreted as physically stable.",
-        "",
-        "| a/M | N | mode | dim | cond(P_N) | warning | residual norm |",
-        "|---:|---:|---|---:|---:|---|---:|",
-    ]
-    for row in publication_rows:
-        lines.append(
-            f"| {row.a:.1f} | {row.n} | {row.mode} | {row.matrix_dimension} | "
-            f"{row.condition_number:.3e} | {row.conditioning_warning} | {row.residual_norm:.3e} |"
-        )
-
-    lines += [
-        "",
-        "## Verification",
-        "",
-        "The code verifies Hermiticity, positive semidefiniteness, Schwarzschild recovery,",
-        "Leaver agreement, and catalogue consistency through pytest-compatible tests,",
-        "`tests/test_qnm_algorithm.py --full`, and `scripts/run_hybrid_qnm_algorithm.py --tests-only`.",
-        "",
-        "Small negative PSD eigenvalues can appear at the 1e-13 level because of dense Hermitian eigensolver",
-        "roundoff. The reported residual norm uses the smallest singular value of `P_N(omega)`, which is",
-        "nonnegative by construction.",
-        "",
-        "High-N first-overtone rows are treated as exploratory until branch-by-branch Leaver or",
-        "higher-precision validation is added.",
-    ]
-    output.write_text("\n".join(lines) + "\n")
 
 
 def plot_convergence(rows: list[ModeResult], output: Path) -> None:
@@ -427,12 +283,10 @@ def run_pipeline(base_dir: Path) -> None:
     write_spectral_results(results_dir / "exploratory_spectral_results.csv", baselines, spectral_rows, publication_only=False)
     write_convergence_table(results_dir / "convergence_results.csv", spectral_rows)
     write_convergence_table(results_dir / "convergence_table.csv", spectral_rows)
-    write_resource_estimates(results_dir / "resource_estimates.csv", spectral_rows)
     write_leaver_comparison(results_dir / "leaver_comparison.csv", leaver_rows)
     write_catalogue(results_dir / "qnm_catalogue.csv", catalogue_rows)
     write_catalogue_report(results_dir / "qnm_catalogue_report.md", catalogue_rows)
     physics_outputs = write_physics_analysis(results_dir, figures_dir, catalogue_rows)
-    write_residual_operator_report(results_dir / "residual_operator_report.md", baselines, spectral_rows)
     write_run_metadata(results_dir / "run_metadata.json")
     plot_convergence(spectral_rows, figures_dir / "spectral_convergence.png")
     plot_deformation_trend(baselines, spectral_rows, figures_dir / "spectral_deformation_trend.png")

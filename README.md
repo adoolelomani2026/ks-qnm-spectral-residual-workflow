@@ -74,18 +74,26 @@ matplotlib 3.10.8
 ```
 
 Create and activate a virtual environment, then install the pinned runtime
-dependencies:
+dependencies and the local package in editable mode:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+pip install -e .
 ```
 
 For pytest-based development checks, install:
 
 ```powershell
 pip install -r requirements-dev.txt
+pip install -e .
+```
+
+After installation, a quick import check should succeed:
+
+```powershell
+python -c "import qnm; print(qnm.__file__)"
 ```
 
 ## Validation
