@@ -1,7 +1,7 @@
 """Universality stress tests for scalar QNM pseudospectral sensitivity.
 
-The routines here compare the KS deformation with an additional regular black
-hole model using the same finite-dimensional Chebyshev residual diagnostics.
+The routines here compare the KS deformation with regular black-hole
+comparators using the same finite-dimensional Chebyshev residual diagnostics.
 They are intentionally conservative: the output is designed to falsify broad
 claims unless several models, branches, and numerical checks all agree.
 """
@@ -20,7 +20,9 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
 from scipy.linalg import eig
+from scipy.optimize import brentq
 
 from .common import MASS
 from .prl_instability import SCALAR_INITIAL_TARGETS
@@ -41,6 +43,8 @@ UNIVERSALITY_PARAMETERS = {
     "ks": (0.0, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0),
     # Hayward horizons exist for q/M < 4/(3 sqrt(3)) ~= 0.770.
     "hayward": (0.0, 0.1, 0.2, 0.35, 0.5, 0.65, 0.72),
+    # Bardeen horizons have the same critical magnetic-charge scale.
+    "bardeen": (0.0, 0.1, 0.2, 0.35, 0.5, 0.65, 0.72),
 }
 UNIVERSALITY_ELL_VALUES = (0, 1, 2, 3, 4)
 UNIVERSALITY_OVERTONES = (0, 1)
@@ -103,6 +107,16 @@ class ModelBarrierMetric:
     model: str
     parameter: float
     ell: int
+    horizon_radius: float
+    horizon_shift: float | None
+    surface_gravity: float
+    surface_gravity_shift: float | None
+    photon_sphere_radius: float
+    photon_sphere_shift: float | None
+    photon_orbital_frequency: float
+    photon_orbital_frequency_shift: float | None
+    eikonal_lyapunov: float
+    eikonal_lyapunov_shift: float | None
     peak_height: float
     peak_height_shift: float | None
     r_peak: float
@@ -147,6 +161,34 @@ def horizon_hayward(q: float, mass: float = MASS) -> float:
     return float(real_roots[-1])
 
 
+def f_bardeen(r: np.ndarray | float, g: float, mass: float = MASS) -> np.ndarray | float:
+    r_arr = np.asarray(r)
+    return 1.0 - 2.0 * mass * r_arr * r_arr / (r_arr * r_arr + g * g) ** 1.5
+
+
+def df_bardeen(r: np.ndarray | float, g: float, mass: float = MASS) -> np.ndarray | float:
+    r_arr = np.asarray(r)
+    return 2.0 * mass * r_arr * (r_arr * r_arr - 2.0 * g * g) / (r_arr * r_arr + g * g) ** 2.5
+
+
+def horizon_bardeen(g: float, mass: float = MASS) -> float:
+    if abs(g) < 1.0e-14:
+        return 2.0 * mass
+    r_grid = np.linspace(1.0e-6, 5.0 * mass, 2000)
+    values = np.asarray(f_bardeen(r_grid, g, mass), dtype=float)
+    roots: list[float] = []
+    for left, right, f_left, f_right in zip(r_grid[:-1], r_grid[1:], values[:-1], values[1:]):
+        if not np.isfinite(f_left) or not np.isfinite(f_right):
+            continue
+        if f_left == 0.0:
+            roots.append(float(left))
+        elif f_left * f_right < 0.0:
+            roots.append(float(brentq(lambda radius: f_bardeen(radius, g, mass), left, right)))
+    if not roots:
+        raise ValueError(f"Bardeen parameter g/M={g:g} has no positive horizon.")
+    return max(roots)
+
+
 MODELS = {
     "ks": StaticScalarModel(
         name="ks",
@@ -164,6 +206,14 @@ MODELS = {
         lapse=f_hayward,
         lapse_derivative=df_hayward,
     ),
+    "bardeen": StaticScalarModel(
+        name="bardeen",
+        parameter_label="g/M",
+        asymptotic_mass=MASS,
+        horizon_radius=horizon_bardeen,
+        lapse=f_bardeen,
+        lapse_derivative=df_bardeen,
+    ),
 }
 
 
@@ -171,6 +221,45 @@ def scalar_potential_model(model: StaticScalarModel, r: np.ndarray, ell: int, pa
     f = model.lapse(r, parameter)
     fp = model.lapse_derivative(r, parameter)
     return f * (ell * (ell + 1.0) / (r * r) + fp / r)
+
+
+def _second_lapse_derivative(model: StaticScalarModel, r: float, parameter: float) -> float:
+    step = max(1.0e-5 * abs(r), 1.0e-6)
+    return float(
+        (
+            model.lapse(r + step, parameter)
+            - 2.0 * model.lapse(r, parameter)
+            + model.lapse(r - step, parameter)
+        )
+        / (step * step)
+    )
+
+
+def _photon_sphere_metrics(model: StaticScalarModel, parameter: float) -> tuple[float, float, float]:
+    rh = model.horizon_radius(parameter)
+
+    def condition(radius: float) -> float:
+        return float(radius * model.lapse_derivative(radius, parameter) - 2.0 * model.lapse(radius, parameter))
+
+    r_grid = np.geomspace(rh * (1.0 + 1.0e-5), 80.0 * model.asymptotic_mass, 6000)
+    values = np.array([condition(radius) for radius in r_grid], dtype=float)
+    roots: list[float] = []
+    for left, right, f_left, f_right in zip(r_grid[:-1], r_grid[1:], values[:-1], values[1:]):
+        if not np.isfinite(f_left) or not np.isfinite(f_right):
+            continue
+        if f_left == 0.0:
+            roots.append(float(left))
+        elif f_left * f_right < 0.0:
+            roots.append(float(brentq(condition, left, right)))
+    if not roots:
+        return float("nan"), float("nan"), float("nan")
+    radius = max(roots)
+    lapse = float(model.lapse(radius, parameter))
+    omega = math.sqrt(max(lapse / (radius * radius), 0.0))
+    fpp = _second_lapse_derivative(model, radius, parameter)
+    lyapunov_squared = lapse * (2.0 * lapse - radius * radius * fpp) / (2.0 * radius * radius)
+    lyapunov = math.sqrt(max(lyapunov_squared, 0.0)) if np.isfinite(lyapunov_squared) else float("nan")
+    return radius, omega, lyapunov
 
 
 def build_model_spectral_problem(
@@ -455,10 +544,12 @@ def _tortoise_grid(model: StaticScalarModel, parameter: float, r: np.ndarray) ->
 def compute_barrier_metrics() -> list[ModelBarrierMetric]:
     rows: list[ModelBarrierMetric] = []
     for model_name, model in MODELS.items():
-        baselines: dict[int, tuple[float, float, float]] = {}
+        baselines: dict[int, dict[str, float]] = {}
         for ell in UNIVERSALITY_ELL_VALUES:
             for parameter in UNIVERSALITY_PARAMETERS[model_name]:
                 rh = model.horizon_radius(parameter)
+                surface_gravity = 0.5 * float(model.lapse_derivative(rh, parameter))
+                photon_radius, photon_frequency, lyapunov = _photon_sphere_metrics(model, parameter)
                 r = np.geomspace(rh * (1.0 + 1.0e-5), 140.0, 8000)
                 potential = scalar_potential_model(model, r, ell, parameter)
                 peak_index = int(np.argmax(potential))
@@ -477,20 +568,45 @@ def compute_barrier_metrics() -> list[ModelBarrierMetric]:
                 coeffs = np.polyfit(local_x - local_x[2], local_y, 2)
                 curvature = float(2.0 * coeffs[0])
                 if parameter == 0.0:
-                    baselines[ell] = (peak_height, width, curvature)
+                    baselines[ell] = {
+                        "horizon_radius": rh,
+                        "surface_gravity": surface_gravity,
+                        "photon_sphere_radius": photon_radius,
+                        "photon_orbital_frequency": photon_frequency,
+                        "eikonal_lyapunov": lyapunov,
+                        "peak_height": peak_height,
+                        "width": width,
+                        "curvature": curvature,
+                    }
                 base = baselines.get(ell)
                 rows.append(
                     ModelBarrierMetric(
                         model=model_name,
                         parameter=parameter,
                         ell=ell,
+                        horizon_radius=rh,
+                        horizon_shift=None if base is None else rh / base["horizon_radius"] - 1.0,
+                        surface_gravity=surface_gravity,
+                        surface_gravity_shift=None if base is None else surface_gravity / base["surface_gravity"] - 1.0,
+                        photon_sphere_radius=photon_radius,
+                        photon_sphere_shift=None
+                        if base is None or not np.isfinite(base["photon_sphere_radius"])
+                        else photon_radius / base["photon_sphere_radius"] - 1.0,
+                        photon_orbital_frequency=photon_frequency,
+                        photon_orbital_frequency_shift=None
+                        if base is None or not np.isfinite(base["photon_orbital_frequency"])
+                        else photon_frequency / base["photon_orbital_frequency"] - 1.0,
+                        eikonal_lyapunov=lyapunov,
+                        eikonal_lyapunov_shift=None
+                        if base is None or not np.isfinite(base["eikonal_lyapunov"])
+                        else lyapunov / base["eikonal_lyapunov"] - 1.0,
                         peak_height=peak_height,
-                        peak_height_shift=None if base is None else peak_height / base[0] - 1.0,
+                        peak_height_shift=None if base is None else peak_height / base["peak_height"] - 1.0,
                         r_peak=float(r[peak_index]),
                         rstar_width_halfmax=width,
-                        width_shift=None if base is None else width / base[1] - 1.0,
+                        width_shift=None if base is None else width / base["width"] - 1.0,
                         curvature_rstar_at_peak=curvature,
-                        curvature_shift=None if base is None else abs(curvature) / abs(base[2]) - 1.0,
+                        curvature_shift=None if base is None else abs(curvature) / abs(base["curvature"]) - 1.0,
                     )
                 )
     return rows
@@ -548,9 +664,23 @@ def compute_correlations(verdicts: list[ModelBranchVerdict], barriers: list[Mode
                 "peak_height_softening": -(barrier.peak_height_shift or 0.0),
                 "width_growth": barrier.width_shift or 0.0,
                 "curvature_softening": -(barrier.curvature_shift or 0.0),
+                "horizon_expansion": barrier.horizon_shift or 0.0,
+                "surface_gravity_growth": barrier.surface_gravity_shift or 0.0,
+                "photon_frequency_softening": -(barrier.photon_orbital_frequency_shift or 0.0),
+                "eikonal_lyapunov_growth": barrier.eikonal_lyapunov_shift or 0.0,
             }
         )
-    metrics = ["frequency_softening", "damping_shift", "peak_height_softening", "width_growth", "curvature_softening"]
+    metrics = [
+        "frequency_softening",
+        "damping_shift",
+        "peak_height_softening",
+        "width_growth",
+        "curvature_softening",
+        "horizon_expansion",
+        "surface_gravity_growth",
+        "photon_frequency_softening",
+        "eikonal_lyapunov_growth",
+    ]
     rows: list[dict[str, float | str]] = []
     for metric in metrics:
         x = np.array([float(item[metric]) for item in data], dtype=float)
@@ -693,6 +823,44 @@ def plot_barrier_correlation(output: Path, verdicts: list[ModelBranchVerdict], b
     plt.close(fig)
 
 
+def plot_width_correlation(output: Path, verdicts: list[ModelBranchVerdict], barriers: list[ModelBarrierMetric]) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    barrier_lookup = {(row.model, row.parameter, row.ell): row for row in barriers}
+    fig, axis = plt.subplots(figsize=(6.4, 4.0), constrained_layout=True)
+    markers = {"ks": "o", "hayward": "s", "bardeen": "^"}
+    colors = {0: "#356bad", 1: "#d95f02"}
+    for verdict in verdicts:
+        barrier = barrier_lookup.get((verdict.model, verdict.endpoint_parameter, verdict.ell))
+        if barrier is None or barrier.width_shift is None:
+            continue
+        axis.scatter(
+            100.0 * barrier.width_shift,
+            verdict.q10_gain_n64,
+            marker=markers.get(verdict.model, "o"),
+            color=colors.get(verdict.overtone, "black"),
+            alpha=0.78,
+            s=55,
+        )
+    axis.axhline(0.0, color="black", linewidth=0.8, alpha=0.35)
+    axis.axvline(0.0, color="black", linewidth=0.8, alpha=0.35)
+    axis.set_xlabel("tortoise-width change at half maximum (%)")
+    axis.set_ylabel(r"$\Delta[-Q_{10}(\log_{10}\eta_N)]$")
+    axis.grid(alpha=0.25)
+    model_handles = [
+        Line2D([0], [0], marker=marker, color="none", markerfacecolor="0.35", markersize=7, label=model)
+        for model, marker in markers.items()
+    ]
+    overtone_handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=color, markersize=7, label=f"n={overtone}")
+        for overtone, color in colors.items()
+    ]
+    first_legend = axis.legend(handles=model_handles, loc="lower left", frameon=False, title="model")
+    axis.add_artist(first_legend)
+    axis.legend(handles=overtone_handles, loc="upper right", frameon=False, title="branch")
+    fig.savefig(output, dpi=220)
+    plt.close(fig)
+
+
 def write_assessment(
     output: Path,
     verdicts: list[ModelBranchVerdict],
@@ -722,10 +890,11 @@ def write_assessment(
         "",
         "## Strongest one-sentence physical claim",
         "",
-        "KS and Hayward scalar branches often show simultaneous frequency softening",
-        "and increased finite-N pseudospectral susceptibility, but the effect is",
-        "model- and branch-dependent and does not yet establish a generic quantum",
-        "black-hole instability principle.",
+        "KS scalar branches show simultaneous frequency softening and increased",
+        "finite-N pseudospectral susceptibility, while the Hayward and Bardeen",
+        "regular-black-hole comparators mostly harden and narrow the same residual",
+        "diagnostic; the response is therefore deformation-specific rather than a",
+        "generic quantum-black-hole instability principle.",
         "",
         "## Evidence for or against universality",
         "",
@@ -740,13 +909,15 @@ def write_assessment(
     lines.extend(
         [
             "",
-            "The endpoint-gain pattern is therefore suggestive but not universal.",
+            "The endpoint-gain pattern is therefore a deformation-response taxonomy,",
+            "not evidence for universal amplification.",
             "",
             "## Evidence for or against a mechanism",
             "",
             f"- Best single predictor in this scan: {best_correlation['predictor']} with Pearson r={float(best_correlation['pearson_r_with_q10_gain']):.3f}.",
-            "- No single dimensionless barrier quantity explains all branches across both models.",
-            "- Barrier-height softening correlates qualitatively with frequency softening, but not strongly enough to be a scaling law.",
+            "- KS lowers the scalar barrier and broadens the finite-N residual susceptibility on usable branches.",
+            "- Hayward and Bardeen raise the scalar barrier for most ell>=1 branches and narrow the same diagnostic.",
+            "- No single dimensionless barrier or photon-sphere quantity is strong enough to be a universal scaling law.",
             "",
             "## Evidence for or against exceptional-point behavior",
             "",
@@ -760,10 +931,10 @@ def write_assessment(
             "",
             "## Referee-risk assessment",
             "",
-            "- Hayward comparison uses the same Chebyshev residual machinery but not an independent Leaver continued-fraction validation layer.",
+            "- Comparator models use the same Chebyshev residual machinery but not independent continued-fraction validation layers.",
             "- Low multipoles and overtones remain the most fragile sectors.",
             "- The finite-N pseudospectrum is not a continuum operator theorem.",
-            "- No comparator-independent scaling law has been found.",
+            "- The new result is a robust negative universality test, not a discovery-level PRL mechanism.",
             "",
             "## Branch table",
             "",

@@ -19,6 +19,7 @@ from qnm.universality import (
     plot_barrier_correlation,
     plot_model_heatmap,
     plot_softening_vs_sensitivity,
+    plot_width_correlation,
     run_universality_scan,
     summarize_model_branches,
     write_assessment,
@@ -40,7 +41,7 @@ def main() -> None:
     args.results_dir.mkdir(parents=True, exist_ok=True)
     args.figures_dir.mkdir(parents=True, exist_ok=True)
 
-    print("Running KS/Hayward universality scan...")
+    print("Running model-zoo universality scan...")
     scan_rows = run_universality_scan(
         main_grid_size=args.main_grid_size,
         resolution_grid_size=args.resolution_grid_size,
@@ -67,15 +68,18 @@ def main() -> None:
     heatmap = args.figures_dir / "universality_endpoint_gain_heatmap.png"
     scatter = args.figures_dir / "universality_softening_vs_sensitivity.png"
     barrier = args.figures_dir / "universality_barrier_correlation.png"
+    width = args.figures_dir / "universality_width_correlation.png"
     plot_model_heatmap(heatmap, verdicts)
     plot_softening_vs_sensitivity(scatter, verdicts)
     plot_barrier_correlation(barrier, verdicts, barriers)
+    plot_width_correlation(width, verdicts, barriers)
 
     support = [verdict for verdict in verdicts if verdict.universality_support]
     print(f"Wrote scan CSV: {scan_csv}")
     print(f"Wrote verdict CSV: {verdict_csv}")
     print(f"Wrote report: {report}")
     print(f"Wrote heatmap: {heatmap}")
+    print(f"Wrote width-correlation figure: {width}")
     print(f"Universality-supporting branches: {len(support)} / {len(verdicts)}")
     print("Verdict: Result is PRD/CQG quality but not PRL quality.")
 

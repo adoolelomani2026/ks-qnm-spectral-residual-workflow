@@ -48,7 +48,7 @@ from qnm.spectral import (
     run_self_tests,
     select_physical_mode,
 )
-from qnm.universality import MODELS, build_model_spectral_problem, horizon_hayward
+from qnm.universality import MODELS, build_model_spectral_problem, horizon_bardeen, horizon_hayward
 
 
 def _slow_marker(func):
@@ -209,6 +209,14 @@ def test_prl_instability_scan_branch_policy() -> None:
 def test_hayward_comparator_spectral_problem_smoke() -> None:
     assert horizon_hayward(0.5) > 0.0
     problem = build_model_spectral_problem(MODELS["hayward"], parameter=0.2, n=12, ell=2)
+    assert problem.a0.shape == (12, 12)
+    assert problem.left.shape == (24, 24)
+    assert np.isfinite(problem.r_nodes).all()
+
+
+def test_bardeen_comparator_spectral_problem_smoke() -> None:
+    assert horizon_bardeen(0.5) > 0.0
+    problem = build_model_spectral_problem(MODELS["bardeen"], parameter=0.2, n=12, ell=2)
     assert problem.a0.shape == (12, 12)
     assert problem.left.shape == (24, 24)
     assert np.isfinite(problem.r_nodes).all()
