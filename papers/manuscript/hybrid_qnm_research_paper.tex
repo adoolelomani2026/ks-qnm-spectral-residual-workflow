@@ -522,6 +522,7 @@ Table~\ref{tab:residualdiagnostics} reports the residual and conditioning diagno
 
 The code verifies Hermiticity, positive semidefiniteness, and Schwarzschild recovery. Small negative eigenvalues of \(R_N\) can appear at the \(10^{-13}\) level in dense Hermitian eigensolvers because of roundoff; the singular-value residual norm remains nonnegative by construction. The reported condition numbers remain very large even after bounded pencil scaling, so convergence and cross-validation are more reliable indicators than residual size alone.
 
+\clearpage
 \section{Discussion}
 
 The central physical pattern is the monotonic softening of the validated KS spectrum. Increasing \(a/M\) lowers both the oscillation frequency and the absolute damping rate for every sampled scalar and lapse-deformed axial branch in the catalogue. The scalar \(\ell=2\) fundamental mode is the safest interpretation of this pattern: at \(a/M=1\), its real frequency is lower by \(7.29\%\), its damping magnitude is lower by \(2.59\%\), and its quality factor is lower by \(4.83\%\).
@@ -540,23 +541,24 @@ The catalogue-level shifts are also not detectability forecasts. The percent-lev
 
 Finally, the overtone hierarchy remains the numerically weakest part of the catalogue. Fundamental modes are the most stable, first overtones are publication-facing only on the Leaver-validated \(N=32\) grid, and tracked high-\(N\) first-overtone rows are retained as exploratory diagnostics. Second overtones are included because they are scientifically informative, but the largest spectral--Leaver difference occurs on an \(n=2\) branch. They should be interpreted as branch diagnostics until higher-precision continuation and independent validation are added. This claim hierarchy is summarized in Table~\ref{tab:claimhierarchy}.
 
-\begin{table*}[t]
+\begin{table}[!htbp]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.16}
-\begin{tabularx}{\textwidth}{p{0.22\textwidth}p{0.28\textwidth}X}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{p{0.22\columnwidth}p{0.25\columnwidth}X}
 \toprule
-Sector or branch & Status & Publication use \\
+Branch & Status & Use \\
 \midrule
-Scalar fundamentals, \(n=0\) & Strongest validated sector & Main physics claim: monotonic KS softening and scalar \(\ell=2\) spectroscopic shifts. \\
-Scalar first overtones, \(n=1\) & Leaver-validated at \(N=32\) & Secondary catalogue and ratio diagnostics; high-\(N\) tracked rows remain exploratory. \\
-Second overtones, \(n=2\) & Informative but most delicate & Branch-sensitivity diagnostics only; avoid headline precision claims. \\
-Axial gravitational rows & Phenomenological axial model & Trend comparison only until gauge-invariant KS axial/polar master equations are derived. \\
+Scalar \(n=0\) & Strongest sector & Main softening and spectroscopy claims. \\
+Scalar \(n=1\) & Validated at \(N=32\) & Secondary diagnostics; high-\(N\) tracking remains exploratory. \\
+Overtones \(n=2\) & Most delicate & Branch diagnostics only; avoid headline precision claims. \\
+Axial rows & Phenomenological & Trend comparison only; not final gravitational-wave predictions. \\
 \bottomrule
 \end{tabularx}
 \caption{Claim hierarchy used in this manuscript. The table separates publication-facing scalar results from exploratory overtone diagnostics and phenomenological axial-gravitational trends.}
 \label{tab:claimhierarchy}
-\end{table*}
+\end{table}
 
 \subsection{Reproducibility}
 
