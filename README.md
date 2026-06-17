@@ -178,79 +178,8 @@ This writes:
 - `outputs/figures/scalar_l2_pseudospectrum_sensitivity.png`
 - `outputs/figures/scalar_l2_pseudospectrum_resolution_check.png`
 
-Run the broader PRL-level scalar instability stress test:
-
-```powershell
-python scripts/run_prl_instability_scan.py
-```
-
-This scan tests whether the stronger claim "KS deformation universally
-amplifies scalar QNM pseudospectral sensitivity" survives lower multipoles,
-overtones, denser deformation sampling, endpoint Leaver checks, finite-`N`
-checks through `N=96` for fundamentals, window-size checks, and mode-pair
-diagnostics. The current output is deliberately conservative: it recommends
-PRD/CQG rather than PRL.
-
-Main outputs:
-
-- `outputs/results/prl_instability_assessment.md`
-- `outputs/results/prl_instability_branch_verdicts.csv`
-- `outputs/results/prl_instability_scan_summary.csv`
-- `outputs/results/prl_instability_endpoint_leaver_checks.csv`
-- `outputs/results/prl_instability_mode_pair_diagnostics.csv`
-- `outputs/results/prl_instability_barrier_metrics.csv`
-- `outputs/results/prl_instability_window_sensitivity.csv`
-- `outputs/figures/prl_instability_central_heatmap.png`
-- `outputs/figures/prl_instability_robustness.png`
-- `outputs/figures/prl_instability_softening_scatter.png`
-- `papers/prl/ks_instability_prl_letter_draft.md`
-- `papers/prl/supplemental_material_outline.md`
-
-Classify the KS scalar stress-test branches by pseudospectral sensitivity:
-
-```powershell
-python scripts/analyze_branch_sensitivity.py
-```
-
-This joins the existing stress-test branch verdicts, endpoint Leaver checks,
-barrier metrics, condition indicators, and finite-`N` spread diagnostics. It
-does not assume universal amplification; it separates robustly increasing,
-weakly increasing, non-monotonic, and numerically inconclusive branches.
-
-Main outputs:
-
-- `outputs/results/branch_sensitivity_classes.csv`
-- `outputs/results/branch_sensitivity_correlations.csv`
-- `outputs/results/branch_sensitivity_predictor_search.csv`
-- `outputs/results/branch_sensitivity_report.md`
-- `outputs/figures/branch_sensitivity_predictors.png`
-
-Run the model-zoo universality test:
-
-```powershell
-python scripts/run_universality_scan.py
-```
-
-This compares the KS deformation with Hayward and Bardeen regular black holes
-using the same finite-dimensional Chebyshev residual diagnostics. The result is
-a direct falsification of the broadest PRL-style claim: KS shows positive
-endpoint susceptibility gains on the usable scalar branches, while the Hayward
-and Bardeen scans show negative endpoint gains across the tested branches. The
-current assessment is therefore that the effect is a deformation-response
-taxonomy rather than a generic quantum-correction principle.
-
-Main outputs:
-
-- `outputs/results/universality_assessment.md`
-- `outputs/results/universality_branch_verdicts.csv`
-- `outputs/results/universality_model_scan.csv`
-- `outputs/results/universality_barrier_metrics.csv`
-- `outputs/results/universality_correlations.csv`
-- `outputs/results/universality_mode_pair_diagnostics.csv`
-- `outputs/figures/universality_endpoint_gain_heatmap.png`
-- `outputs/figures/universality_softening_vs_sensitivity.png`
-- `outputs/figures/universality_barrier_correlation.png`
-- `outputs/figures/universality_width_correlation.png`
+Optional internal sensitivity audits are also preserved in `scripts/` and
+`outputs/`, but they are not part of the main manuscript narrative.
 
 ## Scientific Scope
 
@@ -311,22 +240,6 @@ Claim hierarchy:
   susceptibility `-Q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
   `a/M=1`, and the `log10 eta_N <= -10` local area grows by a factor `5.06`
   within the chosen window.
-- A broader PRL-level scalar scan finds positive endpoint susceptibility gains
-  for the active oscillatory branches, but only `8/14` branches satisfy the
-  stricter usable/supporting criteria. The current verdict is therefore
-  PRD/CQG-strength, not PRL-strength.
-- Branch-dependence analysis classifies those active scalar branches into
-  `8` robustly increasing, `3` weakly increasing, `1` non-monotonic, and `2`
-  numerically inconclusive cases. The strongest numerical correlate of gain
-  magnitude is condition-indicator growth, while the empirical overtone-load
-  separator `n/(ell+1/2) <= 2/3` identifies the reliable increasing cases in
-  the current finite sample. This is not a derived scaling law.
-- A KS/Hayward/Bardeen model-zoo universality scan finds only `8/30`
-  model-branch verdicts satisfy the stricter support criteria. KS contributes
-  all eight supporting branches, while Hayward and Bardeen each have `0/10`
-  supporting branches and negative endpoint susceptibility gains on every
-  tested branch. The broad "generic quantum amplification" claim is therefore
-  not supported.
 - Publication-facing first-overtone rows are frozen at the Leaver-validated
   `N=32` grid; tracked high-`N` overtone rows are kept in
   `outputs/results/exploratory_spectral_results.csv`.
