@@ -1,0 +1,6 @@
+predictor,pearson_r_with_q10_gain,sample_count
+frequency_softening,0.6311918583902759,20
+damping_shift,0.9345941860826656,20
+peak_height_softening,0.762650409997575,20
+width_growth,-0.9153460963062495,20
+curvature_softening,-0.26936815756968585,20

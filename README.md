@@ -206,6 +206,32 @@ Main outputs:
 - `papers/prl/ks_instability_prl_letter_draft.md`
 - `papers/prl/supplemental_material_outline.md`
 
+Run the KS/Hayward universality test:
+
+```powershell
+python scripts/run_universality_scan.py
+```
+
+This compares the KS deformation with a Hayward regular black hole using the
+same finite-dimensional Chebyshev residual diagnostics. The result is a direct
+falsification of the broadest PRL-style claim: KS shows positive endpoint
+susceptibility gains on the usable scalar branches, while the Hayward scan
+shows negative endpoint gains across the tested branches. The current
+assessment is therefore that the effect is model-dependent rather than a
+generic quantum-correction principle.
+
+Main outputs:
+
+- `outputs/results/universality_assessment.md`
+- `outputs/results/universality_branch_verdicts.csv`
+- `outputs/results/universality_model_scan.csv`
+- `outputs/results/universality_barrier_metrics.csv`
+- `outputs/results/universality_correlations.csv`
+- `outputs/results/universality_mode_pair_diagnostics.csv`
+- `outputs/figures/universality_endpoint_gain_heatmap.png`
+- `outputs/figures/universality_softening_vs_sensitivity.png`
+- `outputs/figures/universality_barrier_correlation.png`
+
 ## Scientific Scope
 
 The scalar sector is the cleanest physics target. The axial gravitational sector
@@ -269,6 +295,10 @@ Claim hierarchy:
   for the active oscillatory branches, but only `8/14` branches satisfy the
   stricter usable/supporting criteria. The current verdict is therefore
   PRD/CQG-strength, not PRL-strength.
+- A KS/Hayward universality scan finds only `8/20` model-branch verdicts satisfy
+  the stricter support criteria. Hayward has `0/10` supporting branches and
+  negative endpoint susceptibility gains on the tested branches, so the broad
+  "generic quantum amplification" claim is not supported.
 - Publication-facing first-overtone rows are frozen at the Leaver-validated
   `N=32` grid; tracked high-`N` overtone rows are kept in
   `outputs/results/exploratory_spectral_results.csv`.
