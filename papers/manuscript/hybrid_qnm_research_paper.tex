@@ -15,6 +15,7 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{caption}
+\usepackage{tikz}
 \usepackage[hidelinks]{hyperref}
 
 \setlength{\parindent}{1.45em}
@@ -60,18 +61,25 @@
 \newcommand{\ii}{\mathrm{i}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
+\definecolor{orcidgreen}{HTML}{A6CE39}
+\newcommand{\orcidicon}{%
+  \href{https://orcid.org/0009-0000-1935-4392}{%
+    \tikz[baseline=-0.55ex]{%
+      \node[fill=orcidgreen,circle,inner sep=0.45pt,text=white,font=\sffamily\bfseries\tiny] {iD};%
+    }%
+  }%
+}
 
 \begin{document}
 \twocolumn[
 \begin{center}
 {\large\bfseries A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes}\\
 \vspace{1.15em}
-{\normalsize Adel H. Al-Yoorby}\\
+{\normalsize Adel H. Al-Yoorby\,\orcidicon\textsuperscript{1,\textcolor{red}{*}}}\\
 \vspace{0.25em}
-{\itshape Department of Physics, Khalifa University of Science and Technology,}\\
+{\itshape \textsuperscript{1}Department of Physics, Khalifa University of Science and Technology,}\\
 {\itshape P.O. Box 127788, Abu Dhabi, United Arab Emirates}\\
-{\itshape ORCID: \href{https://orcid.org/0009-0000-1935-4392}{0009-0000-1935-4392}}\\
-{\itshape Corresponding author: Adel H. Al-Yoorby, \href{mailto:100063397@ku.ac.ae}{100063397@ku.ac.ae}}
+{\itshape \textsuperscript{\textcolor{red}{*}}Corresponding author: \href{mailto:100063397@ku.ac.ae}{100063397@ku.ac.ae}}
 \end{center}
 \begin{quote}
 \small
