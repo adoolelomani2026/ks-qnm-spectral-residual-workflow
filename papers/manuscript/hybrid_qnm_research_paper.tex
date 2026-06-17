@@ -1,4 +1,4 @@
-\documentclass[11pt,letterpaper]{article}
+\documentclass[12pt,a4paper]{article}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -22,6 +22,7 @@
 
 \setlength{\parindent}{1.2em}
 \setlength{\parskip}{0.05em}
+\linespread{1.05}
 \setlist[itemize]{leftmargin=1.2em,itemsep=0.1em,topsep=0.2em}
 \setlist[enumerate]{leftmargin=1.35em,itemsep=0.1em,topsep=0.2em}
 \emergencystretch=3em
@@ -29,14 +30,14 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[R]{\thepage}
-\setlength{\headheight}{14pt}
+\setlength{\headheight}{15pt}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
-\renewcommand{\figurename}{Fig.}
+\renewcommand{\figurename}{Figure}
 \renewcommand{\tablename}{Table}
 \captionsetup{font=small,labelfont=bf,labelsep=space}
 
@@ -325,11 +326,11 @@ M\omega_{\mathrm{Leaver}}=0.483643872211-0.096758775978\,\ii
 \end{equation*}
 for the Schwarzschild fundamental mode, with relative error \(9.652\times10^{-11}\) against the same reference. This confirms that the direct spectral branch is not an artifact of waveform fitting, matrix-pencil reduction, or the residual minimization layer, while still relying on the same physical equation and endpoint factorization.
 
-The convergence of the direct spectral fundamental branches with Chebyshev size is shown in Fig.~\ref{fig:spectralconvergence}. The plotted error is the complex difference from the \(N=96\) value at the same \(a/M\). It falls from the \(10^{-8}\) scale at \(N=16\) to \(10^{-10}\) or below by \(N=24\), after which the curves sit on the high-\(N\) numerical plateau expected from the ill-conditioned residual pencils.
+The convergence of the direct spectral fundamental branches with Chebyshev size is shown in figure~\ref{fig:spectralconvergence}. The plotted error is the complex difference from the \(N=96\) value at the same \(a/M\). It falls from the \(10^{-8}\) scale at \(N=16\) to \(10^{-10}\) or below by \(N=24\), after which the curves sit on the high-\(N\) numerical plateau expected from the ill-conditioned residual pencils.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{../../outputs/figures/spectral_convergence.png}
+\includegraphics[width=\linewidth]{figures/figure1_spectral_convergence.png}
 \caption{Chebyshev convergence of the direct spectral fundamental branches. The vertical axis shows \(|\omega_N-\omega_{96}|\) for \(N=16,24,32,48,64\), using the \(N=96\) value at the same \(a/M\) as the reference. The error drops rapidly between \(N=16\) and \(N=24\) and then reaches a high-\(N\) plateau, consistent with the large condition numbers reported in Table~\ref{tab:residualdiagnostics}.}
 \label{fig:spectralconvergence}
 \end{figure}
@@ -395,11 +396,11 @@ literature rel. error\\
 \label{tab:gravitationalcatalogue}
 \end{table}
 
-Representative lapse-deformed axial-gravitational \(\ell=2\) trajectories over the deformation grid are shown in Fig.~\ref{fig:gravitationaltrajectory}.
+Representative lapse-deformed axial-gravitational \(\ell=2\) trajectories over the deformation grid are shown in figure~\ref{fig:gravitationaltrajectory}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{../../outputs/figures/mode_trajectories_gravitational_l2.png}
+\includegraphics[width=\linewidth]{figures/figure2_mode_trajectories_gravitational_l2.png}
 \caption{Representative lapse-deformed axial-gravitational \(\ell=2\) mode trajectories versus \(a/M\). These curves are trend diagnostics for the phenomenological axial model.}
 \label{fig:gravitationaltrajectory}
 \end{figure}
@@ -410,11 +411,11 @@ Across the full Leaver-validated catalogue, the worst spectral--Leaver relative 
 
 The catalogue now supports a simple physics-facing analysis: each KS branch is compared against its own Schwarzschild endpoint at \(a/M=0\). Across the current grid, every scalar and lapse-deformed axial branch has a monotonically decreasing real part and a monotonically decreasing damping magnitude as \(a/M\) increases. Across the sampled validated catalogue examined here, the KS deformation shifts the ringdown branches toward lower oscillation frequencies and slightly longer damping times.
 
-For the scalar \(\ell=2\) fundamental branch, the endpoint \(a/M=1\) shifts are \(-7.29\%\) in \(\mathrm{Re}(M\omega)\), \(-2.59\%\) in \(-\mathrm{Im}(M\omega)\), and \(7.17\%\) in \(|\Delta\omega|/|\omega_0|\). The scalar \(\ell=2\) second overtone has a larger real-frequency shift, \(-9.16\%\), but it also belongs to the more delicate overtone sector. The axial gravitational \(\ell=2\) fundamental shifts by \(-5.61\%\) in \(\mathrm{Re}(M\omega)\) and \(-2.63\%\) in damping magnitude. The largest endpoint fractional frequency shift in the full table is \(7.23\%\), occurring for the scalar \(\ell=4\) fundamental branch. The \(\ell=2\) endpoint trends are plotted in Fig.~\ref{fig:cataloguephysics}.
+For the scalar \(\ell=2\) fundamental branch, the endpoint \(a/M=1\) shifts are \(-7.29\%\) in \(\mathrm{Re}(M\omega)\), \(-2.59\%\) in \(-\mathrm{Im}(M\omega)\), and \(7.17\%\) in \(|\Delta\omega|/|\omega_0|\). The scalar \(\ell=2\) second overtone has a larger real-frequency shift, \(-9.16\%\), but it also belongs to the more delicate overtone sector. The axial gravitational \(\ell=2\) fundamental shifts by \(-5.61\%\) in \(\mathrm{Re}(M\omega)\) and \(-2.63\%\) in damping magnitude. The largest endpoint fractional frequency shift in the full table is \(7.23\%\), occurring for the scalar \(\ell=4\) fundamental branch. The \(\ell=2\) endpoint trends are plotted in figure~\ref{fig:cataloguephysics}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{../../outputs/figures/catalogue_l2_fractional_shifts.png}
+\includegraphics[width=\linewidth]{figures/figure3_catalogue_l2_fractional_shifts.png}
 \caption{Schwarzschild-relative endpoint trends for the \(\ell=2\) catalogue branches. Solid curves show scalar modes and dashed curves show the lapse-deformed axial gravitational model. The real-frequency shifts dominate the damping shifts, and all branches move downward over the sampled deformation range.}
 \label{fig:cataloguephysics}
 \end{figure}
@@ -425,11 +426,11 @@ The generated analysis records the sensitivity ranking, dimensionless spectrosco
 
 At fixed mass scale, the catalogue trend has a direct spectroscopic interpretation. The negative shift in \(\mathrm{Re}(M\omega)\) lowers the ringdown tone, while the negative shift in \(-\mathrm{Im}(M\omega)\) lowers the absolute damping rate and therefore lengthens the damping time. For the scalar \(\ell=2\) fundamental branch, the damping magnitude decreases by \(2.59\%\), corresponding to an approximate \(2.7\%\) increase in damping time. Because the oscillation frequency decreases by a larger fraction, the quality factor decreases by \(4.83\%\): the signal lives slightly longer in absolute time, but it completes fewer oscillations per damping time.
 
-Dimensionless mode ratios sharpen this interpretation because they are less directly absorbable into a simple mass rescaling than individual frequencies. For the scalar \(\ell=2\) branch at \(a/M=1\), the complex ratio \(\omega_0/\omega_1\) changes from \(0.836060+0.324207\,\ii\) to \(0.823241+0.335659\,\ii\), a \(1.92\%\) shift in the complex-ratio plane. The corresponding \(\omega_0/\omega_2\) ratio changes from \(0.579814+0.460140\,\ii\) to \(0.553881+0.464905\,\ii\), a \(3.56\%\) shift. The branch-wise ratio \(\mathrm{Re}(\omega)/[-\mathrm{Im}(\omega)]\) shifts by \(-4.83\%\), \(-5.71\%\), and \(-7.31\%\) for \(n=0,1,2\), respectively; the \(n=2\) value should be read with the overtone caveat already discussed. These ratio diagnostics are shown in Fig.~\ref{fig:spectroscopicratios}.
+Dimensionless mode ratios sharpen this interpretation because they are less directly absorbable into a simple mass rescaling than individual frequencies. For the scalar \(\ell=2\) branch at \(a/M=1\), the complex ratio \(\omega_0/\omega_1\) changes from \(0.836060+0.324207\,\ii\) to \(0.823241+0.335659\,\ii\), a \(1.92\%\) shift in the complex-ratio plane. The corresponding \(\omega_0/\omega_2\) ratio changes from \(0.579814+0.460140\,\ii\) to \(0.553881+0.464905\,\ii\), a \(3.56\%\) shift. The branch-wise ratio \(\mathrm{Re}(\omega)/[-\mathrm{Im}(\omega)]\) shifts by \(-4.83\%\), \(-5.71\%\), and \(-7.31\%\) for \(n=0,1,2\), respectively; the \(n=2\) value should be read with the overtone caveat already discussed. These ratio diagnostics are shown in figure~\ref{fig:spectroscopicratios}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{../../outputs/figures/catalogue_l2_spectroscopic_ratios.png}
+\includegraphics[width=\linewidth]{figures/figure4_catalogue_l2_spectroscopic_ratios.png}
 \caption{Scalar \(\ell=2\) dimensionless spectroscopy diagnostics. The plot shows Schwarzschild-relative changes in \(\omega_0/\omega_1\), \(\omega_0/\omega_2\), and \(\mathrm{Re}(\omega_0)/[-\mathrm{Im}(\omega_0)]\). These ratios do not by themselves constitute an observational forecast, but they are closer to spectroscopy observables than individual mode frequencies because they reduce simple mass-scaling degeneracy.}
 \label{fig:spectroscopicratios}
 \end{figure}
@@ -539,25 +540,25 @@ Figure~\ref{fig:pseudocontours} shows contours of \(\log_{10}\eta_N\) around the
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{../../outputs/figures/scalar_l2_pseudospectrum_contours.png}
+\includegraphics[width=\linewidth]{figures/figure5_scalar_l2_pseudospectrum_contours.png}
 \caption{Finite-dimensional scalar \(\ell=2,n=0\) singular-value pseudospectral contours for the relative residual \(\eta_N=\sigma_{\min}(P_N)/\sigma_{\max}(P_N)\) at \(N=64\). White crosses mark the residual-minimized QNM locations. The panels show that the local small-\(\eta_N\) basin broadens as \(a/M\) increases.}
 \label{fig:pseudocontours}
 \end{figure}
 
-Quantile and area diagnostics give the same trend. Let \(Q_p\) denote the \(p\)-quantile of \(\log_{10}\eta_N\) over the local window. At \(N=64\), \(-Q_{10}\) rises from \(9.898\) at \(a/M=0\) to \(10.060\) at \(a/M=1\), a gain of \(0.161\), while \(-Q_{50}\) rises from \(9.574\) to \(9.710\). The area fraction satisfying \(\log_{10}\eta_N\le -10\) grows from \(4.36\%\) to \(22.07\%\), a factor of \(5.06\). The endpoint contour is window-limited, so the area is used only as a local diagnostic. These diagnostics are plotted in Fig.~\ref{fig:pseudosensitivity}.
+Quantile and area diagnostics give the same trend. Let \(Q_p\) denote the \(p\)-quantile of \(\log_{10}\eta_N\) over the local window. At \(N=64\), \(-Q_{10}\) rises from \(9.898\) at \(a/M=0\) to \(10.060\) at \(a/M=1\), a gain of \(0.161\), while \(-Q_{50}\) rises from \(9.574\) to \(9.710\). The area fraction satisfying \(\log_{10}\eta_N\le -10\) grows from \(4.36\%\) to \(22.07\%\), a factor of \(5.06\). The endpoint contour is window-limited, so the area is used only as a local diagnostic. These diagnostics are plotted in figure~\ref{fig:pseudosensitivity}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{../../outputs/figures/scalar_l2_pseudospectrum_sensitivity.png}
+\includegraphics[width=\linewidth]{figures/figure6_scalar_l2_pseudospectrum_sensitivity.png}
 \caption{Scalar \(\ell=2,n=0\) singular-value pseudospectral sensitivity diagnostics at \(N=64\). Left: quantile-based susceptibility measures increase with \(a/M\). Right: fixed-threshold contour area fractions also grow; the deepest endpoint contour is window-limited and is used only as a local diagnostic.}
 \label{fig:pseudosensitivity}
 \end{figure}
 
-The sign of the quantile trend is stable under the tested spectral sizes. As shown in Fig.~\ref{fig:pseudoresolution}, the \(a/M=0\) to \(a/M=1\) gain in \(-Q_{10}\) is \(0.097\), \(0.130\), and \(0.161\) for \(N=32,48,64\), respectively. Thus, within the present residual normalization, scalar fundamental softening is associated with increasing local pseudospectral sensitivity.
+The sign of the quantile trend is stable under the tested spectral sizes. As shown in figure~\ref{fig:pseudoresolution}, the \(a/M=0\) to \(a/M=1\) gain in \(-Q_{10}\) is \(0.097\), \(0.130\), and \(0.161\) for \(N=32,48,64\), respectively. Thus, within the present residual normalization, scalar fundamental softening is associated with increasing local pseudospectral sensitivity.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.82\linewidth]{../../outputs/figures/scalar_l2_pseudospectrum_resolution_check.png}
+\includegraphics[width=0.82\linewidth]{figures/figure7_scalar_l2_pseudospectrum_resolution_check.png}
 \caption{Finite-\(N\) check for the scalar \(\ell=2,n=0\) singular-value pseudospectral trend. The plotted quantity is the increase in \(-Q_{10}(\log_{10}\eta_N)\) relative to the Schwarzschild value at the same \(N\). The monotonic increase with \(a/M\) is stable for \(N=32,48,64\), although the absolute contour levels remain resolution dependent.}
 \label{fig:pseudoresolution}
 \end{figure}
@@ -626,7 +627,7 @@ The numerical contribution is the Chebyshev--Leaver validation framework behind 
 
 The workflow contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The non-Hermitian KS resonance equation \(P_N(\omega)\bm{u}=0\) is tested through the Hermitian positive-semidefinite residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), and candidate modes are treated as minima of \(\sigma_{\min}(P_N(\omega))\) subject to convergence and Leaver validation. The singular-value pseudospectral diagnostic extends this workflow from locating frequencies to probing local finite-\(N\) spectral sensitivity: for the scalar \(\ell=2,n=0\) branch, the \(N=64\) 10\% quantile susceptibility increases by \(0.161\) from \(a/M=0\) to \(a/M=1\), with the sign of the trend stable for \(N=32,48,64\). The contribution is therefore not a claim of originality for residual singular-value theory or a continuum stability theorem. It is the combination of a fixed-mass KS Chebyshev residual implementation, Leaver-style validation, branch-status discipline, spectroscopy diagnostics, and a local finite-dimensional singular-value pseudospectral audit.
 
-\section*{Declarations}
+\section*{Acknowledgements and declarations}
 
 \noindent\textbf{Funding.}
 No funding was received to assist with the preparation of this manuscript.
