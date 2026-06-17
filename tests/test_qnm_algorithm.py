@@ -41,6 +41,7 @@ from qnm.normalization import (
     mass_over_horizon_from_alpha,
 )
 from qnm.pseudospectrum import compute_pseudospectrum_grid, summarize_grid
+from qnm.prl_instability import active_branches
 from qnm.spectral import (
     build_spectral_problem,
     generalized_eigenvalues,
@@ -194,6 +195,14 @@ def test_pseudospectrum_grid_smoke() -> None:
     assert summary.min_log10_relative_sigma <= summary.median_log10_relative_sigma
     assert summary.quantiles[0.10] <= summary.quantiles[0.50]
     assert summary.threshold_areas[-7.0] >= 0.0
+
+
+def test_prl_instability_scan_branch_policy() -> None:
+    branches = active_branches()
+    assert (0, 0) in branches
+    assert (0, 1) in branches
+    assert (0, 2) not in branches
+    assert (4, 2) in branches
 
 
 @_slow_marker

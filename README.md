@@ -178,6 +178,34 @@ This writes:
 - `outputs/figures/scalar_l2_pseudospectrum_sensitivity.png`
 - `outputs/figures/scalar_l2_pseudospectrum_resolution_check.png`
 
+Run the broader PRL-level scalar instability stress test:
+
+```powershell
+python scripts/run_prl_instability_scan.py
+```
+
+This scan tests whether the stronger claim "KS deformation universally
+amplifies scalar QNM pseudospectral sensitivity" survives lower multipoles,
+overtones, denser deformation sampling, endpoint Leaver checks, finite-`N`
+checks through `N=96` for fundamentals, window-size checks, and mode-pair
+diagnostics. The current output is deliberately conservative: it recommends
+PRD/CQG rather than PRL.
+
+Main outputs:
+
+- `outputs/results/prl_instability_assessment.md`
+- `outputs/results/prl_instability_branch_verdicts.csv`
+- `outputs/results/prl_instability_scan_summary.csv`
+- `outputs/results/prl_instability_endpoint_leaver_checks.csv`
+- `outputs/results/prl_instability_mode_pair_diagnostics.csv`
+- `outputs/results/prl_instability_barrier_metrics.csv`
+- `outputs/results/prl_instability_window_sensitivity.csv`
+- `outputs/figures/prl_instability_central_heatmap.png`
+- `outputs/figures/prl_instability_robustness.png`
+- `outputs/figures/prl_instability_softening_scatter.png`
+- `papers/prl/ks_instability_prl_letter_draft.md`
+- `papers/prl/supplemental_material_outline.md`
+
 ## Scientific Scope
 
 The scalar sector is the cleanest physics target. The axial gravitational sector
@@ -237,6 +265,10 @@ Claim hierarchy:
   susceptibility `-Q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
   `a/M=1`, and the `log10 eta_N <= -10` local area grows by a factor `5.06`
   within the chosen window.
+- A broader PRL-level scalar scan finds positive endpoint susceptibility gains
+  for the active oscillatory branches, but only `8/14` branches satisfy the
+  stricter usable/supporting criteria. The current verdict is therefore
+  PRD/CQG-strength, not PRL-strength.
 - Publication-facing first-overtone rows are frozen at the Leaver-validated
   `N=32` grid; tracked high-`N` overtone rows are kept in
   `outputs/results/exploratory_spectral_results.csv`.
