@@ -16,7 +16,7 @@
 \usepackage{titlesec}
 \usepackage{caption}
 \usepackage{tikz}
-\usepackage[hidelinks]{hyperref}
+\usepackage[hidelinks,hyperfootnotes=false]{hyperref}
 
 \setlength{\parindent}{1.45em}
 \setlength{\parskip}{0pt}
@@ -75,7 +75,7 @@
 \begin{center}
 {\large\bfseries A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes}\\
 \vspace{1.15em}
-{\normalsize Adel H. Al-Yoorby\,\orcidicon\textsuperscript{1}}\\
+{\normalsize Adel H. Al-Yoorby\,\orcidicon\textsuperscript{1,*}}\\
 \vspace{0.25em}
 {\itshape \textsuperscript{1}Department of Physics, Khalifa University of Science and Technology,}\\
 {\itshape P.O. Box 127788, Abu Dhabi, United Arab Emirates}
@@ -91,6 +91,10 @@ Kazakov--Solodukhin black holes; quasinormal modes; Chebyshev spectral methods; 
 \end{quote}
 \vspace{1.0em}
 ]
+\begingroup
+\renewcommand{\thefootnote}{*}
+\footnotetext{Corresponding author: \href{mailto:alyoorby@gmail.com}{alyoorby@gmail.com}.}
+\endgroup
 \thispagestyle{empty}
 
 \section{Introduction}

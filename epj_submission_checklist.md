@@ -5,7 +5,7 @@ Target manuscript: *A Chebyshev-Leaver Spectral Residual Workflow for Kazakov-So
 ## Implemented manuscript requirements
 
 - Title page includes the concise title, author name, full affiliation, and linked ORCID `iD` icon.
-- The corresponding-author email is omitted from the visible title block by author preference; provide `100063397@ku.ac.ae` in the EPJ submission portal metadata.
+- Corresponding-author email is supplied as a first-page footnote: `alyoorby@gmail.com`.
 - Abstract has a visible heading and is 227 words, within the EPJ Plus 150-250 word range.
 - Abstract defines QNM and KS at first use.
 - Abstract includes the requested core results:
@@ -63,6 +63,6 @@ Target manuscript: *A Chebyshev-Leaver Spectral Residual Workflow for Kazakov-So
 ## Remaining submission-portal items
 
 - No repository placeholder remains; the GitHub link is active.
-- Enter the corresponding-author email in the submission portal metadata: `100063397@ku.ac.ae`.
+- Enter the corresponding-author email in the submission portal metadata: `alyoorby@gmail.com`.
 - The official Springer Nature `sn-jnl.cls` class was not available in the local TeX installation, so the manuscript keeps the existing LaTeX article layout while implementing EPJ/Springer structural requirements.
 - EPJ Plus may request a separate graphical abstract upload through the submission portal. That file is not part of the manuscript PDF.
