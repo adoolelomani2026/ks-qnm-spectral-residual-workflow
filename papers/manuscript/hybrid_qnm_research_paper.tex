@@ -1,11 +1,12 @@
-\documentclass[10pt,letterpaper,twocolumn]{article}
+\documentclass[11pt,letterpaper]{article}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=0.72in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage{newtxtext,newtxmath}
 \usepackage{microtype}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{xcolor}
 \usepackage{amsmath,bm}
 \usepackage{booktabs}
@@ -19,9 +20,8 @@
 \usepackage{tikz}
 \usepackage[hidelinks,hyperfootnotes=false]{hyperref}
 
-\setlength{\parindent}{1.45em}
-\setlength{\parskip}{0pt}
-\setlength{\columnsep}{0.25in}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0.05em}
 \setlist[itemize]{leftmargin=1.2em,itemsep=0.1em,topsep=0.2em}
 \setlist[enumerate]{leftmargin=1.35em,itemsep=0.1em,topsep=0.2em}
 \emergencystretch=3em
@@ -29,6 +29,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[R]{\thepage}
+\setlength{\headheight}{14pt}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
@@ -40,7 +41,7 @@
 \captionsetup{font=small,labelfont=bf,labelsep=space}
 
 \titleformat{\section}
-  {\normalsize\bfseries}
+  {\large\bfseries}
   {\thesection}
   {0.65em}
   {}
@@ -72,16 +73,17 @@
 }
 
 \begin{document}
-\twocolumn[
 \begin{center}
-{\large\bfseries A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes}\\
-\vspace{1.15em}
+{\Large\bfseries A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes}\\
+\vspace{1.2em}
 {\normalsize Adel H. Al-Yoorby\,\orcidicon\textsuperscript{1,*}}\\
 \vspace{0.25em}
 {\itshape \textsuperscript{1}Department of Physics, Khalifa University of Science and Technology,}\\
 {\itshape P.O. Box 127788, Abu Dhabi, United Arab Emirates}
 \end{center}
-\begin{quote}
+
+\begin{center}
+\begin{minipage}{0.92\textwidth}
 \small
 \noindent\textbf{Abstract.}
 Can non-Hermitian black-hole quasinormal-mode (QNM) resonance conditions be handled through a Hermitian residual minimization workflow in a concrete quantum-deformed spacetime? This paper applies a Chebyshev--Leaver spectral residual workflow to Kazakov--Solodukhin (KS) quantum-deformed Schwarzschild black holes. After compactifying the radial equation and factoring the QNM asymptotics, Chebyshev collocation gives a polynomial operator \(P_N(\omega)\bm{u}=0\). For each trial frequency the method forms \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), searches for minima of \(\sigma_{\min}(P_N(\omega))\), and accepts candidates after convergence checks and Leaver-style continued-fraction validation. The workflow is presented as a KS-specific implementation grounded in existing singular-value and pseudospectrum ideas, not as a claim to invent residual singular-value theory. The Schwarzschild scalar \(\ell=2\) fundamental mode is recovered at \(N=96\) with relative error \(1.462\times10^{-10}\). The validated catalogue covers scalar and lapse-deformed axial-gravitational \(\ell=2,3,4\) modes through the second overtone; the worst Leaver--spectral relative difference is \(1.097\times10^{-5}\). Across \(a/M=0,0.2,0.5,1.0\), sampled branches soften monotonically in the fixed-mass normalization. For scalar \(\ell=2,n=0\) at \(a/M=1\), the shifts are \(-7.29\%\) in \(\mathrm{Re}(M\omega)\), \(-2.59\%\) in \(-\mathrm{Im}(M\omega)\), and \(-4.83\%\) in quality factor. The axial gravitational sector remains phenomenological because it uses a KS-lapse-deformed Regge--Wheeler potential rather than derived gauge-invariant KS perturbation equations.
@@ -89,9 +91,9 @@ Can non-Hermitian black-hole quasinormal-mode (QNM) resonance conditions be hand
 \vspace{0.65em}
 \noindent\textbf{Keywords.}
 Kazakov--Solodukhin black holes; quasinormal modes; Chebyshev spectral methods; Leaver continued fractions; spectral residual minimization; black-hole spectroscopy.
-\end{quote}
+\end{minipage}
+\end{center}
 \vspace{1.0em}
-]
 \begingroup
 \renewcommand{\thefootnote}{*}
 \footnotetext{Corresponding author: \href{mailto:alyoorby@gmail.com}{alyoorby@gmail.com}.}
@@ -325,7 +327,7 @@ for the Schwarzschild fundamental mode, with relative error \(9.652\times10^{-11
 
 The convergence of the direct spectral fundamental branch with Chebyshev size is shown in Fig.~\ref{fig:spectralconvergence}.
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{../../outputs/figures/spectral_convergence.png}
 \caption{Chebyshev convergence of the direct spectral fundamental mode for \(N=16,32,48,64,96\). The Schwarzschild branch is stable to high precision through moderate \(N\); the \(N=96\) values are retained for the final comparison table.}
@@ -336,7 +338,7 @@ The convergence of the direct spectral fundamental branch with Chebyshev size is
 
 Table~\ref{tab:leavercomparison} summarizes the Leaver-style continued-fraction validation against the targeted Chebyshev spectral rows used for the scalar publication-facing comparison.
 
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.14}
@@ -359,13 +361,13 @@ Table~\ref{tab:leavercomparison} summarizes the Leaver-style continued-fraction 
 \end{tabular}
 \caption{Leaver-style continued-fraction validation against targeted Chebyshev spectral results at \(N=32\). The Leaver solver avoids Chebyshev collocation, matrix-pencil data, and residual minimization, while sharing the same perturbation equation and endpoint factorization. The automated validation fails if the relative difference exceeds \(10^{-6}\); the largest observed difference is \(1.814\times10^{-9}\).}
 \label{tab:leavercomparison}
-\end{table*}
+\end{table}
 
 \subsection{Axial gravitational catalogue}
 
 The same Chebyshev and Leaver infrastructure is extended to both scalar and axial-gravitational perturbation selectors for \(\ell=2,3,4\) and overtone indices \(n=0,1,2\). The resulting catalogue contains 72 rows covering \(a/M=0,0.2,0.5,1.0\). For the axial gravitational sector, the Schwarzschild entries are checked against literature table values for the Regge--Wheeler spectrum, as reported in Table~\ref{tab:gravitationalcatalogue}.
 
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.14}
@@ -389,11 +391,11 @@ literature rel. error\\
 \end{tabular}
 \caption{Axial gravitational Schwarzschild validation from the Leaver continued-fraction solver. Literature values are drawn from standard Schwarzschild QNM tables associated with the Berti--Cardoso--Starinets review and Leaver-method ringdown data; the largest relative discrepancy reflects rounded overtone table values.}
 \label{tab:gravitationalcatalogue}
-\end{table*}
+\end{table}
 
 Representative axial gravitational \(\ell=2\) trajectories over the deformation grid are shown in Fig.~\ref{fig:gravitationaltrajectory}.
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{../../outputs/figures/mode_trajectories_gravitational_l2.png}
 \caption{Representative axial gravitational \(\ell=2\) mode trajectories versus \(a/M\). The full catalogue also includes scalar and axial gravitational trajectory plots for \(\ell=2,3,4\).}
@@ -408,7 +410,7 @@ The catalogue now supports a simple physics-facing analysis: each KS branch is c
 
 For the scalar \(\ell=2\) fundamental branch, the endpoint \(a/M=1\) shifts are \(-7.29\%\) in \(\mathrm{Re}(M\omega)\), \(-2.59\%\) in \(-\mathrm{Im}(M\omega)\), and \(7.17\%\) in \(|\Delta\omega|/|\omega_0|\). The scalar \(\ell=2\) second overtone has a larger real-frequency shift, \(-9.16\%\), but it also belongs to the more delicate overtone sector. The axial gravitational \(\ell=2\) fundamental shifts by \(-5.61\%\) in \(\mathrm{Re}(M\omega)\) and \(-2.63\%\) in damping magnitude. The largest endpoint fractional frequency shift in the full table is \(7.23\%\), occurring for the scalar \(\ell=4\) fundamental branch. The \(\ell=2\) endpoint trends are plotted in Fig.~\ref{fig:cataloguephysics}.
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{../../outputs/figures/catalogue_l2_fractional_shifts.png}
 \caption{Schwarzschild-relative endpoint trends for the \(\ell=2\) catalogue branches. Solid curves show scalar modes and dashed curves show the lapse-deformed axial gravitational model. The real-frequency shifts dominate the damping shifts, and all branches move downward over the sampled deformation range.}
@@ -423,7 +425,7 @@ At fixed mass scale, the catalogue trend has a direct spectroscopic interpretati
 
 Dimensionless mode ratios sharpen this interpretation because they are less directly absorbable into a simple mass rescaling than individual frequencies. For the scalar \(\ell=2\) branch at \(a/M=1\), the complex ratio \(\omega_0/\omega_1\) changes from \(0.836060+0.324207\,\ii\) to \(0.823241+0.335659\,\ii\), a \(1.92\%\) shift in the complex-ratio plane. The corresponding \(\omega_0/\omega_2\) ratio changes from \(0.579814+0.460140\,\ii\) to \(0.553881+0.464905\,\ii\), a \(3.56\%\) shift. The branch-wise ratio \(\mathrm{Re}(\omega)/[-\mathrm{Im}(\omega)]\) shifts by \(-4.83\%\), \(-5.71\%\), and \(-7.31\%\) for \(n=0,1,2\), respectively; the \(n=2\) value should be read with the overtone caveat already discussed. These ratio diagnostics are shown in Fig.~\ref{fig:spectroscopicratios}.
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{../../outputs/figures/catalogue_l2_spectroscopic_ratios.png}
 \caption{Scalar \(\ell=2\) dimensionless spectroscopy diagnostics. The plot shows Schwarzschild-relative changes in \(\omega_0/\omega_1\), \(\omega_0/\omega_2\), and \(\mathrm{Re}(\omega_0)/[-\mathrm{Im}(\omega_0)]\). These ratios do not by themselves constitute a detectability forecast, but they are closer to spectroscopy observables than individual mode frequencies because they reduce simple mass-scaling degeneracy.}
@@ -443,7 +445,7 @@ Direct row-by-row numerical comparison requires care because the tabulated conve
 
 A direct numerical overlap does exist for the scalar \(\ell=0,n=0\) fundamental mode tabulated by Konoplya at fixed \(r_h=1\). This branch is outside the main \(\ell=2,3,4\) catalogue, so it is used only as a side diagnostic. After converting \(\beta=a/r_h\) to \(\alpha=a/M\), the same Chebyshev--Leaver workflow gives the horizon-scaled frequencies shown in Table~\ref{tab:konoplyacomparison}. The agreement with the published time-domain values is at the \(2.1\times10^{-3}\)--\(2.6\times10^{-3}\) relative level over the enabled rows; the comparison with the seventh-order WKB entries is weaker, roughly \(9.4\times10^{-3}\)--\(1.2\times10^{-2}\), as expected for low-\(\ell\) WKB data. This check is useful because it shows that the present implementation reproduces the earlier fixed-horizon scalar fundamental branch within the accuracy of the published time-domain extraction, while the fixed-\(M\) catalogue answers a different normalization question.
 
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.14}
@@ -460,11 +462,11 @@ this work \(r_h\omega\) & Konoplya time-domain \(r_h\omega\) &
 \end{tabular}
 \caption{Normalization-matched side comparison with the scalar \(\ell=0,n=0\) fixed-horizon table of Konoplya \cite{Konoplya2020}. The main catalogue in this paper starts at \(\ell=2\), so these rows are not used as headline results; they verify that the solver reproduces the previously tabulated scalar fundamental branch once the \(r_h\omega\) convention is matched. The full six-row comparison is generated by \texttt{scripts/compare\_konoplya2020\_scalar\_l0.py}.}
 \label{tab:konoplyacomparison}
-\end{table*}
+\end{table}
 
 The overtone comparison with Bolokhov--Bronnikov--Konoplya is necessarily more structural in the public manuscript record. Their overtone figures are for scalar \(\ell=0\) branches, including higher overtones \(n=5,7,9\), and the paper states that the precise numerical values plotted in those figures are available from the authors upon request \cite{Bolokhov2025}. The present catalogue instead reports \(\ell=2,3,4\) and stops at \(n=2\). The robust shared conclusion is therefore not a row-by-row frequency match, but the branch-status lesson: fundamentals are comparatively stable, while overtones are the deformation-sensitive sector and must be validated separately. Within the literature reviewed here, the distinctive contribution of the present work is the combination of fixed-mass KS catalogue generation, Leaver-anchored branch-status discipline, and dimensionless spectroscopy diagnostics in a single spectral residual workflow. Table~\ref{tab:literaturecomparison} summarizes this positioning.
 
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.16}
@@ -480,14 +482,14 @@ Quality-factor shifts & Not isolated as a headline KS diagnostic in the cited wo
 \end{tabularx}
 \caption{Positioning relative to existing KS QNM literature. The comparison is qualitative because earlier tabulations and the present fixed-mass catalogue use different parameter conventions.}
 \label{tab:literaturecomparison}
-\end{table*}
+\end{table}
 \FloatBarrier
 
 \subsection{Frequency comparison}
 
 The publication-facing scalar rows used for the headline numerical comparison are collected in Table~\ref{tab:spectralresults}. The associated scalar fundamental deformation trend is shown in Fig.~\ref{fig:spectraltrend}; this comparison separates the baseline waveform diagnostics from the direct spectral values used for the paper's claims.
 
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.16}
@@ -511,9 +513,9 @@ The publication-facing scalar rows used for the headline numerical comparison ar
 \end{tabular}
 \caption{Publication-facing scalar comparison. Fundamental branches are reported at \(N=96\); first overtones are frozen at the Leaver-validated \(N=32\) reference grid. Tracked high-\(N\) overtone rows are retained as exploratory diagnostics rather than used as headline results.}
 \label{tab:spectralresults}
-\end{table*}
+\end{table}
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{../../outputs/figures/spectral_deformation_trend.png}
 \caption{Baseline and direct spectral deformation trends for the scalar \(\ell=2\) fundamental mode. The spectral operator reproduces the same qualitative decrease in oscillation frequency with increasing \(a/M\), while avoiding the waveform-derived matrix surrogate.}
@@ -524,7 +526,7 @@ The publication-facing scalar rows used for the headline numerical comparison ar
 
 Table~\ref{tab:residualdiagnostics} reports the residual and conditioning diagnostics associated with the same publication-facing scalar rows.
 
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.14}
@@ -544,11 +546,11 @@ Table~\ref{tab:residualdiagnostics} reports the residual and conditioning diagno
 \end{tabular}
 \caption{Residual diagnostics for the publication-facing spectral branches. The residual column reports \(\sigma_{\min}(P_N)\) at the accepted frequency. All rows exceed the \(10^{14}\) condition-warning threshold, so residual minima should not be read as guaranteeing all displayed frequency digits without convergence and Leaver validation.}
 \label{tab:residualdiagnostics}
-\end{table*}
+\end{table}
 
 The code verifies Hermiticity, positive semidefiniteness, and Schwarzschild recovery. Small negative eigenvalues of \(R_N\) can appear at the \(10^{-13}\) level in dense Hermitian eigensolvers because of roundoff; the singular-value residual norm remains nonnegative by construction. The reported condition numbers remain very large even after bounded pencil scaling, so convergence and cross-validation are more reliable indicators than residual size alone.
 
-\clearpage
+\FloatBarrier
 \section{Discussion}
 
 The central physical pattern is the monotonic softening of the validated KS spectrum. Increasing \(a/M\) lowers both the oscillation frequency and the absolute damping rate for every sampled scalar and lapse-deformed axial branch in the catalogue. The scalar \(\ell=2\) fundamental mode is the safest interpretation of this pattern: at \(a/M=1\), its real frequency is lower by \(7.29\%\), its damping magnitude is lower by \(2.59\%\), and its quality factor is lower by \(4.83\%\).
@@ -588,7 +590,11 @@ Axial rows & Phenomenological & Trend comparison only; not final gravitational-w
 
 \subsection{Reproducibility}
 
-The implementation is reproducible from the accompanying repository, \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}. The repository contains the Chebyshev spectral solver, the Leaver-style validation layer, catalogue-generation scripts, generated tables, manuscript-supporting figures, and automated tests. The default validation entry point is \texttt{python -m pytest}; full catalogue regeneration is driven by \texttt{scripts/run\_hybrid\_qnm\_algorithm.py}.
+The implementation is reproducible from the accompanying repository:
+\begin{center}
+\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}
+\end{center}
+The repository contains the Chebyshev spectral solver, the Leaver-style validation layer, catalogue-generation scripts, generated tables, manuscript-supporting figures, and automated tests. The default validation entry point is the test suite; full catalogue regeneration is driven by the main algorithm script in \texttt{scripts/}.
 
 \section{Conclusion}
 
