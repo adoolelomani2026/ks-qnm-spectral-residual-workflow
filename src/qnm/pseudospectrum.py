@@ -539,8 +539,6 @@ def write_report(
         "- Absolute contour levels shift with Chebyshev size N, so the finite-N robustness check",
         "  uses the sign and monotonicity of the Q10 susceptibility gain rather than exact equality",
         "  of epsilon-contour areas.",
-        "- No exceptional-point search was attempted in this upgrade; mode coalescence would require",
-        "  a separate eigenvector and mode-pair condition analysis.",
         "",
         "## Publishable Claim",
         "",

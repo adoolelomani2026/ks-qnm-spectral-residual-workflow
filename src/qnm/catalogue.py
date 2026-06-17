@@ -289,11 +289,16 @@ def assert_catalogue_validation(rows: list[CatalogueRow]) -> None:
         raise AssertionError("Catalogue validation failed: " + "; ".join(messages))
 
 
-def plot_mode_trajectories(rows: list[CatalogueRow], figures_dir: Path) -> list[Path]:
+def plot_mode_trajectories(
+    rows: list[CatalogueRow],
+    figures_dir: Path,
+    perturbation_types: tuple[str, ...] = ("gravitational",),
+    ell_values: tuple[int, ...] = (2,),
+) -> list[Path]:
     figures_dir.mkdir(exist_ok=True)
     outputs: list[Path] = []
-    for perturbation_type in PERTURBATION_TYPES:
-        for ell in CATALOGUE_ELL_VALUES:
+    for perturbation_type in perturbation_types:
+        for ell in ell_values:
             subset = [
                 row
                 for row in rows

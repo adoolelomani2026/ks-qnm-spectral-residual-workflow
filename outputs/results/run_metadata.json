@@ -5,6 +5,7 @@
   "matplotlib": "3.10.8",
   "spectral_sizes": [
     16,
+    24,
     32,
     48,
     64,

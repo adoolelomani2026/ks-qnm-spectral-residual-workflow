@@ -10,13 +10,7 @@ The matrix-pencil operator is not treated as the final spectral operator.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import cumulative_trapezoid
 from scipy.interpolate import PchipInterpolator
@@ -184,29 +178,7 @@ def matrix_pencil_operator(
     return c_operator, omega_values
 
 
-def plot_waveform(
-    output: Path,
-    a: float,
-    times: np.ndarray,
-    signal: np.ndarray,
-    fit_t: np.ndarray,
-    fit_y: np.ndarray,
-) -> None:
-    fig, ax = plt.subplots(figsize=(8.8, 4.8))
-    ax.plot(times, signal, color="#1f5f8b", lw=1.0, label="time-domain waveform")
-    ax.plot(fit_t, fit_y, color="#d1495b", lw=2.0, label="ringdown fit")
-    ax.axvspan(WINDOW[0], WINDOW[1], color="#f2cc8f", alpha=0.22, label="fit window")
-    ax.set_xlim(0, 220)
-    ax.set_xlabel(r"$t/M$")
-    ax.set_ylabel(r"$\Psi(t,r_*^{obs})$")
-    ax.grid(alpha=0.25)
-    ax.legend(loc="upper right", frameon=False)
-    fig.tight_layout()
-    fig.savefig(output, dpi=180)
-    plt.close(fig)
-
-
-def run_baseline(a_values: list[float], figures_dir: Path) -> dict[float, BaselineResult]:
+def run_baseline(a_values: list[float]) -> dict[float, BaselineResult]:
     dx = 0.1
     dt = 0.05
     tmax = 320.0
@@ -219,7 +191,6 @@ def run_baseline(a_values: list[float], figures_dir: Path) -> dict[float, Baseli
         omega_fit, fit_rms, fit_t, _, fit_y = fit_ringdown(times, signal)
         _, omega_values = matrix_pencil_operator(times, signal, rank=4)
         omega_pencil = select_physical_mode(omega_values, omega_fit)
-        plot_waveform(figures_dir / f"waveform_fit_a_{a:g}.png", a, times, signal, fit_t, fit_y)
         results[a] = BaselineResult(
             a=a,
             omega_fit=omega_fit,

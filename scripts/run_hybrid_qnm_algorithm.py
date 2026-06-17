@@ -145,6 +145,11 @@ def write_spectral_results(
 
 
 def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
+    references = {
+        (row.a, row.mode): row.omega
+        for row in rows
+        if row.n == FINAL_SPECTRAL_N
+    }
     with output.open("w", newline="") as handle:
         writer = csv.writer(handle)
         writer.writerow(
@@ -155,6 +160,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                 "omega_real",
                 "omega_imag",
                 "relative_change_from_previous_N",
+                "absolute_error_from_N96",
                 "residual_norm",
                 "matrix_dimension",
                 "sparsity",
@@ -166,6 +172,8 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
             ]
         )
         for row in rows:
+            reference = references.get((row.a, row.mode))
+            error_from_reference = "" if reference is None else abs(row.omega - reference)
             writer.writerow(
                 [
                     row.a,
@@ -174,6 +182,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                     row.omega.real,
                     row.omega.imag,
                     "" if row.relative_change is None else row.relative_change,
+                    error_from_reference,
                     row.residual_norm,
                     row.matrix_dimension,
                     row.sparsity,
@@ -206,55 +215,19 @@ def write_run_metadata(output: Path) -> None:
 
 
 def plot_convergence(rows: list[ModeResult], output: Path) -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.4))
+    fig, ax = plt.subplots(figsize=(6.9, 4.6))
     for a in A_VALUES:
         subset = [row for row in rows if row.a == a and row.mode == "fundamental"]
-        ns = np.array([row.n for row in subset])
-        omegas = np.array([row.omega for row in subset])
-        axes[0].plot(ns, omegas.real, marker="o", label=f"a/M={a:g}")
-        axes[1].plot(ns, -omegas.imag, marker="o", label=f"a/M={a:g}")
-    axes[0].set_xlabel("Chebyshev size N")
-    axes[0].set_ylabel(r"$\mathrm{Re}(M\omega)$")
-    axes[1].set_xlabel("Chebyshev size N")
-    axes[1].set_ylabel(r"$-\mathrm{Im}(M\omega)$")
-    for ax in axes:
-        ax.grid(alpha=0.25)
-        ax.legend(frameon=False, fontsize=8)
-    fig.tight_layout()
-    fig.savefig(output, dpi=180)
-    plt.close(fig)
-
-
-def plot_deformation_trend(
-    baselines: dict[float, BaselineResult],
-    rows: list[ModeResult],
-    output: Path,
-) -> None:
-    final_fund = final_fundamental_rows(rows)
-    final_fund.sort(key=lambda row: row.a)
-    a_values = np.array([row.a for row in final_fund])
-    td = np.array([baselines[a].omega_fit for a in a_values])
-    pencil = np.array([baselines[a].omega_pencil for a in a_values])
-    spectral = np.array([row.omega for row in final_fund])
-    residual = np.array([row.omega_residual for row in final_fund])
-
-    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.4))
-    series = [
-        ("baseline fit", td, "#1f5f8b"),
-        ("matrix pencil", pencil, "#669bbc"),
-        ("direct spectral", spectral, "#2a9d8f"),
-        ("spectral residual", residual, "#d1495b"),
-    ]
-    for label, values, color in series:
-        axes[0].plot(a_values, values.real, marker="o", label=label, color=color)
-        axes[1].plot(a_values, -values.imag, marker="o", label=label, color=color)
-    axes[0].set_xlabel(r"$a/M$")
-    axes[0].set_ylabel(r"$\mathrm{Re}(M\omega)$")
-    axes[1].set_xlabel(r"$a/M$")
-    axes[1].set_ylabel(r"$-\mathrm{Im}(M\omega)$")
-    for ax in axes:
-        ax.grid(alpha=0.25)
-        ax.legend(frameon=False, fontsize=8)
+        reference = next(row.omega for row in subset if row.n == FINAL_SPECTRAL_N)
+        ns = np.array([row.n for row in subset if row.n != FINAL_SPECTRAL_N])
+        errors = np.array([abs(row.omega - reference) for row in subset if row.n != FINAL_SPECTRAL_N])
+        ax.plot(ns, errors, marker="o", linewidth=1.8, label=f"a/M={a:g}")
+    ax.set_yscale("log")
+    ax.set_xlabel("Chebyshev size N")
+    ax.set_ylabel(r"$|\omega_N-\omega_{96}|$")
+    ax.set_xticks([n for n in SPECTRAL_SIZES if n != FINAL_SPECTRAL_N])
+    ax.grid(alpha=0.25, which="both")
+    ax.legend(frameon=False, fontsize=8)
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)
@@ -271,7 +244,7 @@ def run_pipeline(base_dir: Path) -> None:
     if failed:
         raise RuntimeError("Self-tests failed: " + ", ".join(test.name for test in failed))
 
-    baselines = run_baseline(A_VALUES, figures_dir)
+    baselines = run_baseline(A_VALUES)
     baseline_targets = {a: result.omega_fit for a, result in baselines.items()}
     spectral_rows = run_spectral_study(A_VALUES, SPECTRAL_SIZES, baseline_targets)
     leaver_rows = run_leaver_validation(A_VALUES)
@@ -289,7 +262,6 @@ def run_pipeline(base_dir: Path) -> None:
     physics_outputs = write_physics_analysis(results_dir, figures_dir, catalogue_rows)
     write_run_metadata(results_dir / "run_metadata.json")
     plot_convergence(spectral_rows, figures_dir / "spectral_convergence.png")
-    plot_deformation_trend(baselines, spectral_rows, figures_dir / "spectral_deformation_trend.png")
     trajectory_plots = plot_mode_trajectories(catalogue_rows, figures_dir)
 
     print("Spectral residual QNM pipeline complete.")

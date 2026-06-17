@@ -412,40 +412,6 @@ def write_spectroscopic_ratio_csv(output: Path, ratio_rows: list[SpectroscopicRa
             )
 
 
-def plot_sensitivity_heatmap(summaries: list[BranchSummary], output: Path) -> None:
-    output.parent.mkdir(parents=True, exist_ok=True)
-    perturbation_types = sorted({row.perturbation_type for row in summaries})
-    branch_labels = [
-        (ell, overtone)
-        for ell in sorted({row.ell for row in summaries})
-        for overtone in sorted({row.overtone for row in summaries if row.ell == ell})
-    ]
-    data = np.full((len(perturbation_types), len(branch_labels)), np.nan)
-    lookup = {(row.perturbation_type, row.ell, row.overtone): row for row in summaries}
-    for i, perturbation_type in enumerate(perturbation_types):
-        for j, (ell, overtone) in enumerate(branch_labels):
-            row = lookup[(perturbation_type, ell, overtone)]
-            data[i, j] = 100.0 * row.endpoint_fractional_complex_shift
-
-    fig, axis = plt.subplots(figsize=(11.0, 3.8))
-    image = axis.imshow(data, aspect="auto", cmap="viridis")
-    axis.set_yticks(np.arange(len(perturbation_types)), labels=perturbation_types)
-    axis.set_xticks(
-        np.arange(len(branch_labels)),
-        labels=[fr"$\ell={ell}, n={overtone}$" for ell, overtone in branch_labels],
-        rotation=35,
-        ha="right",
-    )
-    colorbar = fig.colorbar(image, ax=axis)
-    colorbar.set_label("fractional shift (%)")
-    for i in range(data.shape[0]):
-        for j in range(data.shape[1]):
-            axis.text(j, i, f"{data[i, j]:.1f}", ha="center", va="center", color="white", fontsize=8)
-    fig.tight_layout()
-    fig.savefig(output, dpi=180)
-    plt.close(fig)
-
-
 def plot_l2_spectroscopic_ratios(ratio_rows: list[SpectroscopicRatioRow], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     selected_names = ["omega0_over_omega1", "omega0_over_omega2", "real_to_damping_n0"]
@@ -723,7 +689,6 @@ def write_physics_analysis(
         "summary_csv": results_dir / "catalogue_physics_summary.csv",
         "ratio_csv": results_dir / "catalogue_spectroscopic_ratios.csv",
         "report": results_dir / "catalogue_physics_report.md",
-        "heatmap": figures_dir / "catalogue_sensitivity_heatmap.png",
         "l2_shifts": figures_dir / "catalogue_l2_fractional_shifts.png",
         "l2_ratios": figures_dir / "catalogue_l2_spectroscopic_ratios.png",
     }
@@ -731,7 +696,6 @@ def write_physics_analysis(
     write_summary_csv(outputs["summary_csv"], summaries)
     write_spectroscopic_ratio_csv(outputs["ratio_csv"], ratio_rows)
     write_physics_report(outputs["report"], summaries, ratio_rows)
-    plot_sensitivity_heatmap(summaries, outputs["heatmap"])
     plot_l2_fractional_shifts(trend_rows, outputs["l2_shifts"])
     plot_l2_spectroscopic_ratios(ratio_rows, outputs["l2_ratios"])
     return outputs

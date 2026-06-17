@@ -41,14 +41,12 @@ from qnm.normalization import (
     mass_over_horizon_from_alpha,
 )
 from qnm.pseudospectrum import compute_pseudospectrum_grid, summarize_grid
-from qnm.prl_instability import active_branches
 from qnm.spectral import (
     build_spectral_problem,
     generalized_eigenvalues,
     run_self_tests,
     select_physical_mode,
 )
-from qnm.universality import MODELS, build_model_spectral_problem, horizon_bardeen, horizon_hayward
 
 
 def _slow_marker(func):
@@ -75,6 +73,14 @@ def test_scaled_spectral_solver_recovers_schwarzschild_reference() -> None:
     omega = select_physical_mode(values, SCHWARZSCHILD_SCALAR_L2)
     relative_error = abs(omega - SCHWARZSCHILD_SCALAR_L2) / abs(SCHWARZSCHILD_SCALAR_L2)
     assert relative_error < 1.0e-8
+
+
+def test_pencil_scaling_preserves_schwarzschild_fundamental() -> None:
+    problem = build_spectral_problem(0.0, 32)
+    omega_scaled = select_physical_mode(generalized_eigenvalues(problem, scale=True), SCHWARZSCHILD_SCALAR_L2)
+    omega_unscaled = select_physical_mode(generalized_eigenvalues(problem, scale=False), SCHWARZSCHILD_SCALAR_L2)
+    relative_difference = abs(omega_scaled - omega_unscaled) / abs(omega_scaled)
+    assert relative_difference < 1.0e-9
 
 
 def test_catalogue_physics_analysis_tracks_endpoint_shifts() -> None:
@@ -196,30 +202,6 @@ def test_pseudospectrum_grid_smoke() -> None:
     assert summary.min_log10_relative_sigma <= summary.median_log10_relative_sigma
     assert summary.quantiles[0.10] <= summary.quantiles[0.50]
     assert summary.threshold_areas[-7.0] >= 0.0
-
-
-def test_prl_instability_scan_branch_policy() -> None:
-    branches = active_branches()
-    assert (0, 0) in branches
-    assert (0, 1) in branches
-    assert (0, 2) not in branches
-    assert (4, 2) in branches
-
-
-def test_hayward_comparator_spectral_problem_smoke() -> None:
-    assert horizon_hayward(0.5) > 0.0
-    problem = build_model_spectral_problem(MODELS["hayward"], parameter=0.2, n=12, ell=2)
-    assert problem.a0.shape == (12, 12)
-    assert problem.left.shape == (24, 24)
-    assert np.isfinite(problem.r_nodes).all()
-
-
-def test_bardeen_comparator_spectral_problem_smoke() -> None:
-    assert horizon_bardeen(0.5) > 0.0
-    problem = build_model_spectral_problem(MODELS["bardeen"], parameter=0.2, n=12, ell=2)
-    assert problem.a0.shape == (12, 12)
-    assert problem.left.shape == (24, 24)
-    assert np.isfinite(problem.r_nodes).all()
 
 
 @_slow_marker

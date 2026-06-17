@@ -53,7 +53,7 @@ Repository URL:
 - `src/qnm/baseline.py` - finite-difference waveform evolution, ringdown fitting, matrix-pencil diagnostic.
 - `src/qnm/spectral.py` - Chebyshev collocation, generalized eigenvalue solve, and residual diagnostics.
 - `src/qnm/leaver.py` - Frobenius recurrence and continued-fraction validation.
-- `src/qnm/catalogue.py` - scalar/gravitational catalogue generation and trajectory plots.
+- `src/qnm/catalogue.py` - scalar/gravitational catalogue generation and the manuscript trajectory plot.
 - `src/qnm/analysis.py` - Schwarzschild-relative catalogue physics diagnostics.
 - `src/qnm/pseudospectrum.py` - scalar finite-`N` pseudospectrum grids,
   quantile diagnostics, contour-area estimates, and resolution checks.
@@ -62,11 +62,10 @@ Repository URL:
 - `scripts/` - command-line entry points.
 - `data/literature/` - transcribed-literature CSV files for normalization-matched comparison tables.
 - `tests/` - pytest-compatible validation checks.
-- `outputs/results/` - generated CSV tables and Markdown reports.
-- `outputs/figures/` - generated waveform, convergence, deformation, sensitivity, and trajectory plots.
+- `outputs/results/` - generated CSV tables and selected Markdown summaries.
+- `outputs/figures/` - manuscript-supporting convergence, catalogue, trajectory, and pseudospectrum figures.
 - `papers/manuscript/` - current manuscript TeX/PDF; figures are loaded from `outputs/figures/`.
-- `papers/followup/` - outline for the next physics-first spectroscopy paper.
-- `docs/` - literature-normalization protocol and project notes.
+- `docs/` - literature-normalization protocol.
 
 ## Installation
 
@@ -161,6 +160,17 @@ comparison:
 python scripts/compare_konoplya2020_scalar_l0.py
 ```
 
+Run the scalar `ell=2,n=0` endpoint `N=128` spot check:
+
+```powershell
+python scripts/check_n128_spot.py
+```
+
+This writes:
+
+- `outputs/results/n128_spot_check.csv`
+- `outputs/results/n128_spot_check_report.md`
+
 Regenerate the scalar `ell=2,n=0` pseudospectrum grids, summaries, report, and
 figures:
 
@@ -178,8 +188,18 @@ This writes:
 - `outputs/figures/scalar_l2_pseudospectrum_sensitivity.png`
 - `outputs/figures/scalar_l2_pseudospectrum_resolution_check.png`
 
-Optional internal sensitivity audits are also preserved in `scripts/` and
-`outputs/`, but they are not part of the main manuscript narrative.
+For a clean submission-facing regeneration, run the main pipeline, the scalar
+pseudospectrum diagnostic, the normalization-matched literature comparison, and
+the automated tests:
+
+```powershell
+python scripts/run_hybrid_qnm_algorithm.py
+python scripts/check_n128_spot.py
+python scripts/analyze_pseudospectrum.py
+python scripts/compare_konoplya2020_scalar_l0.py
+pytest
+pytest -m slow
+```
 
 ## Scientific Scope
 
@@ -201,7 +221,7 @@ spacetime.
 - Axial gravitational entries are phenomenological KS-lapse-deformed
   Regge-Wheeler diagnostics, not final gauge-invariant KS gravitational
   predictions.
-- Catalogue shifts are not detectability forecasts; observability would require
+- Catalogue shifts are not observational forecasts; observability would require
   waveform modeling, detector-noise weighting, and parameter-degeneracy studies.
 - Overtones remain the least robust numerical sector. First overtones are
   publication-facing only on the Leaver-validated `N=32` grid, while `n=2`
@@ -246,15 +266,3 @@ Claim hierarchy:
 
 The exact environment for regenerated outputs is recorded in
 `outputs/results/run_metadata.json`.
-
-## Next Research Steps
-
-The next stage should focus on physics and robustness rather than adding more
-infrastructure:
-
-- Develop `papers/followup/spectroscopic_signatures_outline.md` into a scalar-first physics paper using the generated dimensionless ratio diagnostics, the normalization protocol in `docs/LITERATURE_NORMALIZATION_PROTOCOL.md`, the Konoplya side comparison in `scripts/compare_konoplya2020_scalar_l0.py`, and the scaffold in `scripts/prepare_literature_comparison.py`.
-- Axial-polar or gauge-invariant gravitational perturbation analysis for the KS background.
-- Dedicated overtone branch tracking, especially for `n=2`.
-- Conditioning/scaling improvements for high-resolution generalized eigenvalue problems.
-- Extend pseudospectrum diagnostics to scalar overtones only after stronger branch tracking is in place.
-- Compare the finite-dimensional KS pseudospectrum against other quantum-corrected Schwarzschild models under matched normalization and discretization choices.

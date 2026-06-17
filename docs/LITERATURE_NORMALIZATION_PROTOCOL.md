@@ -95,30 +95,6 @@ and writes:
 outputs/results/konoplya2020_scalar_l0_comparison.csv
 ```
 
-For broader catalogue comparisons, transcribe published rows into:
-
-```text
-data/literature/ks_qnm_literature_template.csv
-```
-
-Then enable those rows and run:
-
-```text
-python scripts/prepare_literature_comparison.py
-```
-
-The script writes:
-
-```text
-outputs/results/literature_normalized_comparison.csv
-```
-
-It converts horizon-scaled entries into `M omega`, matches the corresponding
-catalogue branch by `(perturbation_type, ell, overtone)`, and reports whether
-the converted deformation parameter is an exact catalogue point or only a
-nearest-neighbor comparison. It deliberately does not interpolate; interpolation
-should be added only after a denser scalar grid is generated.
-
 ## Quantitative Comparison Workflow
 
 1. Identify the exact convention used in the published table: fixed `M`,
