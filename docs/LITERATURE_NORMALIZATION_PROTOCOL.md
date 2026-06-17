@@ -74,7 +74,28 @@ The helper functions live in `src/qnm/normalization.py`.
 
 ## Comparison Scaffold
 
-Transcribe published rows into:
+The repository includes one concrete side comparison against the scalar
+`ell=0`, `n=0` fixed-horizon table of Konoplya (2020). It is outside the
+publication-facing `ell=2,3,4` catalogue, but it is useful for checking the
+normalization conversion and the scalar fundamental branch:
+
+```text
+python scripts/compare_konoplya2020_scalar_l0.py
+```
+
+The script reads:
+
+```text
+data/literature/konoplya2020_scalar_l0_table.csv
+```
+
+and writes:
+
+```text
+outputs/results/konoplya2020_scalar_l0_comparison.csv
+```
+
+For broader catalogue comparisons, transcribe published rows into:
 
 ```text
 data/literature/ks_qnm_literature_template.csv
@@ -121,6 +142,8 @@ should be added only after a denser scalar grid is generated.
   predictions.
 - Published overtone labels can be branch-sensitive; use continuation and
   residual checks before comparing high overtones.
-- A qualitative literature comparison is publication-safe now. A quantitative
-  comparison should wait until the converted parameter grid and branch labels
-  are explicitly matched.
+- The public Bolokhov-Bronnikov-Konoplya overtone figures are scalar `ell=0`
+  fixed-horizon plots and include high overtones beyond this catalogue. The
+  exact plotted frequencies are not tabulated in the public manuscript, so a
+  row-by-row comparison requires author-provided values or a separately
+  documented digitization workflow.

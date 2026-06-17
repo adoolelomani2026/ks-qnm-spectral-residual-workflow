@@ -1,0 +1,11 @@
+enabled,source,reference,a_over_rh,wkb_real_rh,wkb_imag_rh,time_domain_real_rh,time_domain_imag_rh,notes
+true,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.01,0.223624,-0.210830,0.22112,-0.21057,Low-deformation row with time-domain value.
+true,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.10,0.223962,-0.211724,0.22147,-0.21144,Low-deformation row with time-domain value.
+true,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.20,0.224992,-0.214503,0.22237,-0.21420,Low-deformation row with time-domain value.
+true,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.30,0.226730,-0.219381,0.22437,-0.21867,Low-deformation row with time-domain value.
+true,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.40,0.229239,-0.226810,0.22690,-0.22580,Low-deformation row with time-domain value.
+true,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.50,0.232801,-0.237722,0.23012,-0.23620,Moderate-deformation row with time-domain value.
+false,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.60,0.238824,-0.254580,0.23373,-0.25193,Disabled by default because the finite-depth Leaver side diagnostic is less stable beyond this point.
+false,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.70,0.255035,-0.287220,,,No time-domain value reported in the source table.
+false,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.80,0.355043,-0.411972,,,No time-domain value reported in the source table.
+false,Konoplya2020,Table I scalar ell=0 n=0 rh=1,0.90,0.492339,-0.102714,,,No time-domain value reported in the source table.

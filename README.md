@@ -40,7 +40,8 @@ Repository URL:
   Bolokhov-Bronnikov-Konoplya (2025): earlier KS work established QNM
   deformation and overtone sensitivity, while this project adds fixed-`M`
   Chebyshev-Leaver validation, dimensionless ratios, and quality-factor
-  shifts.
+  shifts. A normalization-matched scalar `ell=0` side comparison with
+  Konoplya's fixed-horizon table is generated separately.
 
 ## Repository Map
 
@@ -54,7 +55,7 @@ Repository URL:
 - `src/qnm/normalization.py` - fixed-horizon/fixed-mass conversion helpers for
   quantitative literature comparisons.
 - `scripts/` - command-line entry points.
-- `data/literature/` - transcribed-literature CSV template for normalization-matched comparison tables.
+- `data/literature/` - transcribed-literature CSV files for normalization-matched comparison tables.
 - `tests/` - pytest-compatible validation checks.
 - `outputs/results/` - generated CSV tables and Markdown reports.
 - `outputs/figures/` - generated waveform, convergence, deformation, sensitivity, and trajectory plots.
@@ -148,6 +149,13 @@ Analyze catalogue-level physics trends from the generated catalogue:
 python scripts/analyze_catalogue_physics.py
 ```
 
+Reproduce the normalization-matched Konoplya (2020) scalar `ell=0` side
+comparison:
+
+```powershell
+python scripts/compare_konoplya2020_scalar_l0.py
+```
+
 ## Scientific Scope
 
 The scalar sector is the cleanest physics target. The axial gravitational sector
@@ -211,7 +219,7 @@ The exact environment for regenerated outputs is recorded in
 The next stage should focus on physics and robustness rather than adding more
 infrastructure:
 
-- Develop `papers/followup/spectroscopic_signatures_outline.md` into a scalar-first physics paper using the generated dimensionless ratio diagnostics, the normalization protocol in `docs/LITERATURE_NORMALIZATION_PROTOCOL.md`, and the scaffold in `scripts/prepare_literature_comparison.py`.
+- Develop `papers/followup/spectroscopic_signatures_outline.md` into a scalar-first physics paper using the generated dimensionless ratio diagnostics, the normalization protocol in `docs/LITERATURE_NORMALIZATION_PROTOCOL.md`, the Konoplya side comparison in `scripts/compare_konoplya2020_scalar_l0.py`, and the scaffold in `scripts/prepare_literature_comparison.py`.
 - Axial-polar or gauge-invariant gravitational perturbation analysis for the KS background.
 - Dedicated overtone branch tracking, especially for `n=2`.
 - Conditioning/scaling improvements for high-resolution generalized eigenvalue problems.
