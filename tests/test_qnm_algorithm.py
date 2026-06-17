@@ -16,6 +16,8 @@ import argparse
 import sys
 from pathlib import Path
 
+import numpy as np
+
 ROOT_DIR = Path(__file__).resolve().parents[1]
 SRC_DIR = ROOT_DIR / "src"
 if str(SRC_DIR) not in sys.path:
@@ -38,6 +40,7 @@ from qnm.normalization import (
     horizon_over_mass_from_alpha,
     mass_over_horizon_from_alpha,
 )
+from qnm.pseudospectrum import compute_pseudospectrum_grid, summarize_grid
 from qnm.spectral import (
     build_spectral_problem,
     generalized_eigenvalues,
@@ -174,6 +177,23 @@ def test_literature_normalization_roundtrip() -> None:
     assert mass_over_horizon_from_alpha(alpha) == pytest.approx(1.0 / 5.0**0.5)
     assert alpha_roundtrip == pytest.approx(alpha)
     assert omega_m_roundtrip == pytest.approx(omega_m)
+
+
+def test_pseudospectrum_grid_smoke() -> None:
+    grid = compute_pseudospectrum_grid(
+        a=0.0,
+        leaver_target=SCHWARZSCHILD_SCALAR_L2,
+        spectral_n=16,
+        grid_size=7,
+        half_width=0.01,
+    )
+    summary = summarize_grid(grid, thresholds=(-7.0,), quantiles=(0.10, 0.50))
+
+    assert grid.log10_relative_sigma.shape == (7, 7)
+    assert np.isfinite(grid.log10_relative_sigma).all()
+    assert summary.min_log10_relative_sigma <= summary.median_log10_relative_sigma
+    assert summary.quantiles[0.10] <= summary.quantiles[0.50]
+    assert summary.threshold_areas[-7.0] >= 0.0
 
 
 @_slow_marker

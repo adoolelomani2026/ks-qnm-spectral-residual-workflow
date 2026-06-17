@@ -86,7 +86,7 @@
 \begin{minipage}{0.92\textwidth}
 \small
 \noindent\textbf{Abstract.}
-Can non-Hermitian black-hole quasinormal-mode (QNM) resonance conditions be handled through a Hermitian residual minimization workflow in a concrete quantum-deformed spacetime? This paper applies a Chebyshev--Leaver spectral residual workflow to Kazakov--Solodukhin (KS) quantum-deformed Schwarzschild black holes. After compactifying the radial equation and factoring the QNM asymptotics, Chebyshev collocation gives a polynomial operator \(P_N(\omega)\bm{u}=0\). For each trial frequency the method forms \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), searches for minima of \(\sigma_{\min}(P_N(\omega))\), and accepts candidates after convergence checks and Leaver-style continued-fraction validation. The workflow is presented as a KS-specific implementation grounded in existing singular-value and pseudospectrum ideas, not as a claim to invent residual singular-value theory. The Schwarzschild scalar \(\ell=2\) fundamental mode is recovered at \(N=96\) with relative error \(1.462\times10^{-10}\). The validated catalogue covers scalar and lapse-deformed axial-gravitational \(\ell=2,3,4\) modes through the second overtone; the worst Leaver--spectral relative difference is \(1.097\times10^{-5}\). Across \(a/M=0,0.2,0.5,1.0\), sampled branches soften monotonically in the fixed-mass normalization. For scalar \(\ell=2,n=0\) at \(a/M=1\), the shifts are \(-7.29\%\) in \(\mathrm{Re}(M\omega)\), \(-2.59\%\) in \(-\mathrm{Im}(M\omega)\), and \(-4.83\%\) in quality factor. The axial gravitational sector remains phenomenological because it uses a KS-lapse-deformed Regge--Wheeler potential rather than derived gauge-invariant KS perturbation equations.
+Can non-Hermitian black-hole quasinormal-mode (QNM) resonance conditions be handled through a Hermitian residual minimization workflow in a concrete quantum-deformed spacetime? This paper applies a Chebyshev--Leaver spectral residual workflow to Kazakov--Solodukhin (KS) quantum-deformed Schwarzschild black holes. After compactifying the radial equation and factoring the QNM asymptotics, Chebyshev collocation gives \(P_N(\omega)\bm{u}=0\); the residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\) is then used through \(\sigma_{\min}(P_N)\) minimization, convergence checks, and Leaver-style continued-fraction validation. The workflow is KS-specific and grounded in existing singular-value and pseudospectrum ideas. The Schwarzschild scalar \(\ell=2\) fundamental mode is recovered at \(N=96\) with relative error \(1.462\times10^{-10}\), and the validated catalogue covers scalar and lapse-deformed axial-gravitational \(\ell=2,3,4\) modes through \(n=2\), with worst Leaver--spectral relative difference \(1.097\times10^{-5}\). Across \(a/M=0,0.2,0.5,1.0\), sampled branches soften monotonically. For scalar \(\ell=2,n=0\) at \(a/M=1\), \(\mathrm{Re}(M\omega)\), \(-\mathrm{Im}(M\omega)\), and quality factor shift by \(-7.29\%\), \(-2.59\%\), and \(-4.83\%\), respectively. A finite-\(N\) pseudospectrum diagnostic for this scalar branch shows increasing local sensitivity: at \(N=64\), the 10\% quantile of \(-\log_{10}[\sigma_{\min}/\sigma_{\max}]\) increases by \(0.161\), and the \(\log_{10}[\sigma_{\min}/\sigma_{\max}]\le -10\) area grows by a factor \(5.06\). The axial gravitational sector remains phenomenological because it is not derived from gauge-invariant KS perturbation equations.
 
 \vspace{0.65em}
 \noindent\textbf{Keywords.}
@@ -550,10 +550,45 @@ Table~\ref{tab:residualdiagnostics} reports the residual and conditioning diagno
 
 The code verifies Hermiticity, positive semidefiniteness, and Schwarzschild recovery. Small negative eigenvalues of \(R_N\) can appear at the \(10^{-13}\) level in dense Hermitian eigensolvers because of roundoff; the singular-value residual norm remains nonnegative by construction. The reported condition numbers remain very large even after bounded pencil scaling, so convergence and cross-validation are more reliable indicators than residual size alone.
 
+\subsection{Scalar pseudospectrum diagnostics}
+
+The residual formulation also makes it possible to ask a sharper stability question: how does the local pseudospectrum around a validated QNM branch change under KS deformation? Following the singular-value viewpoint used in black-hole pseudospectrum studies \cite{Jaramillo2021,Cao2024}, define the finite-dimensional relative residual
+\begin{equation}
+\eta_N(\omega)=\frac{\sigma_{\min}(P_N(\omega))}{\sigma_{\max}(P_N(\omega))}.
+\end{equation}
+This normalization removes the most direct overall matrix-scale dependence, but it does not make the result an infinite-dimensional operator theorem. The diagnostic below should therefore be read as a finite-\(N\) Chebyshev residual pseudospectrum for the scalar \(\ell=2,n=0\) branch.
+
+Figure~\ref{fig:pseudocontours} shows local contours of \(\log_{10}\eta_N\) around the residual-minimized scalar fundamental frequencies for \(a/M=0,0.2,0.5,1.0\). The computation uses \(N=64\), an \(81\times81\) grid, and a square window of half-width \(0.025\) in both \(\mathrm{Re}(M\omega)\) and \(\mathrm{Im}(M\omega)\). The contour centers agree with the Leaver catalogue frequencies to at worst \(6.816\times10^{-12}\) in relative difference, so the plotted basins are attached to the validated scalar branch rather than to an untracked numerical root.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/scalar_l2_pseudospectrum_contours.png}
+\caption{Finite-dimensional scalar \(\ell=2,n=0\) pseudospectrum contours for the relative residual \(\eta_N=\sigma_{\min}(P_N)/\sigma_{\max}(P_N)\) at \(N=64\). White crosses mark the residual-minimized QNM locations. The panels show that the local small-\(\eta_N\) basin broadens as \(a/M\) increases.}
+\label{fig:pseudocontours}
+\end{figure}
+
+The trend can be quantified without relying only on visual inspection. Let \(Q_p\) denote the \(p\)-quantile of \(\log_{10}\eta_N\) over the local window. At \(N=64\), \(-Q_{10}\) increases from \(9.898\) at \(a/M=0\) to \(10.060\) at \(a/M=1\), a gain of \(0.161\). The median susceptibility \(-Q_{50}\) also increases, from \(9.574\) to \(9.710\). The area fraction satisfying \(\log_{10}\eta_N\le -10\) grows from \(4.36\%\) to \(22.07\%\), a factor of \(5.06\); the endpoint contour touches the local-window boundary, so this area should be treated as a window-limited diagnostic rather than a global contour area. These diagnostics are plotted in Fig.~\ref{fig:pseudosensitivity}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{../../outputs/figures/scalar_l2_pseudospectrum_sensitivity.png}
+\caption{Scalar \(\ell=2,n=0\) pseudospectral sensitivity diagnostics at \(N=64\). Left: quantile-based susceptibility measures increase with \(a/M\). Right: fixed-threshold contour area fractions also grow; the deepest endpoint contour is window-limited and is used only as a local diagnostic.}
+\label{fig:pseudosensitivity}
+\end{figure}
+
+Because absolute pseudospectrum contour levels depend on resolution and normalization, the robust claim is not equality of \(\epsilon\)-contours across \(N\). The finite-resolution check in Fig.~\ref{fig:pseudoresolution} instead tests whether the sign of the susceptibility trend is stable. The \(a/M=0\) to \(a/M=1\) gain in \(-Q_{10}\) is \(0.097\), \(0.130\), and \(0.161\) for \(N=32,48,64\), respectively. Thus, within the present residual normalization, KS deformation makes the local scalar fundamental branch more pseudospectrally sensitive as it softens in frequency.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{../../outputs/figures/scalar_l2_pseudospectrum_resolution_check.png}
+\caption{Finite-\(N\) check for the scalar \(\ell=2,n=0\) pseudospectral trend. The plotted quantity is the increase in \(-Q_{10}(\log_{10}\eta_N)\) relative to the Schwarzschild value at the same \(N\). The monotonic increase with \(a/M\) is stable for \(N=32,48,64\), although the absolute contour levels remain resolution dependent.}
+\label{fig:pseudoresolution}
+\end{figure}
+
 \FloatBarrier
 \section{Discussion}
 
-The central physical pattern is the monotonic softening of the validated KS spectrum. Increasing \(a/M\) lowers both the oscillation frequency and the absolute damping rate for every sampled scalar and lapse-deformed axial branch in the catalogue. The scalar \(\ell=2\) fundamental mode is the safest interpretation of this pattern: at \(a/M=1\), its real frequency is lower by \(7.29\%\), its damping magnitude is lower by \(2.59\%\), and its quality factor is lower by \(4.83\%\).
+The central physical pattern is the monotonic softening of the validated KS spectrum. Increasing \(a/M\) lowers both the oscillation frequency and the absolute damping rate for every sampled scalar and lapse-deformed axial branch in the catalogue. The scalar \(\ell=2\) fundamental mode is the safest interpretation of this pattern: at \(a/M=1\), its real frequency is lower by \(7.29\%\), its damping magnitude is lower by \(2.59\%\), and its quality factor is lower by \(4.83\%\). The pseudospectrum analysis adds a second, independent numerical observation: in the same scalar branch, the local relative-singular-value basin broadens with KS deformation, indicating greater finite-\(N\) spectral sensitivity in the residual operator.
 
 The numerical framework is what makes that statement credible. The waveform-derived matrix-pencil path is retained only as a sanity check; the final operator is built directly from the perturbation equation. The Schwarzschild check shows that the direct spectral operator resolves the scalar fundamental mode accurately, and the Leaver comparison reproduces the targeted scalar spectral branches to better than \(10^{-6}\) for the fundamental mode and first overtone at the reference grid. The catalogue extends this cross-check to scalar and axial gravitational modes with \(n=0,1,2\); the largest observed spectral--Leaver difference is \(1.097\times10^{-5}\), localized to an axial gravitational second-overtone branch. This is small enough for catalogue-level branch validation, but it also confirms that second overtones are more delicate than fundamental modes. High-\(N\) first-overtone rows are therefore treated as exploratory until branch-by-branch Leaver or higher-precision validation is added.
 
@@ -566,6 +601,8 @@ The algorithmic contribution is the KS-specific implementation, validation, and 
 The present calculation is a significant step beyond the matrix-pencil pilot, but it is still not a complete treatment of KS perturbation theory. The scalar sector is the cleanest physics sector in this work because it follows directly from the chosen test-field wave equation on the KS background. By contrast, the axial gravitational catalogue is intentionally phenomenological: it uses a KS-lapse-deformed Regge--Wheeler potential that reduces to the Schwarzschild axial equation at \(a=0\), but it is not a derived gauge-invariant perturbation system for the full KS geometry. The axial entries are therefore useful for validation, comparison, and trend exploration; they should not be read as a final gravitational-wave prediction for KS gravity.
 
 The catalogue-level shifts are also not detectability forecasts. The percent-level scalar shifts indicate a physically meaningful deformation of the dimensionless spectrum, but an observational claim would require a waveform model, detector-noise weighting, parameter covariances, and a treatment of degeneracies with the remnant mass and spin. In particular, part of a frequency shift can be absorbed by a mass rescaling, so robust spectroscopy would need dimensionless mode ratios, damping information, and a gauge-invariant gravitational perturbation treatment.
+
+The pseudospectrum diagnostics are similarly bounded. They are computed from finite Chebyshev matrices \(P_N(\omega)\), not from a rigorously controlled infinite-dimensional KS wave operator. The use of \(\eta_N=\sigma_{\min}/\sigma_{\max}\) reduces simple matrix-scale effects but does not remove all discretization or norm choices. The fixed-threshold contour areas are therefore secondary diagnostics; the stronger statement is that the quantile-based local susceptibility increases monotonically with \(a/M\) for \(N=32,48,64\) on the scalar \(\ell=2,n=0\) branch.
 
 Finally, the overtone hierarchy remains the numerically weakest part of the catalogue. Fundamental modes are the most stable, first overtones are publication-facing only on the Leaver-validated \(N=32\) grid, and tracked high-\(N\) first-overtone rows are retained as exploratory diagnostics. Second overtones are included because they are scientifically informative, but the largest spectral--Leaver difference occurs on an \(n=2\) branch. They should be interpreted as branch diagnostics until higher-precision continuation and independent validation are added. This claim hierarchy is summarized in Table~\ref{tab:claimhierarchy}.
 
@@ -594,7 +631,7 @@ The implementation is reproducible from the accompanying repository:
 \begin{center}
 \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}
 \end{center}
-The repository contains the Chebyshev spectral solver, the Leaver-style validation layer, catalogue-generation scripts, generated tables, manuscript-supporting figures, and automated tests. The default validation entry point is the test suite; full catalogue regeneration is driven by the main algorithm script in \texttt{scripts/}.
+The repository contains the Chebyshev spectral solver, the Leaver-style validation layer, catalogue-generation scripts, pseudospectrum diagnostics, generated tables, manuscript-supporting figures, and automated tests. The default validation entry point is the test suite; full catalogue regeneration is driven by the main algorithm script in \texttt{scripts/}. The pseudospectrum data and figures in Sec.~5.9 are regenerated with \texttt{python scripts/analyze\_pseudospectrum.py}. That command writes the scalar pseudospectrum grid, summary table, resolution-check table, diagnostic report, and the three pseudospectrum figures under \path{outputs/results/} and \path{outputs/figures/}.
 
 \section{Conclusion}
 
@@ -602,7 +639,7 @@ The physics contribution is the KS ringdown trend. The validated catalogue shows
 
 The numerical contribution is the Chebyshev--Leaver validation framework behind that statement. The matrix-pencil workflow has been demoted to a baseline diagnostic, while the final spectral operator is built directly from the compactified perturbation equation. With scaled generalized pencils and branch-continuation diagnostics, the method recovers the Schwarzschild scalar \(\ell=2\) fundamental mode with relative error \(1.462\times10^{-10}\) at \(N=96\), adds a Leaver-style continued-fraction validation layer, extends the catalogue to scalar and axial gravitational \(\ell=2,3,4\) modes through the second overtone, and reports transparent residual and condition-number diagnostics.
 
-The algorithmic contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The non-Hermitian KS resonance equation \(P_N(\omega)\bm{u}=0\) is tested through the Hermitian positive-semidefinite residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), and candidate modes are treated as minima of \(\sigma_{\min}(P_N(\omega))\) subject to convergence and Leaver validation. The contribution is therefore not a claim of originality for residual singular-value theory. It is the combination of a fixed-mass KS Chebyshev residual implementation, Leaver-style continued-fraction validation, branch-status discipline for fundamentals and overtones, and spectroscopy diagnostics including monotonic softening, quality-factor shifts, and dimensionless mode ratios. The next scientific step is a physics-first study of KS spectroscopic signatures: deeper comparison against published KS parameter conventions, independent validation across perturbation sectors, a gauge-invariant gravitational treatment, and a more careful study of overtone stability.
+The algorithmic contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The non-Hermitian KS resonance equation \(P_N(\omega)\bm{u}=0\) is tested through the Hermitian positive-semidefinite residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), and candidate modes are treated as minima of \(\sigma_{\min}(P_N(\omega))\) subject to convergence and Leaver validation. The new pseudospectrum diagnostic extends this workflow from locating frequencies to probing local finite-\(N\) spectral sensitivity: for the scalar \(\ell=2,n=0\) branch, the \(N=64\) 10\% quantile susceptibility increases by \(0.161\) from \(a/M=0\) to \(a/M=1\), with the sign of the trend stable for \(N=32,48,64\). The contribution is therefore not a claim of originality for residual singular-value theory or a proof of infinite-dimensional pseudospectral instability. It is the combination of a fixed-mass KS Chebyshev residual implementation, Leaver-style validation, branch-status discipline, spectroscopy diagnostics, and a finite-dimensional pseudospectrum audit.
 
 \section*{Declarations}
 
@@ -613,10 +650,10 @@ No funding was received to assist with the preparation of this manuscript.
 The author declares no competing interests.
 
 \noindent\textbf{Data availability.}
-The numerical data generated in this study are available from the accompanying code repository and supplementary output files at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
+The numerical data generated in this study, including catalogue rows, spectroscopy diagnostics, and scalar pseudospectrum grids, are available from the accompanying code repository and supplementary output files at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
 
 \noindent\textbf{Code availability.}
-The code used to generate the spectral results, Leaver validation, catalogue tables, and figures is available from the accompanying repository at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
+The code used to generate the spectral results, Leaver validation, catalogue tables, pseudospectrum diagnostics, and figures is available from the accompanying repository at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
 
 \noindent\textbf{Author contribution.}
 Adel H. Al-Yoorby conceived the study, developed the numerical implementation, generated and analyzed the data, prepared the figures and tables, and wrote the manuscript.

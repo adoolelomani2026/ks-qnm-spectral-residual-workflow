@@ -3,7 +3,8 @@
 This project computes quasinormal modes (QNMs) of Kazakov-Solodukhin (KS)
 quantum-deformed Schwarzschild black holes with a direct Chebyshev spectral
 workflow, Leaver-style continued-fraction validation, and fixed-mass
-spectroscopy diagnostics.
+spectroscopy diagnostics. It also includes a finite-dimensional
+pseudospectrum diagnostic for the validated scalar fundamental branch.
 
 The strongest current interpretation is:
 
@@ -36,6 +37,8 @@ Repository URL:
   overtone indices `n = 0, 1, 2`.
 - Dimensionless spectroscopic-ratio diagnostics such as `omega0/omega1`,
   `omega0/omega2`, and `Re(omega)/[-Im(omega)]`.
+- Scalar `ell=2,n=0` pseudospectrum diagnostics based on
+  `eta_N = sigma_min(P_N)/sigma_max(P_N)`.
 - Literature positioning against Konoplya (2020) and
   Bolokhov-Bronnikov-Konoplya (2025): earlier KS work established QNM
   deformation and overtone sensitivity, while this project adds fixed-`M`
@@ -52,6 +55,8 @@ Repository URL:
 - `src/qnm/leaver.py` - Frobenius recurrence and continued-fraction validation.
 - `src/qnm/catalogue.py` - scalar/gravitational catalogue generation and trajectory plots.
 - `src/qnm/analysis.py` - Schwarzschild-relative catalogue physics diagnostics.
+- `src/qnm/pseudospectrum.py` - scalar finite-`N` pseudospectrum grids,
+  quantile diagnostics, contour-area estimates, and resolution checks.
 - `src/qnm/normalization.py` - fixed-horizon/fixed-mass conversion helpers for
   quantitative literature comparisons.
 - `scripts/` - command-line entry points.
@@ -156,6 +161,23 @@ comparison:
 python scripts/compare_konoplya2020_scalar_l0.py
 ```
 
+Regenerate the scalar `ell=2,n=0` pseudospectrum grids, summaries, report, and
+figures:
+
+```powershell
+python scripts/analyze_pseudospectrum.py
+```
+
+This writes:
+
+- `outputs/results/scalar_l2_pseudospectrum_grid.csv`
+- `outputs/results/scalar_l2_pseudospectrum_summary.csv`
+- `outputs/results/scalar_l2_pseudospectrum_resolution_check.csv`
+- `outputs/results/scalar_pseudospectrum_report.md`
+- `outputs/figures/scalar_l2_pseudospectrum_contours.png`
+- `outputs/figures/scalar_l2_pseudospectrum_sensitivity.png`
+- `outputs/figures/scalar_l2_pseudospectrum_resolution_check.png`
+
 ## Scientific Scope
 
 The scalar sector is the cleanest physics target. The axial gravitational sector
@@ -181,6 +203,9 @@ spacetime.
 - Overtones remain the least robust numerical sector. First overtones are
   publication-facing only on the Leaver-validated `N=32` grid, while `n=2`
   branches should be treated as branch diagnostics until further stress-tested.
+- Pseudospectrum contours are finite-dimensional Chebyshev diagnostics, not
+  proofs about the infinite-dimensional KS wave operator. Absolute contour
+  levels depend on `N` and operator normalization.
 
 Claim hierarchy:
 
@@ -207,6 +232,11 @@ Claim hierarchy:
 - Dimensionless scalar `ell=2` spectroscopy diagnostics shift by `1.92%`
   for `omega0/omega1`, `3.56%` for `omega0/omega2`, and `-4.83%`
   for the fundamental `Re(omega)/[-Im(omega)]` ratio at `a/M=1`.
+- Scalar `ell=2,n=0` pseudospectrum diagnostics at `N=64` show increasing
+  local finite-`N` sensitivity with deformation: the 10% quantile
+  susceptibility `-Q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
+  `a/M=1`, and the `log10 eta_N <= -10` local area grows by a factor `5.06`
+  within the chosen window.
 - Publication-facing first-overtone rows are frozen at the Leaver-validated
   `N=32` grid; tracked high-`N` overtone rows are kept in
   `outputs/results/exploratory_spectral_results.csv`.
@@ -223,4 +253,5 @@ infrastructure:
 - Axial-polar or gauge-invariant gravitational perturbation analysis for the KS background.
 - Dedicated overtone branch tracking, especially for `n=2`.
 - Conditioning/scaling improvements for high-resolution generalized eigenvalue problems.
-- Pseudospectral sensitivity analysis.
+- Extend pseudospectrum diagnostics to scalar overtones only after stronger branch tracking is in place.
+- Compare the finite-dimensional KS pseudospectrum against other quantum-corrected Schwarzschild models under matched normalization and discretization choices.
