@@ -67,6 +67,7 @@
 \newcommand{\R}{\mathbb{R}}
 \begin{document}
 \ifdefined\markedrevision
+  \color{blue}
   \linenumbers
 \fi
 \begin{center}
@@ -84,28 +85,28 @@
 \begin{minipage}{0.92\textwidth}
 \small
 \noindent\textbf{Abstract.}
-We calculate the low-lying quasinormal-mode (QNM) spectrum of the
-Kazakov--Solodukhin (KS) geometry using Chebyshev collocation and a
-collocation-independent Frobenius continued fraction. Generalized-eigenvalue roots are retained only
-when they survive tests based on singular-value residuals, spectral convergence,
-continuation in \(a/M\), polynomial backward error, and the continued-fraction
-calculation. In the Schwarzschild limit, the \(N=96\) scalar
-\(\ell=2,n=0\) result and the continued-fraction value differ from the published
-benchmark by \(5.60\times10^{-11}\) and \(8.24\times10^{-13}\), respectively.
-The scalar fundamentals decrease successively across the four sampled
-deformation values.
-For \(\ell=2,n=0\), the changes in \(\operatorname{Re}\omega\),
-\(-\operatorname{Im}\omega\), and
-\(Q=\operatorname{Re}\omega/[2(-\operatorname{Im}\omega)]\) are
-\(-7.29\%\), \(-2.59\%\), and \(-4.83\%\). We report robust scalar
-fundamentals for \(\ell=2,3,4\), cross-validated low-lying first overtones at
-\(N=32\), and exploratory second overtones. A finite-\(N\) singular-value
-pseudospectrum also broadens along the scalar \(\ell=2,n=0\) branch as the
-deformation grows. For odd-parity gravitational perturbations we derive a
-gauge-invariant master equation after imposing an inverse-Cowling closure on
-the effective KS source. The corresponding axial frequencies are conditional
-on this closure, since the spherically reduced KS action does not fix
-nonspherical quantum-source perturbations.
+We investigate how the Kazakov--Solodukhin (KS) deformation changes the
+low-lying ringing of a black hole at fixed mass.  The minimally coupled scalar
+field provides the cleanest probe.  As the deformation grows, its effective
+potential barrier moves outward, becomes lower, and becomes less sharply
+curved.  The resulting fundamental modes have a lower oscillation frequency
+and a smaller damping magnitude.  For the quadrupolar \(\ell=2,n=0\) mode at
+\(a/M=1\), \(\operatorname{Re}\omega\), \(-\operatorname{Im}\omega\), and
+\(Q=\operatorname{Re}\omega/[2(-\operatorname{Im}\omega)]\) change by
+\(-7.29\%\), \(-2.59\%\), and \(-4.83\%\), respectively.  Thus the scalar
+ringing is lower in frequency and lasts slightly longer, but completes fewer
+cycles per damping time.  We establish these shifts with Chebyshev collocation
+and a collocation-independent Frobenius continued fraction; candidate roots
+must pass residual, convergence, continuation, backward-error, and
+cross-method checks.  In the Schwarzschild limit, the \(N=96\) scalar result
+and the continued-fraction value differ from the published benchmark by
+\(5.60\times10^{-11}\) and \(8.24\times10^{-13}\).  We report robust scalar
+fundamentals for \(\ell=2,3,4\), cross-validated first overtones at \(N=32\),
+and exploratory second overtones.  The scalar pseudospectral basin also
+broadens with deformation.  For odd-parity gravitational perturbations we
+derive a gauge-invariant master equation under an inverse-Cowling closure;
+those axial frequencies remain conditional because the spherical KS action
+does not determine nonspherical quantum-source perturbations.
 
 \vspace{0.65em}
 \noindent\textbf{Keywords.}
@@ -121,12 +122,15 @@ Kazakov-Solodukhin black holes; quasinormal modes; Chebyshev spectral methods; L
 
 \section{Introduction}
 
-The relaxation of a perturbed black hole is controlled by its quasinormal modes
-(QNMs), a discrete set of complex frequencies fixed by the background, the
-perturbing field, and radiative boundary conditions. The real part of a QNM
-frequency sets the oscillation scale, whereas its imaginary part determines
-decay or growth. This spectral picture links the classical stability problem
-to black-hole ringdown and gravitational-wave tests of compact objects
+After a black hole is disturbed, it does not vibrate indefinitely.  Part of
+the disturbance falls through the horizon and part escapes to infinity,
+leaving a short-lived superposition of characteristic ringing modes.  These
+quasinormal modes (QNMs) are the resonances of a leaky gravitational potential
+barrier.  Their complex frequencies have an immediate physical meaning:
+\(\operatorname{Re}\omega\) sets the pitch of the ringing, while
+\(-\operatorname{Im}\omega\) sets the rate at which its amplitude decays.
+The spectrum therefore connects the geometry outside the horizon to black-hole
+stability, ringdown, and gravitational-wave tests of compact objects
 \cite{Vishveshwara1970,Kokkotas1999,Berti2009,Konoplya2011}.
 
 The first binary-black-hole detection made this regime observationally
@@ -162,9 +166,12 @@ of the central geometry without generically satisfying every criterion used for
 a regular black hole \cite{Berry2021}---but it provides a well-defined static
 metric on which wave propagation can be studied. Earlier calculations found
 modest changes in the fundamental QNMs and a much stronger response in parts of
-the overtone spectrum \cite{Konoplya2020,Bolokhov2025}. The Schwarzschild limit
-then serves as a stringent numerical check, while finite \(a/M\) probes how the
-effective potential and its resonances respond to the quantum deformation.
+the overtone spectrum \cite{Konoplya2020,Bolokhov2025}.  The central physical
+question is consequently simple: at fixed mass, does increasing \(a/M\) make
+the exterior potential barrier higher or lower, and how does that change the
+pitch and lifetime of the trapped waves?  The Schwarzschild limit supplies the
+numerical control experiment; the finite-\(a/M\) branches answer the physical
+question.
 
 QNMs are non-self-adjoint resonances, and this matters numerically. Outgoing
 boundary conditions lead to complex spectra that may be sensitive to both
@@ -301,6 +308,15 @@ Ref.~\cite{Konoplya2020}.  QNM boundary conditions select solutions that are
 purely ingoing at the horizon and purely outgoing at spatial infinity.  These
 conditions make \(\omega\) complex and the radial problem non-self-adjoint.
 
+Equation~\eqref{eq:scalarpotential} also gives the useful physical picture.
+The \(\ell(\ell+1)/r^2\) term is the angular-momentum barrier, while
+\(f_a'/r\) records the radial curvature of the geometry.  Multiplication by
+the lapse makes the potential vanish at the horizon and at infinity, leaving a
+single barrier outside the hole.  A QNM is a wave concentrated near this
+barrier and leaking through both sides.  Moving and lowering the barrier
+therefore shifts the oscillation frequency, while changing its width and
+curvature changes the leakage rate and hence the damping.
+
 The odd-parity sector requires an assumption beyond the spherical KS
 background.  The original KS construction explicitly writes the full metric
 as a nonperturbative spherically symmetric part plus small propagating
@@ -315,6 +331,14 @@ the KS spherical quantum backreaction but sets the odd part of
 \(\delta T^{\mathrm{eff}}_{\mu\nu}\) to zero and therefore neglects
 independent nonspherical quantum-source excitations.  The modes below are
 conditional on this explicitly defined model.
+
+Physically, this closure lets the odd-parity geometry ring on the
+quantum-corrected spherical background while preventing the effective quantum
+source itself from carrying an independent odd-parity oscillation.  It is the
+gravitational analogue of holding the material source fixed while perturbing
+the surrounding field.  Gauge invariance ensures that the master amplitude is
+not a coordinate artifact; it does not determine whether the frozen-source
+assumption is the unique quantum dynamics.
 
 To display the gauge invariance, write the background as
 \(g_{ab}(y)\dd y^a\dd y^b+r^2(y)\gamma_{AB}\dd z^A\dd z^B\), where
@@ -447,13 +471,18 @@ couplings in Eq.~\eqref{eq:sourcedaxial} \cite{Gerlach1979,Gundlach1999,Karlovin
 
 \subsection{Numerical method}
 
-We solve the radial problem in two complementary ways. A time-domain evolution
-of the scalar equation provides a quick check on the sign and scale of the
-frequency shift, following the strategy used in earlier KS studies
-\cite{Konoplya2020}. The quantitative spectrum comes from a direct Chebyshev
-discretization of the factored frequency-domain equation \cite{Jansen2017}.
-The matrix-pencil fit to the waveform is therefore a diagnostic, not the
-operator from which the tabulated QNMs are obtained.
+We determine the same physical resonances in two independent frequency-domain
+representations.  The Chebyshev calculation describes the radial wave globally
+on a compact grid and produces candidate ringing frequencies.  The Frobenius
+calculation instead expands the wave locally and enforces the horizon and
+infinity conditions through a continued fraction.  Agreement between them
+shows that a reported mode is tied to the wave equation and its radiative
+boundaries rather than to one discretization.  A time-domain evolution of the
+scalar equation provides an additional, lower-precision check on the direction
+and scale of the frequency shift, following earlier KS studies
+\cite{Konoplya2020}.  The quantitative spectrum comes from the two
+frequency-domain calculations \cite{Leaver1985,Jansen2017}; the matrix-pencil
+fit to the waveform is only an orientation diagnostic.
 
 \subsubsection{Baseline time-domain diagnostic}
 
@@ -696,6 +725,28 @@ minimization, while sharing the same perturbation equation and endpoint
 factorization.
 
 \section{Results}
+
+Before discussing numerical accuracy, it is useful to state the physical
+effect visible in the scalar wave equation.  At fixed \(M\), increasing the
+deformation from \(a/M=0\) to \(1\) moves the horizon from \(r_h/M=2\) to
+\(\sqrt{5}\).  For the \(\ell=2\) scalar barrier, the peak moves from
+\(r/M=2.9517\) to \(3.2520\), its height falls by \(13.54\%\), and the
+magnitude of its tortoise-coordinate curvature falls by \(17.77\%\).  The
+leading WKB estimate \(\operatorname{Re}\omega\sim\sqrt{V_{\rm peak}}\)
+therefore predicts a \(7.01\%\) decrease in oscillation frequency, close to
+the fully computed \(7.29\%\) shift.  The damping rate depends on both the
+barrier curvature and the global outgoing-wave solution, so it need not fall
+by the same fraction; the numerical mode gives a smaller \(2.59\%\) decrease
+in damping magnitude.
+
+In time-domain language, the deformed scalar signal would have a lower pitch
+and a slightly more slowly decaying envelope.  Because the pitch falls more
+than the damping rate, the signal nevertheless completes fewer oscillations
+within one damping time: its quality factor decreases by \(4.83\%\).  The
+\(\ell=3\) and \(4\) barriers show the same behavior, so this is a systematic
+low-lying scalar effect rather than an isolated quadrupole feature.  The
+following validation establishes that these percent-level changes are much
+larger than the numerical uncertainty.
 
 \subsection{Schwarzschild validation}
 
@@ -1286,16 +1337,24 @@ sign and comparable magnitude.  Full-precision values are generated by
 \FloatBarrier
 \section{Discussion}
 
-The clearest physical result is the systematic softening of the scalar spectrum.
-As \(a/M\) increases, the potential barrier moves and decreases, and both the
-oscillation frequency and the magnitude of the damping rate fall. For the
-scalar \(\ell=2\) fundamental at \(a/M=1\), the changes are \(-7.29\%\) in
-\(\operatorname{Re}\omega\), \(-2.59\%\) in \(-\operatorname{Im}\omega\),
-and \(-4.83\%\) in \(Q\). The weak \(\ell\)-dependence follows the height and
-curvature of the scalar barrier in the manner expected from WKB theory
-\cite{Ferrari1984,Konoplya2003}. These results extend the qualitative softening
-found in earlier KS calculations to a fixed-mass, low-lying spectral catalogue
-\cite{Konoplya2020,Bolokhov2025}.
+The scalar calculation gives a direct relation between the deformed geometry
+and the ringing it supports.  Increasing \(a/M\) at fixed mass moves both the
+horizon and the peak of the scalar barrier outward.  At the same time the
+barrier becomes lower and less sharply curved in the tortoise coordinate.  A
+wave localized near that peak therefore oscillates at a lower frequency and
+leaks away more slowly.  This is the physical origin of the systematic
+softening of the scalar spectrum, rather than a numerical rescaling of an
+otherwise unchanged Schwarzschild mode.
+
+For the scalar \(\ell=2\) fundamental at \(a/M=1\), the pitch decreases by
+\(7.29\%\) and the damping magnitude by \(2.59\%\).  Equivalently, the damping
+time grows by approximately \(2.7\%\).  Since the oscillation slows more than
+the envelope decay, the quality factor falls by \(4.83\%\): the perturbation
+lives slightly longer in time but executes fewer cycles before fading.  The
+weak \(\ell\)-dependence follows the height and curvature of the scalar barrier
+as expected from WKB theory \cite{Ferrari1984,Konoplya2003}.  These results put
+the qualitative softening found in earlier KS calculations on a fixed-mass,
+low-lying spectral footing \cite{Konoplya2020,Bolokhov2025}.
 
 The agreement between Chebyshev and Frobenius calculations is strongest for the
 fundamentals and remains excellent for the first overtones at \(N=32\). The
@@ -1308,14 +1367,23 @@ the scalar \(n=1\) modes are cross-validated low-lying first overtones at
 \(N=32\), and the \(n=2\) values are best regarded as indications of branch
 motion.
 
-The local singular-value contours broaden with \(a/M\) on the scalar
-\(\ell=2,n=0\) branch. Similar pseudospectral broadening has been used to expose
-the sensitivity of non-self-adjoint black-hole spectra
-\cite{Jaramillo2021,Cao2024}. Our calculation is finite dimensional and local
-in the complex-frequency plane, so it does not establish a continuum
-instability. It does show, however, that the deformation changes not only the
-location of the resonance but also the local normalized singular-value
-sensitivity of the discretized spectral problem.
+The axial calculation asks a different question.  It describes how an
+odd-parity metric disturbance rings when the spherical quantum-corrected
+background is retained but its effective quantum source is not allowed to
+develop an independent odd-parity motion.  The resulting master variable is
+gauge invariant, so its motion is not a coordinate artifact, but the
+frozen-source assumption is still physical input.  The axial frequencies are
+therefore useful conditional predictions of that model, not universal KS
+gravitational-wave frequencies.
+
+Finally, the local singular-value contours broaden with \(a/M\) on the scalar
+\(\ell=2,n=0\) branch.  In physical terms, nearby complex frequencies become
+less sharply distinguishable in the finite spectral representation as the
+geometry is deformed.  Similar pseudospectral broadening has been used to
+expose the sensitivity of non-self-adjoint black-hole spectra
+\cite{Jaramillo2021,Cao2024}.  Because our calculation is finite dimensional
+and local in the complex-frequency plane, this is a sensitivity diagnostic,
+not evidence for a continuum instability.
 
 \subsection{Limitations and reproducibility}
 
@@ -1400,17 +1468,18 @@ These commands write the CSV tables, Markdown summaries, and figures under \path
 
 \section{Conclusion}
 
-We have computed the low-lying QNMs of the KS geometry at fixed mass using two
-numerically distinct frequency-domain methods. The scalar fundamentals decrease
-successively across the four sampled deformation values. For \(\ell=2\) at
-\(a/M=1\), the oscillation
-frequency, damping magnitude, and quality factor change by \(-7.29\%\),
-\(-2.59\%\), and \(-4.83\%\), respectively. The dimensionless
-\(\omega_0/\omega_1\) ratio moves by \(1.92\%\). Together with the potential-peak
-analysis, these numbers show that the KS deformation produces a genuine
-percent-level shift of the test-scalar spectrum, not merely a change of units.
-This complements earlier WKB, time-domain, and Frobenius studies of the same
-geometry \cite{Konoplya2020,Bolokhov2025}.
+The main physical result is that the KS deformation softens the low-lying
+test-scalar ringing at fixed mass.  The deformation pushes the effective
+barrier outward and lowers its height and curvature.  The trapped scalar wave
+therefore rings at a lower frequency and decays slightly more slowly.  For
+\(\ell=2\) at \(a/M=1\), the oscillation frequency, damping magnitude, and
+quality factor change by \(-7.29\%\), \(-2.59\%\), and \(-4.83\%\),
+respectively.  The scalar perturbation consequently survives for a little
+longer but completes fewer cycles during that time.  The dimensionless
+\(\omega_0/\omega_1\) ratio moves by \(1.92\%\), confirming that the result is
+not merely a common change of mass units.  This complements earlier WKB,
+time-domain, and Frobenius studies of the same geometry
+\cite{Konoplya2020,Bolokhov2025}.
 
 At \(N=32\), the scalar fundamentals agree with the continued-fraction values
 to \(7.92\times10^{-13}\) or better on the sampled deformation grid. The
@@ -1435,13 +1504,13 @@ physical meaning remains conditional on the frozen-source closure. A complete
 nonspherical quantum theory of the KS source would be needed to remove that
 assumption.
 
-Finally, the singular-value calculation shows that the local finite-\(N\)
-pseudospectral basin of the scalar fundamental broadens with deformation. The
-trend survives changes in grid size and frequency window, although it should
-not be confused with a continuum pseudospectrum. More broadly, the combination
-of Chebyshev roots, residual minima, branch continuation, backward error, and a
-Frobenius calculation provides a transparent way to separate well-resolved KS
-resonances from numerically fragile overtones \cite{Leaver1985,Jansen2017,Jaramillo2021}.
+The local finite-\(N\) pseudospectral basin of the scalar fundamental broadens
+with deformation, indicating greater local numerical sensitivity around the
+resonance without implying a continuum instability.  The computational audits
+support, rather than replace, the physical conclusion: two independent radial
+representations identify the same robust fundamental branches, while the
+second overtones remain too fragile for equally strong claims
+\cite{Leaver1985,Jansen2017,Jaramillo2021}.
 
 \appendix
 \section{Schwarzschild branch-identification seeds}
