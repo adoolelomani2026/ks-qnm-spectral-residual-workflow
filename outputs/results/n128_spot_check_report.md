@@ -15,7 +15,7 @@ not a claim of additional significant digits.
 ## Interpretation
 
 - The `N=128` endpoint frequencies remain within `5e-10` of the
-  `N=96` publication-facing values for the tested scalar fundamental branch.
+  reported `N=96` values for the tested scalar fundamental branch.
 - The movement is small compared with the displayed table precision and does
   not change any catalogue trend, percent shift, or physics conclusion.
 - The `N=96 -> N=128` movement is not used as a claim of extra digits because

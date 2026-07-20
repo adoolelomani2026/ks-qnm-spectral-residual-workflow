@@ -262,8 +262,8 @@ def run_pipeline(base_dir: Path) -> None:
     ).stdout.strip() else "clean"
     results_dir = base_dir / "outputs" / "results"
     figures_dir = base_dir / "outputs" / "figures"
-    results_dir.mkdir(exist_ok=True)
-    figures_dir.mkdir(exist_ok=True)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
 
     tests = run_self_tests()
     failed = [test for test in tests if not test.passed]

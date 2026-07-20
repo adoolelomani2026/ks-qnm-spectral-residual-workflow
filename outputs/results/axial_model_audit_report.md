@@ -1,6 +1,6 @@
 # Axial inverse-Cowling audit
 
-- Local source commit: `9090c8cc5b55549bb4f25a16e701a1c6858a64c7` (the run metadata separately records whether the tree was dirty).
+- Local source commit: `6cbccc9f7c44e08b797854b7977dbc76373ccdab` (the run metadata separately records whether the tree was dirty).
 - Public Batic--Dutykh--Sukaiti repository commit inspected: `f53435ebdb8d1124d13bee75fa54972ac1613a03`.
 - Public repository first commit and date: `dcdc3f6c07584b17c83662eae3b8ac4a424dae30 2026-06-07T06:49:31+04:00`.
 - The public files use the same mass-normalised deformation `a/M` and frequency `M omega`.
