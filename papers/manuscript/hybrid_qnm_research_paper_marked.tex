@@ -97,8 +97,8 @@ continuation in \(a/M\), polynomial backward error, and the continued-fraction
 calculation. In the Schwarzschild limit, the \(N=96\) scalar
 \(\ell=2,n=0\) result and the continued-fraction value differ from the published
 benchmark by \(5.60\times10^{-11}\) and \(8.24\times10^{-13}\), respectively.
-At fixed mass, increasing the KS deformation from \(a/M=0\) to \(1\) lowers both
-the oscillation frequency and the damping rate of the scalar fundamental modes.
+The scalar fundamentals decrease successively across the four sampled
+deformation values.
 For \(\ell=2,n=0\), the changes in \(\operatorname{Re}\omega\),
 \(-\operatorname{Im}\omega\), and
 \(Q=\operatorname{Re}\omega/[2(-\operatorname{Im}\omega)]\) are
@@ -394,8 +394,8 @@ two-dimensional volume form so that \(\epsilon^{tr}=+1\) in the static
 \color{blue}
 Writing the odd stress perturbation as
 \(\delta T_{aB}=\delta t_a^{\mathrm{odd}}X_B\), its gauge-invariant source
-one-form is \(L_a=\delta t_a^{\mathrm{odd}}-\mathcal{Q}_{\mathrm{bg}}h_a\), where
-\(\mathcal{Q}_{\mathrm{bg}}\) denotes the coefficient called \(Q\) for the
+one-form is \(L_a=\delta t_a^{\mathrm{odd}}-Q_{\mathrm{bg}}h_a\), where
+\(Q_{\mathrm{bg}}\) denotes the coefficient called \(Q\) for the
 angular background stress tensor in the notation of
 Ref.~\cite{Gundlach1999}; this is their Eq.~(19).  Because it is constructed
 from the gauge-invariant matter combination, imposing \(L_a=0\) does not
@@ -779,7 +779,8 @@ number of residual-function evaluations is 1000, and the accepted residual is
 required to be below \(10^{-7}\) for the scalar validation calculation.  The
 initial guesses are the branch-tracked \(N=32\) Chebyshev candidates. At
 \(a/M=0\), those candidates are selected as the nearest distinct roots to the
-18 literature targets listed in Appendix~\ref{tab:schwarzschildseeds}; no
+18 literature targets listed in Table~\ref{tab:schwarzschildseeds} of
+Appendix~\ref{sec:schwarzschildseeds}; no
 manual or continued-fraction Schwarzschild seed is used. Branch
 identity is maintained by continuation over \(a/M=0,0.2,0.5,1\) and by keeping
 the fundamental and first-overtone targets distinct.  The catalogue uses the
@@ -1605,8 +1606,9 @@ These commands write the CSV tables, Markdown summaries, and figures under \path
 
 \color{blue}
 We have computed the low-lying QNMs of the KS geometry at fixed mass using two
-numerically distinct frequency-domain methods. The scalar fundamentals soften steadily
-as \(a/M\) is increased. For \(\ell=2\) at \(a/M=1\), the oscillation
+numerically distinct frequency-domain methods. The scalar fundamentals decrease
+successively across the four sampled deformation values. For \(\ell=2\) at
+\(a/M=1\), the oscillation
 frequency, damping magnitude, and quality factor change by \(-7.29\%\),
 \(-2.59\%\), and \(-4.83\%\), respectively. The dimensionless
 \(\omega_0/\omega_1\) ratio moves by \(1.92\%\). Together with the potential-peak
@@ -1635,8 +1637,9 @@ obeys a sourced equation on a general spherical background
 \cite{Gerlach1979,Gundlach1999,Karlovini2002}. Setting the invariant axial
 effective-source current to zero gives the inverse-Cowling potential used here,
 which differs from a simple lapse-deformed Regge--Wheeler potential. Its
-frequencies provide a useful numerical comparison and agree closely with an
-separate Chebyshev calculation \cite{BaticDutykhSukaiti2026}, but their
+frequencies provide a useful numerical comparison and agree closely with the
+separate high-precision Chebyshev calculation of Batic, Dutykh, and Sukaiti
+\cite{BaticDutykhSukaiti2026}, but their
 physical meaning remains conditional on the frozen-source closure. A complete
 nonspherical quantum theory of the KS source would be needed to remove that
 assumption.
@@ -1651,6 +1654,7 @@ resonances from numerically fragile overtones \cite{Leaver1985,Jansen2017,Jarami
 
 \appendix
 \section{Schwarzschild branch-identification seeds}
+\label{sec:schwarzschildseeds}
 
 Table~\ref{tab:schwarzschildseeds} records every initial target used at
 \(a/M=0\). Each is a literature value: no seed was selected manually and no
