@@ -97,7 +97,7 @@ across the four sampled values \(a/M=0,0.2,0.5,1\).  For
 \(\ell=2,n=0\) at \(a/M=1\), the oscillation frequency, damping magnitude, and
 quality factor \(Q=\operatorname{Re}\omega/[2(-\operatorname{Im}\omega)]\)
 shift by \(-7.29\%\), \(-2.59\%\), and \(-4.83\%\).  The low-lying catalogue
-contains scalar \(\ell=2,3,4\) fundamentals, validated first overtones, and
+contains scalar \(\ell=2,3,4\) fundamentals, cross-validated first overtones, and
 exploratory second-overtone diagnostics; higher overtones are outside the
 scope.  A finite-\(N\) singular-value pseudospectral diagnostic of the scalar
 \(\ell=2,n=0\) branch broadens with deformation: at \(N=64\), its 10\%
@@ -156,8 +156,8 @@ traceability: each reported branch carries evidence explaining why it was
 retained and what level of interpretation it supports.
 
 The scope is therefore deliberately limited to a low-lying KS catalogue.  The
-scalar \(n=0\) fundamentals are robust quantitative results; scalar \(n=1\)
-branches are validated low-lying overtones; \(n=2\) entries are exploratory
+scalar \(n=0\) fundamentals are robust fundamental modes; scalar \(n=1\)
+branches are cross-validated low-lying first overtones at \(N=32\); \(n=2\) entries are exploratory
 branch diagnostics; and higher overtones are outside the scope.  Recent
 analytic-continuation methods based on confluent-Heun solutions explicitly
 target complete and highly damped spectra of type-D black holes
@@ -518,7 +518,7 @@ non-finite roots are removed.  The physical search window is
 \(-3<\operatorname{Im}\omega<-0.02\).  Roots separated by at most
 \(10^{-7}\) are treated as one numerical cluster, retaining the representative
 with the smaller raw-polynomial singular-value residual.  At most the 20
-closest candidates enter the detailed scoring stage.
+candidates closest to the current branch target enter the detailed scoring stage.
 
 For a previously tracked branch, a candidate must lie within an absolute
 complex-frequency distance \(0.20\) of the preceding target.  Competing
@@ -526,11 +526,25 @@ matches minimize
 
 \begin{equation*}
 S=d_{\rm target}+0.45d_{\rm cont}+0.35(1-|\langle u_{j-1},u_j\rangle|)
-+10^{-3}\min(\sigma_j/\sigma_{\min},100),
++10^{-3}\min(\sigma_j/\sigma_{\rm best},100),
 \end{equation*}
-where frequency distances are normalized by the relevant frequency magnitude
-with a floor of \(0.1\), and the previous eigenvector is barycentrically
-interpolated to the new grid before its normalized overlap is evaluated.
+where, for the shortlisted candidate set \(\mathcal C\),
+\begin{equation*}
+d_{\rm target}=\frac{|\omega_j-\omega_{\rm target}|}
+{\max(|\omega_{\rm target}|,0.1)},\qquad
+d_{\rm cont}=\frac{|\omega_j-\omega_{j-1}|}
+{\max(|\omega_{j-1}|,0.1)},\qquad
+\sigma_{\rm best}=\min_{k\in\mathcal C}\sigma_k.
+\end{equation*}
+Here \(\sigma_j=\sigma_{\min}[P_N(\omega_j)]\) is evaluated on the raw,
+unequilibrated polynomial matrices at the unrefined generalized-eigenvalue
+candidate.  Candidate frequencies and right eigenvectors are generated from
+the row- and column-equilibrated linearized pencil; before overlap evaluation,
+the right eigenvectors are mapped back by the column-scaling matrix as
+\(x=D_r y\).  The extracted mode shapes are normalized, and the previous shape
+is barycentrically interpolated to the new grid.  The absolute value in
+\(|\langle u_{j-1},u_j\rangle|\) removes the arbitrary complex phase of either
+eigenvector.
 The selected raw root is refined within a rectangular radius \(0.02\) in each
 complex-frequency component by L-BFGS-B minimization of
 \(\sigma_{\min}^2[P_N(\omega)]\), with at most 500 iterations,
@@ -667,7 +681,7 @@ Table~\ref{tab:leavercomparison} summarizes the Leaver-style continued-fraction 
 1.0 & first overtone & 0.42697149 & -0.28857291 & \(1.747\times10^{-9}\)\\
 \bottomrule
 \end{tabular}
-\caption{Leaver-style continued-fraction validation against targeted Chebyshev spectral results at \(N=32\). Frequency columns are rounded for display; the discrepancy column is computed from full-precision internal values. The Leaver solver avoids Chebyshev collocation, matrix-pencil data, and residual minimization, while sharing the same perturbation equation and endpoint factorization. The automated validation fails if the relative difference exceeds \(10^{-6}\); the largest observed difference is \(1.814\times10^{-9}\).}
+\caption{Leaver-style continued-fraction validation against targeted Chebyshev spectral results at \(N=32\). Frequency columns are rounded for display; the discrepancy column is computed from full-precision internal values. The Leaver solver avoids Chebyshev collocation, matrix-pencil data, and residual minimization, while sharing the same perturbation equation and endpoint factorization. The stricter scalar comparison shown here fails if the relative difference exceeds \(10^{-6}\); the looser general catalogue gate of \(10^{-4}\) exists only to accommodate the exploratory \(n=2\) tier. The largest difference in this table is \(1.814\times10^{-9}\).}
 \label{tab:leavercomparison}
 \end{table}
 
@@ -675,7 +689,7 @@ Table~\ref{tab:cfconvergence} isolates continued-fraction truncation from the
 spectral comparison.  The fundamental modes stabilize by depth 90 at the shown
 precision.  The deformed first overtone is more sensitive, but its depth-240
 and depth-320 values differ by only \(2.05\times10^{-12}\).  This is consistent
-with treating \(n=1\) as a validated low-lying overtone while retaining a
+with treating scalar \(n=1\) as a cross-validated low-lying first overtone at \(N=32\) while retaining a
 stricter claim for the fundamentals.
 
 \begin{table}[H]
@@ -745,9 +759,10 @@ indices \(n=0,1,2\).  Together with the scalar rows, the working catalogue
 contains 72 entries over \(a/M=0,0.2,0.5,1.0\).  The axial entries are
 conditional inverse-Cowling modes of the explicitly stated closure, rather than modes of the former
 lapse-substitution proxy.  At \(a=0\), the effective source vanishes and the
-equation can be checked against tabulated Schwarzschild Regge--Wheeler
-frequencies, as reported in
-Table~\ref{tab:gravitationalcatalogue}.
+model reduces exactly to the Schwarzschild Regge--Wheeler equation.
+Table~\ref{tab:gravitationalcatalogue} lists the resulting continued-fraction
+frequencies.  External high-precision comparisons are reported separately
+below.
 
 \begin{table}[H]
 \centering
@@ -833,7 +848,7 @@ the inverse-Cowling model and does not establish stability under other
 effective-source closures; the finite root search is an additional numerical
 check.
 
-Across the low-lying working catalogue, the worst spectral--Leaver relative difference is \(1.202\times10^{-5}\), occurring for the axial \(\ell=2\), \(n=2\) branch at \(a/M=0.5\).  The \(n=0\) fundamentals are quantitative results, \(n=1\) entries are validated low-lying overtones, and \(n=2\) entries are exploratory branch diagnostics rather than equal-confidence physical predictions.  Higher overtones are outside the scope.
+Across the low-lying working catalogue, the worst spectral--Leaver relative difference is \(1.202\times10^{-5}\), occurring for the axial \(\ell=2\), \(n=2\) branch at \(a/M=0.5\).  The conditional \(n=0\) axial fundamentals are numerically the most robust axial tier, while axial \(n=1\) and \(n=2\) entries remain conditional inverse-Cowling odd-parity modes; \(n=2\) entries are exploratory branch diagnostics rather than equal-confidence physical predictions.  Higher overtones are outside the scope.
 
 \subsection{Catalogue-level deformation trends}
 
@@ -974,13 +989,13 @@ The scalar rows used for the headline numerical comparison are collected in Tabl
 \(\mathrm{Im}(M\omega_{\mathrm{spec}})\)\\
 \midrule
 0.0 & 96 & fundamental & high-\(N\) & 0.48364248 & 0.48365353 & 0.48364387 & -0.09675878\\
-0.0 & 32 & first overtone & validated & -- & -- & 0.46385058 & -0.29560394\\
+0.0 & 32 & first overtone & cross-validated & -- & -- & 0.46385058 & -0.29560394\\
 0.2 & 96 & fundamental & high-\(N\) & 0.48203239 & 0.48204305 & 0.48203369 & -0.09665386\\
-0.2 & 32 & first overtone & validated & -- & -- & 0.46216559 & -0.29531130\\
+0.2 & 32 & first overtone & cross-validated & -- & -- & 0.46216559 & -0.29531130\\
 0.5 & 96 & fundamental & high-\(N\) & 0.47388656 & 0.47389459 & 0.47388693 & -0.09610918\\
-0.5 & 32 & first overtone & validated & -- & -- & 0.45364275 & -0.29379018\\
+0.5 & 32 & first overtone & cross-validated & -- & -- & 0.45364275 & -0.29379018\\
 1.0 & 96 & fundamental & high-\(N\) & 0.44836165 & 0.44836213 & 0.44836241 & -0.09424818\\
-1.0 & 32 & first overtone & validated & -- & -- & 0.42697149 & -0.28857291\\
+1.0 & 32 & first overtone & cross-validated & -- & -- & 0.42697149 & -0.28857291\\
 \bottomrule
 \end{tabular}
 \caption{Reported scalar comparison. Fundamental branches are reported at \(N=96\); first overtones are frozen at the Leaver-validated \(N=32\) reference grid. Displayed decimals are for branch identification and table readability; precision claims are set by convergence and Leaver validation, not by residual size alone. Tracked high-\(N\) overtone rows are retained as exploratory diagnostics rather than used as headline results.}
@@ -1101,7 +1116,7 @@ sign and comparable magnitude.  Full-precision values are generated by
 
 The central physical pattern is successive softening across the sampled KS grid. Increasing \(a/M\) across the four adopted values lowers both the oscillation frequency and the absolute damping rate for every sampled scalar and gauge-invariant inverse-Cowling axial branch in the catalogue. The scalar \(\ell=2\) fundamental mode is the least assumption-dependent interpretation of this pattern: at \(a/M=1\), its real frequency is lower by \(7.29\%\), its damping magnitude is lower by \(2.59\%\), and its quality factor is lower by \(4.83\%\). The singular-value pseudospectral analysis adds a second numerical observation: in the same scalar branch, the local relative-singular-value basin broadens with KS deformation, consistent with greater local finite-\(N\) spectral sensitivity in the residual operator. This observation is intentionally local and exploratory.
 
-The numerical framework is what makes that statement credible. The waveform-derived matrix-pencil path is retained only as a sanity check; the final operator is built directly from the perturbation equation. The Schwarzschild check shows that the direct spectral operator resolves the scalar fundamental mode accurately, and the Leaver comparison reproduces the targeted scalar spectral branches to better than \(10^{-6}\) for the fundamental mode and first overtone at the reference grid. The low-lying catalogue extends this cross-check through \(n=2\); the largest observed spectral--Leaver difference is \(1.202\times10^{-5}\), localized to a second-overtone axial branch. This confirms rather than erases the confidence hierarchy: fundamentals are robust, first overtones are validated low-lying modes, and second overtones are exploratory diagnostics.
+The numerical framework is what makes that statement credible. The waveform-derived matrix-pencil path is retained only as a sanity check; the final operator is built directly from the perturbation equation. The Schwarzschild check shows that the direct spectral operator resolves the scalar fundamental mode accurately, and the Leaver comparison reproduces the targeted scalar spectral branches to better than \(10^{-6}\) for the fundamental mode and first overtone at the reference grid. The low-lying catalogue extends this cross-check through \(n=2\); the largest observed spectral--Leaver difference is \(1.202\times10^{-5}\), localized to a second-overtone axial branch. This confirms rather than erases the confidence hierarchy: scalar fundamentals are robust, scalar first overtones are cross-validated low-lying modes at \(N=32\), and second overtones are exploratory diagnostics; every axial tier remains conditional on the inverse-Cowling closure.
 
 The workflow contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The generalized eigenproblem supplies candidates, but the accepted QNM claim is attached to a small value of \(\sigma_{\min}(P_N(\omega))\), convergence in \(N\), branch tracking, and Leaver comparison. This is a useful way to discuss the KS non-Hermitian resonance problem in Hermitian positive-semidefinite language, but it should not be read as a priority claim for residual singular-value theory.
 
@@ -1122,18 +1137,18 @@ Finally, the overtone hierarchy remains the numerically weakest part of the cata
 \footnotesize
 \renewcommand{\arraystretch}{1.16}
 \setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\columnwidth}{p{0.22\columnwidth}p{0.25\columnwidth}X}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{0.22\columnwidth}>{\raggedright\arraybackslash}p{0.25\columnwidth}>{\raggedright\arraybackslash}X}
 \toprule
 Branch & Status & Use \\
 \midrule
-Scalar \(n=0\) & Strongest sector & Main softening and spectroscopy claims. \\
-Scalar \(n=1\) & Cross-validated at \(N=32\) & Secondary diagnostics; high-\(N\) tracking remains exploratory. \\
-Overtones \(n=2\) & Most delicate & Branch diagnostics only; avoid headline precision claims. \\
-Axial rows & Gauge invariant, closure dependent & Conditional modes with frozen axial effective-source current. \\
+Scalar \(n=0\) & Robust fundamental modes & Main softening and spectroscopy claims. \\
+Scalar \(n=1\) & Cross-validated low-lying first overtones at \(N=32\) & Secondary diagnostics; high-\(N\) tracking remains exploratory. \\
+Overtones \(n=2\) & Exploratory branch diagnostics & Avoid headline precision claims. \\
+Axial rows & Conditional inverse-Cowling odd-parity modes & Gauge-invariant metric variable with frozen axial effective-source current. \\
 \bottomrule
 \end{tabularx}
 \caption{Claim hierarchy used in this manuscript. The table separates robust
-scalar fundamentals and validated low-lying first overtones from exploratory
+scalar fundamentals and cross-validated low-lying first overtones from exploratory
 second-overtone diagnostics and closure-dependent axial modes.}
 \label{tab:claimhierarchy}
 \end{table}
@@ -1170,7 +1185,7 @@ fundamental branches soften successively across the four sampled deformation val
 \(\ell=2\) at the upper sampled value \(a/M=1\), the oscillation frequency,
 damping magnitude, and quality factor shift by \(-7.29\%\), \(-2.59\%\), and
 \(-4.83\%\), respectively.  Dimensionless scalar spectroscopy diagnostics
-shift by \(1.92\%\) in the validated \(\omega_0/\omega_1\) ratio; ratios
+shift by \(1.92\%\) in the cross-validated \(\omega_0/\omega_1\) ratio; ratios
 involving \(n=2\) remain detailed exploratory diagnostics rather than headline
 results.  The axial metric variable is gauge invariant and its potential
 differs explicitly from the earlier lapse-substitution ansatz.
@@ -1182,11 +1197,12 @@ The numerical contribution is not a new high-precision eigensolver or a general
 solution of the high-overtone problem.  It is the Chebyshev--Leaver audit
 framework behind the scalar statement: generalized eigenvalues are candidates,
 not conclusions, and are retained only after residual, spectral-size,
-continuation, backward-error, and collocation-independent continued-fraction checks.  The continued-
-fraction truncation table makes those settings and their convergence explicit.
+continuation, backward-error, and collocation-independent continued-fraction checks.  The
+continued\mbox{-}fraction truncation table makes those settings and their convergence explicit.
 The catalogue is deliberately low lying: \(n=0\) fundamentals are robust,
-\(n=1\) modes are validated low-lying overtones, \(n=2\) entries are
-exploratory diagnostics, and higher overtones are outside the scope.
+scalar \(n=1\) modes are cross-validated low-lying first overtones at \(N=32\),
+\(n=2\) entries are exploratory branch diagnostics, and all axial modes are
+conditional inverse-Cowling odd-parity modes.  Higher overtones are outside the scope.
 
 The workflow contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The non-Hermitian KS resonance equation \(P_N(\omega)\bm{u}=0\) is tested through the Hermitian positive-semidefinite residual \(R_N(\omega)=P_N(\omega)^\dagger P_N(\omega)\), and candidate modes are treated as minima of \(\sigma_{\min}(P_N(\omega))\) subject to convergence and continued-fraction validation. The singular-value pseudospectral diagnostic extends this workflow from locating frequencies to probing local finite-\(N\) spectral sensitivity: for the scalar \(\ell=2,n=0\) branch, the sign and order of magnitude of the endpoint increase in the 10\% quantile diagnostic survive changes in spectral size, grid density, and window width. The contribution is therefore not a claim of originality for residual singular-value theory or a continuum stability theorem. It is the combination of a fixed-mass KS Chebyshev residual implementation, continued-fraction validation, branch-status discipline, spectroscopy diagnostics, and a local finite-dimensional singular-value pseudospectral audit.
 
@@ -1217,7 +1233,8 @@ Not applicable.
 Not applicable.
 
 \noindent\textbf{Use of AI tools.}
-OpenAI Codex assisted with code development, numerical-analysis
+OpenAI Codex with model identifier \texttt{gpt-5.6-sol}, as recorded in the
+relevant session metadata, was used during June--July 2026 for code development, numerical-analysis
 scripting, algebraic cross-checks, literature discovery, manuscript structure,
 language editing, and formatting.  The author executed the calculations,
 checked cited claims against the primary sources, reviewed the derivations and

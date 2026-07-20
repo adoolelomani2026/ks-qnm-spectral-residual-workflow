@@ -989,13 +989,13 @@ The scalar rows used for the headline numerical comparison are collected in Tabl
 \(\mathrm{Im}(M\omega_{\mathrm{spec}})\)\\
 \midrule
 0.0 & 96 & fundamental & high-\(N\) & 0.48364248 & 0.48365353 & 0.48364387 & -0.09675878\\
-0.0 & 32 & first overtone & validated & -- & -- & 0.46385058 & -0.29560394\\
+0.0 & 32 & first overtone & cross-validated & -- & -- & 0.46385058 & -0.29560394\\
 0.2 & 96 & fundamental & high-\(N\) & 0.48203239 & 0.48204305 & 0.48203369 & -0.09665386\\
-0.2 & 32 & first overtone & validated & -- & -- & 0.46216559 & -0.29531130\\
+0.2 & 32 & first overtone & cross-validated & -- & -- & 0.46216559 & -0.29531130\\
 0.5 & 96 & fundamental & high-\(N\) & 0.47388656 & 0.47389459 & 0.47388693 & -0.09610918\\
-0.5 & 32 & first overtone & validated & -- & -- & 0.45364275 & -0.29379018\\
+0.5 & 32 & first overtone & cross-validated & -- & -- & 0.45364275 & -0.29379018\\
 1.0 & 96 & fundamental & high-\(N\) & 0.44836165 & 0.44836213 & 0.44836241 & -0.09424818\\
-1.0 & 32 & first overtone & validated & -- & -- & 0.42697149 & -0.28857291\\
+1.0 & 32 & first overtone & cross-validated & -- & -- & 0.42697149 & -0.28857291\\
 \bottomrule
 \end{tabular}
 \caption{Reported scalar comparison. Fundamental branches are reported at \(N=96\); first overtones are frozen at the Leaver-validated \(N=32\) reference grid. Displayed decimals are for branch identification and table readability; precision claims are set by convergence and Leaver validation, not by residual size alone. Tracked high-\(N\) overtone rows are retained as exploratory diagnostics rather than used as headline results.}
@@ -1137,7 +1137,7 @@ Finally, the overtone hierarchy remains the numerically weakest part of the cata
 \footnotesize
 \renewcommand{\arraystretch}{1.16}
 \setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\columnwidth}{p{0.22\columnwidth}p{0.25\columnwidth}X}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{0.22\columnwidth}>{\raggedright\arraybackslash}p{0.25\columnwidth}>{\raggedright\arraybackslash}X}
 \toprule
 Branch & Status & Use \\
 \midrule
@@ -1185,7 +1185,7 @@ fundamental branches soften successively across the four sampled deformation val
 \(\ell=2\) at the upper sampled value \(a/M=1\), the oscillation frequency,
 damping magnitude, and quality factor shift by \(-7.29\%\), \(-2.59\%\), and
 \(-4.83\%\), respectively.  Dimensionless scalar spectroscopy diagnostics
-shift by \(1.92\%\) in the validated \(\omega_0/\omega_1\) ratio; ratios
+shift by \(1.92\%\) in the cross-validated \(\omega_0/\omega_1\) ratio; ratios
 involving \(n=2\) remain detailed exploratory diagnostics rather than headline
 results.  The axial metric variable is gauge invariant and its potential
 differs explicitly from the earlier lapse-substitution ansatz.
@@ -1197,8 +1197,8 @@ The numerical contribution is not a new high-precision eigensolver or a general
 solution of the high-overtone problem.  It is the Chebyshev--Leaver audit
 framework behind the scalar statement: generalized eigenvalues are candidates,
 not conclusions, and are retained only after residual, spectral-size,
-continuation, backward-error, and collocation-independent continued-fraction checks.  The continued-
-fraction truncation table makes those settings and their convergence explicit.
+continuation, backward-error, and collocation-independent continued-fraction checks.  The
+continued\mbox{-}fraction truncation table makes those settings and their convergence explicit.
 The catalogue is deliberately low lying: \(n=0\) fundamentals are robust,
 scalar \(n=1\) modes are cross-validated low-lying first overtones at \(N=32\),
 \(n=2\) entries are exploratory branch diagnostics, and all axial modes are

@@ -23,6 +23,9 @@ inspected page by page.
 
 The source folder was compiled independently. Auxiliary build files in that
 folder are not submission inputs and should not be uploaded.
+Every documented generator and test command was also run from a fresh sparse
+clone with no pre-existing `outputs/` directory; the regenerated metadata
+records the clean source commit used for that pass.
 
 Manual actions still required before upload:
 

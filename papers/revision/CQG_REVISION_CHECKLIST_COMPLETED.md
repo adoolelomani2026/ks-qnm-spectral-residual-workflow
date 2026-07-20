@@ -47,6 +47,7 @@ File: `papers/manuscript/hybrid_qnm_research_paper.tex`
 - [x] Built from the clean revised TeX source.
 - [x] Unmarked and without line numbers.
 - [x] Compiled twice without LaTeX warnings or unresolved references.
+- [x] Re-ran every documented generator and all tests from a fresh sparse clone with no pre-existing `outputs/` directory.
 - [ ] Upload with designation “Source Files.”
 
 File: `papers/manuscript/hybrid_qnm_research_paper.pdf`

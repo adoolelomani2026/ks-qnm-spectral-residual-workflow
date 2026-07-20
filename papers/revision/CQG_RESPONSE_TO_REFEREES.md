@@ -57,8 +57,8 @@ density and radial pressure and differs from simple lapse substitution for
 with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
-**Changes in the manuscript:** Section 2.1, pages 4--6, lines 119--185; axial
-external validation and stability audit, pages 13--15, lines 346--382.
+**Changes in the manuscript:** Section 2.1, pages 4--6, lines 119--193; axial
+external validation and stability audit, pages 13--15, lines 353--391.
 
 ### Referee 1, Comment 2
 
@@ -104,10 +104,10 @@ not support one; instead, the paper states precisely that the advantage is
 confidence and traceability.
 
 **Changes in the manuscript:** Introduction, pages 2--3, lines 59--73;
-candidate-selection algorithm, pages 8--9, lines 242--277;
-continued-fraction methods, pages 9--10, lines 278--301; Schwarzschild benchmark
-and convergence evidence, pages 10--13, lines 302--345; residual diagnostics,
-page 19, lines 475--481; conclusion, pages 24--25, lines 587--613.
+candidate-selection algorithm, pages 8--9, lines 243--284;
+continued-fraction methods, pages 9--10, lines 285--307; Schwarzschild benchmark
+and convergence evidence, pages 10--13, lines 309--352; residual diagnostics,
+page 19, lines 484--493; conclusion, pages 24--25, lines 597--632.
 
 ### Referee 1, Comment 3
 
@@ -133,9 +133,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--9; Introduction,
-pages 2--3, lines 59--73; catalogue discussion, pages 13--15, lines 346--382;
-claim hierarchy and limitations, pages 22--23, lines 534--564; conclusion,
-pages 24--25, lines 587--613.
+pages 2--3, lines 59--73; catalogue discussion, pages 13--15, lines 353--391;
+claim hierarchy and limitations, pages 22--23, lines 544--574; conclusion,
+pages 24--25, lines 597--632.
 
 ### Referee 1, Comment 4
 
@@ -166,8 +166,8 @@ regenerated from the revised inverse-Cowling potential; no lapse-substitution
 numerical results remain in the revised manuscript.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
-lines 141--185; axial subsection, pages 13--15, lines 346--382; limitations,
-pages 22--23, lines 534--564; conclusion, pages 24--25, lines 587--600.
+lines 141--193; axial subsection, pages 13--15, lines 353--391; limitations,
+pages 22--23, lines 544--574; conclusion, pages 24--25, lines 597--610.
 
 ## Referee 2
 
@@ -196,7 +196,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 5--6, lines 141--185.
+**Changes in the manuscript:** Section 2.1, pages 5--6, lines 141--193.
 
 ### Referee 2, Comment 2
 
@@ -216,8 +216,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 13--15, lines 346--382; confidence statement, page 15, lines 374--382;
-claim hierarchy, pages 22--23, lines 534--564.
+pages 13--15, lines 353--391; confidence statement, page 15, lines 386--391;
+claim hierarchy, pages 22--23, lines 544--574.
 
 ### Referee 2, Comment 3
 
@@ -246,7 +246,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 15--16, lines 383--406.
+pages 15--16, lines 392--415.
 
 ### Referee 2, Comment 4
 
@@ -263,7 +263,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-pages 16--18, lines 407--436.
+pages 16--18, lines 416--445.
 
 ### Referee 2, Comment 5
 
@@ -280,7 +280,7 @@ clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
 **Changes in the manuscript:** Section 2.1, page 4, lines 126--131;
-literature-normalization discussion, pages 18--19, lines 437--470.
+literature-normalization discussion, pages 17--18, lines 446--479.
 
 ### Referee 2, Comment 6
 
@@ -344,7 +344,10 @@ The AI disclosure now records the exact model identifier
 `gpt-5.6-sol`, verified from the relevant local Codex session metadata, together
 with the dates, detailed uses, and author-responsibility statement.
 
-The fast test suite passes 8/8 checks, including a symbolic/numerical audit of the
+Every documented generator and test command was also run successfully from a
+fresh sparse clone with no pre-existing `outputs/` directory. This audit found
+and corrected one bootstrap issue in which the main pipeline assumed that the
+parent output directory already existed. The fast test suite passes 8/8 checks, including a symbolic/numerical audit of the
 new axial potential, and the complete validation suite passes,
 with the worst spectral--Leaver catalogue difference
 \(1.202\times10^{-5}\) on the deliberately exploratory axial
