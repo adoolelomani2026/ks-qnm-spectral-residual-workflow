@@ -129,6 +129,9 @@ quasinormal modes (QNMs) are the resonances of a leaky gravitational potential
 barrier.  Their complex frequencies have an immediate physical meaning:
 \(\operatorname{Re}\omega\) sets the pitch of the ringing, while
 \(-\operatorname{Im}\omega\) sets the rate at which its amplitude decays.
+With the convention \(e^{-i\omega t}\), writing
+\(\omega=\omega_R-i\alpha\) gives a damping time
+\(\tau=1/\alpha\), where \(\alpha>0\).
 The spectrum therefore connects the geometry outside the horizon to black-hole
 stability, ringdown, and gravitational-wave tests of compact objects
 \cite{Vishveshwara1970,Kokkotas1999,Berti2009,Konoplya2011}.
@@ -141,9 +144,10 @@ Reliable spectra are therefore needed not only for Kerr black holes, but also
 for proposed quantum-corrected and exotic geometries whose ringdowns may depart
 from the general-relativistic expectation \cite{Konoplya2011,Jaramillo2021}.
 
-QNM frequencies are obtained with several complementary tools.  WKB
-approximations connect the spectrum to the height and curvature of the
-effective-potential barrier and are efficient when the multipole number exceeds
+QNM frequencies are obtained with several complementary tools.  The
+Wentzel--Kramers--Brillouin (WKB) approximation treats the wave locally near
+the top of a slowly varying effective-potential barrier and connects the
+spectrum to its height and curvature.  It is efficient when the multipole number exceeds
 the overtone number \cite{Schutz1985,Iyer1987,Ferrari1984,Konoplya2003,Konoplya2011}. Direct
 time-domain evolution extracts the least-damped modes from waveforms, while
 Frobenius/Leaver continued fractions impose the frequency-domain boundary
@@ -189,7 +193,13 @@ The Frobenius calculation supplies a numerically distinct, collocation-independe
 same radial equation and is particularly useful for following a mode as
 \(a/M\) changes \cite{Leaver1985,Bolokhov2025}.
 
-Our scope is the low-lying KS spectrum. The
+Modes are labelled by the spherical-harmonic multipole \(\ell\) and the
+overtone index \(n\).  The least-damped mode for a fixed \(\ell\) is the
+fundamental, \(n=0\); successively more strongly damped modes are the
+overtones \(n=1,2,\ldots\).  Spherical symmetry makes the frequency independent
+of the azimuthal label \(m\), which is suppressed.  Here ``low-lying'' means
+the fundamental and first few overtones nearest the real-frequency axis.  Our
+scope is this low-lying KS spectrum. The
 scalar \(n=0\) modes are robust fundamentals; scalar \(n=1\)
 branches are cross-validated low-lying first overtones at \(N=32\); \(n=2\) entries are exploratory
 branch diagnostics; and higher overtones are outside the scope.  Recent
@@ -197,120 +207,15 @@ analytic-continuation methods based on confluent-Heun solutions explicitly
 target complete and highly damped spectra of type-D black holes
 \cite{Chen2025}; the present calculation is not intended to compete in that
 regime. The minimally coupled scalar field gives the cleanest physical probe
-of the KS metric. For the axial sector we derive the gauge-invariant
-odd-parity equation and then impose a frozen-source, inverse-Cowling closure,
+of the KS metric because it propagates without perturbing the effective source
+that supports the geometry.  The axial, or odd-parity, sector instead
+describes metric perturbations with parity \((-1)^{\ell+1}\).  For that sector
+we derive the gauge-invariant equation and then impose a frozen-source,
+inverse-Cowling closure,
 as in perturbative treatments of general spherical backgrounds
 \cite{Gerlach1979,Gundlach1999,Karlovini2002}. Those frequencies characterize
 the stated effective model, not a unique nonspherical completion of the KS
 quantum source.
-
-\subsection{Reader's guide to the terminology}
-
-Because black-hole spectroscopy combines relativity, wave mechanics, and
-numerical linear algebra, we collect the terminology used throughout the paper
-before presenting the calculation.
-
-\paragraph{Mode labels and perturbation sectors.}
-The integers \(\ell\) and \(m\) label the spherical harmonic
-\(Y_{\ell m}\).  The multipole number \(\ell\) measures angular structure:
-\(\ell=0\) is spherically symmetric, \(\ell=1\) is dipolar, and \(\ell=2\) is
-quadrupolar.  Spherical symmetry makes the frequency independent of \(m\), so
-we suppress that label.  The integer \(n\) orders modes with the same \(\ell\)
-by damping.  The least-damped mode is the \emph{fundamental}, \(n=0\); modes
-with \(n\geq1\) are \emph{overtones}.  ``Low-lying'' means the fundamental and
-first few overtones, which lie closest to the real-frequency axis and usually
-dominate the early ringdown.  The \emph{scalar sector} is a massless test field
-obeying the Klein--Gordon equation: it probes the geometry without perturbing
-the effective source that supports it.  The \emph{axial}, or odd-parity,
-sector is the part of a metric perturbation that changes sign as
-\((\theta,\phi)\mapsto(\pi-\theta,\phi+\pi)\) by the factor
-\((-1)^{\ell+1}\).
-
-\paragraph{Geometry, potential, and boundary conditions.}
-The metric tells clocks and radial distances how to respond to position.  Its
-\emph{lapse} \(f_a(r)\) vanishes at the event horizon, the one-way surface from
-which an outward signal cannot return.  The \emph{tortoise coordinate}
-\(r_*\) stretches the finite-radius horizon to \(r_*\to-\infty\) and sends
-spatial infinity to \(r_*\to+\infty\); this makes the radial equation look
-like a one-dimensional wave equation.  Its \emph{effective potential} is not a
-new material force.  It is the combination of spacetime curvature and angular
-momentum that scatters the radial wave.  A QNM is ingoing at the horizon and
-outgoing at infinity, meaning that energy leaves the exterior region through
-both ends and no wave is sent in from either boundary.
-
-\paragraph{Complex frequency and spectroscopy.}
-With time dependence \(e^{-i\omega t}\), a damped mode has
-\(\omega=\omega_R-i\alpha\), where \(\omega_R=\operatorname{Re}\omega\) is
-the angular oscillation frequency and \(\alpha=-\operatorname{Im}\omega>0\)
-is the exponential damping rate.  Its e-folding time is
-\(\tau=1/\alpha\).  The quality factor is
-\(Q=\omega_R/(2\alpha)\).  During one e-folding time the mode accumulates
-\(2Q\) radians, or \(Q/\pi\) oscillation cycles; a larger \(Q\) therefore means
-weaker damping relative to the period.  We quote
-\(M\omega\), which is dimensionless, and compare deformations at fixed \(M\)
-so that a change cannot be attributed to changing the mass unit.
-
-\paragraph{WKB and potential-peak intuition.}
-The Wentzel--Kramers--Brillouin (WKB) approximation treats the wave locally
-near the top of a slowly varying barrier.  At leading order,
-\(\operatorname{Re}\omega\sim\sqrt{V_{\rm peak}}\), while damping depends on
-the barrier curvature in the tortoise coordinate.  WKB therefore translates
-changes in barrier height and width into physical intuition.  In this paper it
-is an interpretation tool only; all quoted frequencies come from the
-Chebyshev and continued-fraction calculations.
-
-\paragraph{Gauge invariance and inverse Cowling.}
-A coordinate change can alter individual metric-perturbation components
-without changing the physical spacetime.  A \emph{gauge-invariant} master
-variable is a combination unchanged by those infinitesimal coordinate
-changes, so a nonzero master wave cannot be removed by relabelling
-coordinates.  Gauge invariance does not specify the dynamics of an unknown
-quantum source.  The \emph{inverse-Cowling closure} used here freezes the
-odd-parity perturbation of that effective source while allowing the metric to
-ring.  It is a stated physical model assumption, not a consequence of gauge
-invariance.
-
-\paragraph{Spectral and continued-fraction calculations.}
-A \emph{spectral method} approximates a smooth function by global basis
-functions rather than by local finite-difference steps.  We use Chebyshev
-polynomials and enforce the differential equation at \(N\) special
-\emph{collocation points}.  This converts the wave equation into a polynomial
-matrix equation in \(\omega\).  A generalized eigensolver returns many
-\emph{candidate roots} at once, but finite matrices can also produce
-\emph{spurious roots} that move or disappear as \(N\) changes.  The Frobenius
-method instead writes the regular radial factor as a power series.  Leaver's
-continued fraction selects the series solution satisfying both radiative
-boundaries.  Because it uses no Chebyshev grid, agreement provides an
-independent discretization check rather than a repeat of the same matrix
-calculation.
-
-\paragraph{Residual, backward error, convergence, and continuation.}
-For a trial frequency, the \emph{residual} measures how nearly the discretized
-wave equation is satisfied.  The smallest singular value
-\(\sigma_{\min}[P_N(\omega)]\), obtained from a singular-value decomposition,
-is the smallest possible residual over normalized trial wavefunctions.  A
-\emph{backward error} divides that defect by the scale of the matrix
-coefficients and asks how small a relative change to the discretized equation
-would make the trial pair exact.  Neither guarantees a physical QNM by itself.
-\emph{Spectral convergence} checks whether the frequency stabilizes as \(N\)
-changes.  \emph{Continuation} follows a root in small steps of \(a/M\), using
-its frequency and wavefunction to preserve \emph{branch identity}; it prevents
-an algorithm from silently jumping from one overtone to another.
-
-\paragraph{Pseudospectrum and why it is used.}
-The spectrum lists frequencies where the operator is exactly singular.  The
-\emph{pseudospectrum} also maps nearby frequencies where it is nearly
-singular.  Equivalently, it shows where small perturbations of a
-non-self-adjoint operator could move an eigenvalue.  A narrow residual basin
-means the mode is sharply isolated in the chosen finite representation; a
-broad basin means a larger neighborhood behaves almost like a solution and the
-frequency is locally more sensitive to discretization or operator
-perturbations.  We use this diagnostic because QNM boundary conditions make
-the problem non-self-adjoint, so a tiny residual at one point does not by
-itself reveal how sensitive that point is.  Our plots concern finite
-Chebyshev matrices: they compare local sensitivity along the validated scalar
-branch, but they do not prove a physical instability or determine a continuum
-pseudospectrum.
 
 \subsection{Literature context and related work}
 
@@ -359,7 +264,9 @@ f_a(r)&=\frac{\sqrt{r^2-a^2}}{r}-\frac{2M}{r},
 \label{eq:ksmetric}
 \end{equation}
 Here \(r\) is the areal radius, \(M>0\) is the mass parameter, and \(a\geq0\)
-is a length scale.  No radial-coordinate transformation relative to the
+is a length scale.  The areal radius is defined so that a sphere at coordinate
+\(r\) has area \(4\pi r^2\).  The function \(f_a\) is the lapse: it controls
+the redshift of static clocks and vanishes at the event horizon.  No radial-coordinate transformation relative to the
 convention of Ref.~\cite{Konoplya2020} is made.  In that convention the
 present numerical work treats \(a\) directly as the deformation parameter;
 no otherwise unused renormalized coupling is introduced.  Reality of the metric coefficients restricts the
@@ -400,7 +307,9 @@ with \(\nabla^2_{S^2}Y_{\ell m}=-\ell(\ell+1)Y_{\ell m}\), gives
 \label{eq:scalarintermediate}
 \end{equation}
 Introducing the tortoise coordinate \(\dd r_*/\dd r=f_a^{-1}\) reduces this
-equation to the Schr\"odinger form
+equation to the Schr\"odinger form.  This coordinate stretches the horizon to
+\(r_*\to-\infty\) and spatial infinity to \(r_*\to+\infty\), putting the two
+radiative boundaries at the ends of a one-dimensional wave problem:
 \begin{equation}
 \frac{\dd^2\Psi}{\dd r_*^2}+
 \left[\omega^2 - V_{0\ell}(r;a)\right]\Psi=0,
@@ -414,7 +323,9 @@ V_{0\ell}(r;a)=f_a(r)\left[\frac{\ell(\ell+1)}{r^2}+\frac{1}{r}\frac{\dd f_a}{\d
 in agreement with the minimally coupled scalar equation used in
 Ref.~\cite{Konoplya2020}.  QNM boundary conditions select solutions that are
 purely ingoing at the horizon and purely outgoing at spatial infinity.  These
-conditions make \(\omega\) complex and the radial problem non-self-adjoint.
+conditions mean that energy leaves the exterior region through both ends and
+no wave is sent in from either boundary.  They make \(\omega\) complex and the
+radial problem non-self-adjoint.
 
 Equation~\eqref{eq:scalarpotential} also gives the useful physical picture.
 The \(\ell(\ell+1)/r^2\) term is the angular-momentum barrier, while
@@ -447,6 +358,14 @@ gravitational analogue of holding the material source fixed while perturbing
 the surrounding field.  Gauge invariance ensures that the master amplitude is
 not a coordinate artifact; it does not determine whether the frozen-source
 assumption is the unique quantum dynamics.
+
+Here \emph{gauge} refers to the freedom to relabel coordinates without
+changing the physical spacetime.  Individual perturbation components can
+change under such a relabelling, even though the underlying geometry does not.
+A gauge-invariant master variable is a combination in which those coordinate
+changes cancel.  It therefore prevents a coordinate artifact from being
+mistaken for a physical wave, but it does not determine the dynamics of the
+effective quantum source.
 
 To display the gauge invariance, write the background as
 \(g_{ab}(y)\dd y^a\dd y^b+r^2(y)\gamma_{AB}\dd z^A\dd z^B\), where
@@ -1257,6 +1176,10 @@ standard ringdown convention \cite{Berti2009,Berti2006}, we define
 \begin{equation*}
 Q=\frac{\operatorname{Re}\omega}{2[-\operatorname{Im}\omega]}.
 \end{equation*}
+If \(\tau=1/[-\operatorname{Im}\omega]\) is the time for the mode amplitude to
+fall by a factor of \(e\), then the oscillation advances through \(2Q\) radians,
+or \(Q/\pi\) cycles, during that time.  Thus \(Q\) measures how many oscillations
+remain visible before damping substantially reduces the signal.
 For the scalar \(\ell=2\) fundamental branch, the damping magnitude decreases by \(2.59\%\), corresponding to an approximate \(2.7\%\) increase in damping time. Because the oscillation frequency decreases by a larger fraction, \(Q\) decreases by \(4.83\%\): the scalar perturbation decays slightly more slowly, but it completes fewer oscillations per damping time.
 
 Dimensionless mode ratios are useful because a common rescaling of the black-hole

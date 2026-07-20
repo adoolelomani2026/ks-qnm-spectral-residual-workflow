@@ -21,11 +21,13 @@ The final presentation now foregrounds the physical chain connecting the KS
 geometry, the displacement and softening of the scalar potential barrier, and
 the resulting changes in oscillation frequency, damping time, and quality
 factor; the numerical audits are retained as support for that interpretation.
-We also added a reader's guide defining the physical mode labels, perturbation
-sectors, boundary conditions, WKB interpretation, gauge and closure language,
-and every numerical diagnostic used later in the paper.  The Methods and
-pseudospectrum sections now state explicitly what question each tool answers,
-why it is used, and what it cannot establish.
+Definitions and physical explanations are now introduced naturally at first
+use: the mode labels and WKB picture in the Introduction, the geometric and
+boundary-condition language with the wave equation, gauge and closure concepts
+with the odd-parity derivation, and each numerical diagnostic in the Methods
+section where it enters the calculation.  The Methods and pseudospectrum
+sections state explicitly what question each tool answers, why it is used, and
+what it cannot establish.
 
 We have revised the title to reflect more accurately the manuscript's low-lying spectral scope and its use of two complementary numerical methods. The new title is *Low-lying quasinormal modes of Kazakov--Solodukhin black holes from Chebyshev and continued-fraction methods*.
 
@@ -70,9 +72,9 @@ density and radial pressure and differs from simple lapse substitution for
 with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
-**Changes in the manuscript:** terminology guide, pages 2--4, lines 65--133;
-Section 2.1, pages 5--8, lines 174--253; axial external validation and
-stability analysis, pages 16--18, lines 464--504.
+**Changes in the manuscript:** Introduction, pages 1--3, lines 8--72;
+Section 2.1, pages 4--7, lines 113--203; axial external validation and
+stability analysis, pages 14--17, lines 414--454.
 
 ### Referee 1, Comment 2
 
@@ -119,12 +121,12 @@ did not manufacture a rejected-candidate example where the available data did
 not support one; instead, the paper states precisely that the advantage is
 confidence and traceability.
 
-**Changes in the manuscript:** Introduction and terminology guide, pages 1--4,
-lines 21--133; root-selection algorithm, pages 10--12, lines 330--379;
-continued-fraction methods, page 12, lines 380--408; physical interpretation,
-Schwarzschild benchmark, and convergence evidence, pages 13--14, lines 409--452;
-residual diagnostics, pages 21--22, lines 579--590; conclusion, pages 27--28,
-lines 717--747.
+**Changes in the manuscript:** Introduction, pages 1--3, lines 8--72;
+root-selection algorithm, pages 9--10, lines 280--329;
+continued-fraction methods, pages 10--11, lines 330--358; physical
+interpretation, Schwarzschild benchmark, and convergence evidence, pages
+11--14, lines 359--413; residual diagnostics, page 20, lines 532--543;
+conclusion, pages 26--27, lines 670--700.
 
 ### Referee 1, Comment 3
 
@@ -150,9 +152,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--7; Introduction,
-page 2, lines 55--64; terminology guide, pages 2--4, lines 65--133; catalogue
-discussion, pages 16--18, lines 464--504; branch-status table and limitations,
-pages 26--27, lines 672--716; conclusion, pages 27--28, lines 717--747.
+pages 2--3, lines 57--72; catalogue discussion, pages 14--18, lines 414--478;
+branch-status table and limitations, pages 25--26, lines 625--669; conclusion,
+pages 26--27, lines 670--700.
 
 ### Referee 1, Comment 4
 
@@ -180,9 +182,9 @@ odd-parity modes of this explicit model.
 
 All axial frequencies, tables, figures, deformation shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
-**Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 6--8,
-lines 202--253; axial subsection, pages 16--18, lines 464--504; limitations,
-pages 26--27, lines 672--716; conclusion, page 28, lines 735--742.
+**Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--7,
+lines 142--203; axial subsection, pages 14--17, lines 414--454; limitations,
+pages 25--26, lines 625--669; conclusion, page 27, lines 688--695.
 
 ## Referee 2
 
@@ -211,7 +213,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 6--8, lines 202--253.
+**Changes in the manuscript:** Section 2.1, pages 5--7, lines 142--203.
 
 ### Referee 2, Comment 2
 
@@ -231,8 +233,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 16--18, lines 464--504; branch-status statement, page 18, lines 500--504;
-interpretive-status table, pages 26--27, lines 672--716.
+pages 14--17, lines 414--454; branch-status statement, page 17, lines 450--454;
+interpretive-status table, pages 25--26, lines 625--669.
 
 ### Referee 2, Comment 3
 
@@ -261,7 +263,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 18--19, lines 505--528.
+pages 17--18, lines 455--478.
 
 ### Referee 2, Comment 4
 
@@ -278,7 +280,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-pages 19--20, lines 529--550.
+pages 18--19, lines 479--503.
 
 ### Referee 2, Comment 5
 
@@ -294,8 +296,8 @@ moderate deformation interval selected for this numerical study. We also
 clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
-**Changes in the manuscript:** Section 2.1, pages 5--6, lines 179--187;
-literature-normalization discussion, pages 20--21, lines 551--575.
+**Changes in the manuscript:** Section 2.1, page 4, lines 118--130;
+literature-normalization discussion, pages 19--20, lines 504--528.
 
 ### Referee 2, Comment 6
 
@@ -314,8 +316,7 @@ spectral/pseudospectral eigenvalue methods, and recent confluent-Heun
 high-overtone work. Representative references were checked and added without
 turning the introduction into a general review.
 
-**Changes in the manuscript:** Introduction and terminology guide, pages 1--4,
-lines 21--133.
+**Changes in the manuscript:** Introduction, pages 1--3, lines 22--72.
 
 ### Referee 2, Comment 7
 
@@ -366,5 +367,5 @@ parent output directory already existed. The fast test suite passes 8/8 checks, 
 new axial potential, and the complete validation suite passes,
 with the worst spectral--Leaver catalogue difference
 \(1.202\times10^{-5}\) on the deliberately exploratory axial
-\(\ell=2,n=2,a/M=0.5\) row. Both the clean and marked 32-page manuscripts
+\(\ell=2,n=2,a/M=0.5\) row. Both the clean and marked 30-page manuscripts
 compile independently.
