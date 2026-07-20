@@ -167,7 +167,7 @@ added model assumption. The scalar result remains the least
 assumption-dependent headline, while the axial frequencies are conditional
 odd-parity modes of this explicit model.
 
-All axial frequencies, figures, tables, shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
+All axial frequencies, tables, figures, deformation shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
 lines 128--169; axial subsection, pages 13--14, lines 327--367; limitations,
