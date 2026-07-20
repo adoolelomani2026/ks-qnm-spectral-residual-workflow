@@ -17,7 +17,7 @@ File: `papers/revision/CQG_RESPONSE_TO_REFEREES.pdf`
 - [x] PDF format.
 - [x] Revised text is blue and the manuscript is line numbered.
 - [x] Figures and tables are included.
-- [x] All 28 pages were visually inspected after the final compile; no clipped
+- [x] All 32 pages were visually inspected after the final compile; no clipped
   tables, broken paths, blank pages, or unreadable legends were found.
 - [ ] Confirm anonymization requirements.
 - [ ] Designate “Complete Document for Review (PDF Only)” during upload.

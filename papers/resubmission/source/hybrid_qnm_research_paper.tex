@@ -204,6 +204,114 @@ as in perturbative treatments of general spherical backgrounds
 the stated effective model, not a unique nonspherical completion of the KS
 quantum source.
 
+\subsection{Reader's guide to the terminology}
+
+Because black-hole spectroscopy combines relativity, wave mechanics, and
+numerical linear algebra, we collect the terminology used throughout the paper
+before presenting the calculation.
+
+\paragraph{Mode labels and perturbation sectors.}
+The integers \(\ell\) and \(m\) label the spherical harmonic
+\(Y_{\ell m}\).  The multipole number \(\ell\) measures angular structure:
+\(\ell=0\) is spherically symmetric, \(\ell=1\) is dipolar, and \(\ell=2\) is
+quadrupolar.  Spherical symmetry makes the frequency independent of \(m\), so
+we suppress that label.  The integer \(n\) orders modes with the same \(\ell\)
+by damping.  The least-damped mode is the \emph{fundamental}, \(n=0\); modes
+with \(n\geq1\) are \emph{overtones}.  ``Low-lying'' means the fundamental and
+first few overtones, which lie closest to the real-frequency axis and usually
+dominate the early ringdown.  The \emph{scalar sector} is a massless test field
+obeying the Klein--Gordon equation: it probes the geometry without perturbing
+the effective source that supports it.  The \emph{axial}, or odd-parity,
+sector is the part of a metric perturbation that changes sign as
+\((\theta,\phi)\mapsto(\pi-\theta,\phi+\pi)\) by the factor
+\((-1)^{\ell+1}\).
+
+\paragraph{Geometry, potential, and boundary conditions.}
+The metric tells clocks and radial distances how to respond to position.  Its
+\emph{lapse} \(f_a(r)\) vanishes at the event horizon, the one-way surface from
+which an outward signal cannot return.  The \emph{tortoise coordinate}
+\(r_*\) stretches the finite-radius horizon to \(r_*\to-\infty\) and sends
+spatial infinity to \(r_*\to+\infty\); this makes the radial equation look
+like a one-dimensional wave equation.  Its \emph{effective potential} is not a
+new material force.  It is the combination of spacetime curvature and angular
+momentum that scatters the radial wave.  A QNM is ingoing at the horizon and
+outgoing at infinity, meaning that energy leaves the exterior region through
+both ends and no wave is sent in from either boundary.
+
+\paragraph{Complex frequency and spectroscopy.}
+With time dependence \(e^{-i\omega t}\), a damped mode has
+\(\omega=\omega_R-i\alpha\), where \(\omega_R=\operatorname{Re}\omega\) is
+the angular oscillation frequency and \(\alpha=-\operatorname{Im}\omega>0\)
+is the exponential damping rate.  Its e-folding time is
+\(\tau=1/\alpha\).  The quality factor is
+\(Q=\omega_R/(2\alpha)\).  During one e-folding time the mode accumulates
+\(2Q\) radians, or \(Q/\pi\) oscillation cycles; a larger \(Q\) therefore means
+weaker damping relative to the period.  We quote
+\(M\omega\), which is dimensionless, and compare deformations at fixed \(M\)
+so that a change cannot be attributed to changing the mass unit.
+
+\paragraph{WKB and potential-peak intuition.}
+The Wentzel--Kramers--Brillouin (WKB) approximation treats the wave locally
+near the top of a slowly varying barrier.  At leading order,
+\(\operatorname{Re}\omega\sim\sqrt{V_{\rm peak}}\), while damping depends on
+the barrier curvature in the tortoise coordinate.  WKB therefore translates
+changes in barrier height and width into physical intuition.  In this paper it
+is an interpretation tool only; all quoted frequencies come from the
+Chebyshev and continued-fraction calculations.
+
+\paragraph{Gauge invariance and inverse Cowling.}
+A coordinate change can alter individual metric-perturbation components
+without changing the physical spacetime.  A \emph{gauge-invariant} master
+variable is a combination unchanged by those infinitesimal coordinate
+changes, so a nonzero master wave cannot be removed by relabelling
+coordinates.  Gauge invariance does not specify the dynamics of an unknown
+quantum source.  The \emph{inverse-Cowling closure} used here freezes the
+odd-parity perturbation of that effective source while allowing the metric to
+ring.  It is a stated physical model assumption, not a consequence of gauge
+invariance.
+
+\paragraph{Spectral and continued-fraction calculations.}
+A \emph{spectral method} approximates a smooth function by global basis
+functions rather than by local finite-difference steps.  We use Chebyshev
+polynomials and enforce the differential equation at \(N\) special
+\emph{collocation points}.  This converts the wave equation into a polynomial
+matrix equation in \(\omega\).  A generalized eigensolver returns many
+\emph{candidate roots} at once, but finite matrices can also produce
+\emph{spurious roots} that move or disappear as \(N\) changes.  The Frobenius
+method instead writes the regular radial factor as a power series.  Leaver's
+continued fraction selects the series solution satisfying both radiative
+boundaries.  Because it uses no Chebyshev grid, agreement provides an
+independent discretization check rather than a repeat of the same matrix
+calculation.
+
+\paragraph{Residual, backward error, convergence, and continuation.}
+For a trial frequency, the \emph{residual} measures how nearly the discretized
+wave equation is satisfied.  The smallest singular value
+\(\sigma_{\min}[P_N(\omega)]\), obtained from a singular-value decomposition,
+is the smallest possible residual over normalized trial wavefunctions.  A
+\emph{backward error} divides that defect by the scale of the matrix
+coefficients and asks how small a relative change to the discretized equation
+would make the trial pair exact.  Neither guarantees a physical QNM by itself.
+\emph{Spectral convergence} checks whether the frequency stabilizes as \(N\)
+changes.  \emph{Continuation} follows a root in small steps of \(a/M\), using
+its frequency and wavefunction to preserve \emph{branch identity}; it prevents
+an algorithm from silently jumping from one overtone to another.
+
+\paragraph{Pseudospectrum and why it is used.}
+The spectrum lists frequencies where the operator is exactly singular.  The
+\emph{pseudospectrum} also maps nearby frequencies where it is nearly
+singular.  Equivalently, it shows where small perturbations of a
+non-self-adjoint operator could move an eigenvalue.  A narrow residual basin
+means the mode is sharply isolated in the chosen finite representation; a
+broad basin means a larger neighborhood behaves almost like a solution and the
+frequency is locally more sensitive to discretization or operator
+perturbations.  We use this diagnostic because QNM boundary conditions make
+the problem non-self-adjoint, so a tiny residual at one point does not by
+itself reveal how sensitive that point is.  Our plots concern finite
+Chebyshev matrices: they compare local sensitivity along the validated scalar
+branch, but they do not prove a physical instability or determine a continuum
+pseudospectrum.
+
 \subsection{Literature context and related work}
 
 \subsubsection{Quasinormal modes and black-hole spectroscopy}
@@ -486,6 +594,15 @@ fit to the waveform is only an orientation diagnostic.
 
 \subsubsection{Baseline time-domain diagnostic}
 
+The \emph{time domain} means solving directly for the waveform as a function
+of time and then fitting its ringdown.  It answers the intuitive question
+``what would the decaying signal look like after an initial pulse?''  This
+method is especially good at recovering the least-damped mode because that
+mode survives longest, but several damped sinusoids can be difficult to
+separate in a short or noisy time interval.  We therefore use it to check the
+sign and approximate size of the deformation shift, not to set the final
+digits.
+
 The baseline evolves the radial wave equation in tortoise coordinate \(x=r_*\),
 \begin{equation}
 \frac{\partial^2\Psi}{\partial t^2}
@@ -511,8 +628,19 @@ A rank-four matrix-pencil reduction is also applied to the same waveform
 \cite{Hua1990}. It
 recovers the expected ringdown scale and deformation trend, but no frequency
 reported as a spectral result is inferred from this fit.
+Here a \emph{matrix pencil} is a signal-processing construction that represents
+the sampled waveform as a sum of damped exponentials; its eigenvalues encode
+their frequencies and decay rates.  It should not be confused with the
+generalized matrix pencil obtained below from the differential equation.
 
 \subsubsection{Chebyshev spectral discretization}
+
+Chebyshev polynomials are oscillatory global functions on \([-1,1]\) whose
+special nodes are dense near the endpoints.  Interpolating at these nodes
+reduces large endpoint errors and gives differentiation matrices that
+differentiate the interpolating polynomial.  \emph{Collocation} means that we
+require the differential equation to hold at each node.  Increasing \(N\)
+raises the polynomial resolution and supplies a direct convergence test.
 
 The direct spectral method compactifies the horizon-to-infinity domain with
 \begin{equation*}
@@ -549,6 +677,14 @@ The matrices \(A_0,A_1,A_2\) are built directly from \(f_a(r)\), \(f_a'(r)\), th
 
 \subsubsection{Residual test and mode selection}
 
+The eigensolver is deliberately treated as a candidate generator.  The reason
+is that an algebraic eigenvalue of a finite matrix need not approximate a QNM
+of the original differential equation.  The residual asks whether some
+normalized discrete wavefunction actually satisfies that equation at the
+trial frequency.  A singular value is a non-negative measure of how strongly
+a matrix stretches vectors; \(\sigma_{\min}\) is the weakest stretching
+direction.  It vanishes exactly when the matrix has a nonzero null vector.
+
 For a trial frequency we evaluate the residual map
 \begin{equation*}
 \omega \mapsto \sigma_{\min}\!\left(P_N(\omega)\right),
@@ -570,6 +706,13 @@ resonance, while convergence and the continued fraction determine how much
 confidence can be attached to it \cite{Leaver1985,Jansen2017}.
 
 \subsubsection{Generalized eigenproblem and residual}
+
+The equation is \emph{quadratic} because it contains \(1\), \(\omega\), and
+\(\omega^2\).  Linearization doubles the state vector and rewrites it as a
+\emph{generalized eigenproblem} \(Az=\omega Bz\).  The pair \((A,B)\) is often
+called a matrix pencil.  Its generalized eigenvalues are easy to compute, but
+the doubling and the different coefficient scales can amplify roundoff; this
+is why the resulting frequencies are candidates rather than accepted modes.
 
 Equation~\eqref{eq:polynomialproblem} is linearized as
 \begin{equation}
@@ -602,6 +745,17 @@ both frequency and eigenfunction and are checked separately with the
 continued fraction \cite{Leaver1985,Jansen2017}.
 
 \subsubsection{Root filtering, refinement, and branch assignment}
+
+\emph{Equilibration} rescales rows and columns so that very large and very
+small coefficients enter the eigensolve on comparable numerical scales.  In
+exact arithmetic this does not change a finite eigenvalue; in floating-point
+arithmetic it can reduce avoidable loss of precision.  Filtering then removes
+frequencies outside the damped physical window and merges duplicate numerical
+representatives.  Refinement varies the real and imaginary parts of \(\omega\)
+to find the bottom of the local residual basin.  Branch assignment is a
+separate step: it asks which refined root is the continuation of a particular
+\((\ell,n)\) mode rather than merely which root is closest at one parameter
+value.
 
 The selection rules are fixed before the spectrum is computed. Before solving
 the pencil, each row of the pair of
@@ -681,7 +835,13 @@ therefore carry equal weight in the mode assignment.
 \subsubsection{Leaver-style validation}
 
 As a collocation-independent frequency-domain calculation, we also solve a Frobenius
-recurrence in the manner of Leaver \cite{Leaver1985,Nollert1993}. It uses the same compact
+recurrence in the manner of Leaver \cite{Leaver1985,Nollert1993}.  A Frobenius
+series is a power series multiplied by the known singular behavior at an
+endpoint.  Substitution converts the differential equation into a recurrence
+among series coefficients.  For a generic frequency the recurrence contains a
+solution that grows and violates the required boundary behavior; the continued
+fraction is the condition that selects the minimal, physically admissible
+coefficient sequence.  It uses the same compact
 coordinate \(s=1-r_h/r\) and the same physical endpoint behavior, but no
 Chebyshev grid, matrix-pencil roots, or singular-value minimization. We write
 \begin{equation*}
@@ -1227,7 +1387,13 @@ exploratory diagnostic.}
 
 \subsection{Residual diagnostics}
 
-Table~\ref{tab:residualdiagnostics} reports scale-aware residual diagnostics associated with the same scalar rows.  The polynomial backward error is
+Table~\ref{tab:residualdiagnostics} reports scale-aware residual diagnostics
+associated with the same scalar rows.  The raw smallest singular value answers
+``how close is this matrix to having a null vector?'' but changes if the entire
+equation is multiplied by a constant.  The polynomial backward error removes
+that arbitrary overall scale.  It estimates the smallest relative perturbation
+of the coefficient matrices that would make the reported frequency an exact
+eigenvalue of the finite polynomial problem.  It is
 \begin{equation}
 \eta_{\mathrm{back}}(\omega)=
 \frac{\sigma_{\min}[P_N(\omega)]}
@@ -1261,21 +1427,49 @@ spectral-size and continued-fraction convergence.}
 \label{tab:residualdiagnostics}
 \end{table}
 
-Hermiticity and positive semidefiniteness of \(R_N=P_N^\dagger P_N\) are
-algebraic properties, up to floating-point roundoff; they are not presented as
-empirical validation.  The automated tests instead check their numerical
+Hermiticity means \(R_N=R_N^\dagger\), and positive semidefiniteness means
+\(v^\dagger R_Nv\geq0\) for every vector \(v\).  Both follow algebraically from
+\(R_N=P_N^\dagger P_N\), up to floating-point roundoff; they are not presented
+as empirical validation.  The automated tests instead check their numerical
 implementation, Schwarzschild recovery, scaling invariance of the selected
 root, the inverse-Cowling axial potential, and the numerically distinct validation paths.
 
 \subsection{Local singular-value pseudospectral diagnostics of the scalar fundamental mode}
 
-The same residual operator gives a local finite-dimensional singular-value pseudospectral diagnostic around a validated branch. Following the singular-value viewpoint used in black-hole pseudospectrum studies \cite{Jaramillo2021,Cao2024}, define
+An eigenvalue table tells us where a mode is located but not how sharply that
+location is defined.  This distinction matters for QNMs because outgoing
+boundary conditions make the radial operator non-self-adjoint: its
+eigenfunctions need not be orthogonal, and small operator perturbations can
+move eigenvalues by much more than they would in a self-adjoint problem.  A
+pseudospectrum addresses this by evaluating the residual throughout a region
+of the complex-frequency plane rather than only at the eigenvalue.
+
+The same residual operator therefore gives a local finite-dimensional
+singular-value pseudospectral diagnostic around a branch that has already been
+validated by the independent continued fraction.  Following the
+singular-value viewpoint used in black-hole pseudospectrum studies
+\cite{Jaramillo2021,Cao2024}, we define
 \begin{equation}
 \eta_N(\omega)=\frac{\sigma_{\min}(P_N(\omega))}{\sigma_{\max}(P_N(\omega))}.
 \end{equation}
-This relative residual is used here only as a Chebyshev-matrix diagnostic for the scalar \(\ell=2,n=0\) branch.
+The denominator removes a common matrix scale, so \(\eta_N\) compares the
+weakest and strongest stretching directions of the matrix.  Small
+\(\eta_N\) means that at least one normalized wavefunction nearly satisfies
+the discretized equation.  Contours of equal \(\eta_N\) are therefore level
+sets of ``almost-solutions.''  A narrow set indicates a sharply localized
+root; a broad set indicates that a wider range of nearby frequencies produces
+small relative residuals.  This is what the diagnostic gives us: a map of
+local spectral sensitivity, complementary to the single best-fit frequency.
+It is used here only for the finite Chebyshev matrices on the scalar
+\(\ell=2,n=0\) branch.
 
 Figure~\ref{fig:pseudocontours} shows contours of \(\log_{10}\eta_N\) around the residual-minimized scalar fundamental frequencies for \(a/M=0,0.2,0.5,1.0\), using \(N=64\), an \(81\times81\) grid, and a square half-width \(0.025\) in the complex \(M\omega\) plane. The contour centers agree with the Leaver frequencies to at worst \(6.816\times10^{-12}\) in relative difference, so the plotted basins are attached to the validated scalar branch.
+
+The logarithm is used because the residual spans many orders of magnitude:
+for example, \(\log_{10}\eta_N=-10\) means that the weakest matrix action is
+one part in \(10^{10}\) of the strongest.  The white cross in each panel marks
+the local residual minimum.  The surrounding contour shape, not the cross,
+contains the new information supplied by the pseudospectrum.
 
 \begin{figure}[H]
 \centering
@@ -1284,7 +1478,20 @@ Figure~\ref{fig:pseudocontours} shows contours of \(\log_{10}\eta_N\) around the
 \label{fig:pseudocontours}
 \end{figure}
 
-Quantile and area diagnostics give the same trend. Let \(q_p\) denote the \(p\)-quantile of \(\log_{10}\eta_N\) over the local window; lower-case \(q_p\) distinguishes this statistic from the QNM quality factor \(Q\). At \(N=64\), \(-q_{10}\) rises from \(9.898\) at \(a/M=0\) to \(10.060\) at \(a/M=1\), while \(-q_{50}\) rises from \(9.574\) to \(9.710\). The area fraction satisfying \(\log_{10}\eta_N\le -10\) grows from \(4.36\%\) to \(22.07\%\), a factor of \(5.06\). The upper-interval contour is window-limited, so the area is used only as a local diagnostic. These diagnostics are plotted in Figure~\ref{fig:pseudosensitivity}.
+Quantile and area diagnostics turn the contour picture into numbers.  A
+\(p\)-quantile is the value below which a fraction \(p\) of all sampled grid
+values lies.  Thus \(q_{10}\) characterizes the deepest \(10\%\) of the
+residual landscape, while \(q_{50}\) is its median.  The area fraction below a
+fixed threshold measures how much of the chosen window behaves as an
+almost-solution.  Lower-case \(q_p\) distinguishes this statistic from the QNM
+quality factor \(Q\).  At \(N=64\), \(-q_{10}\) rises from \(9.898\) at
+\(a/M=0\) to \(10.060\) at \(a/M=1\), while \(-q_{50}\) rises from \(9.574\)
+to \(9.710\).  The area fraction satisfying
+\(\log_{10}\eta_N\le -10\) grows from \(4.36\%\) to \(22.07\%\), a factor
+of \(5.06\).  In plain terms, the low-residual neighborhood occupies more of
+the same local frequency window after deformation.  The upper-interval
+contour is window-limited, so the area is used only as a local diagnostic.
+These diagnostics are plotted in Figure~\ref{fig:pseudosensitivity}.
 
 \begin{figure}[H]
 \centering
@@ -1293,7 +1500,7 @@ Quantile and area diagnostics give the same trend. Let \(q_p\) denote the \(p\)-
 \label{fig:pseudosensitivity}
 \end{figure}
 
-The sign of the quantile trend is stable under the tested spectral sizes. As shown in Figure~\ref{fig:pseudoresolution}, the \(a/M=0\) to \(a/M=1\) gain in \(-q_{10}\) is \(0.097\), \(0.130\), and \(0.161\) for \(N=32,48,64\), respectively. Thus, within the present residual normalization, scalar fundamental softening is associated with increasing local pseudospectral sensitivity.
+The sign of the quantile trend is stable under the tested spectral sizes. As shown in Figure~\ref{fig:pseudoresolution}, the \(a/M=0\) to \(a/M=1\) gain in \(-q_{10}\) is \(0.097\), \(0.130\), and \(0.161\) for \(N=32,48,64\), respectively. Thus, within the present residual normalization, scalar fundamental softening is associated with increasing local pseudospectral sensitivity.  This does not mean that the mode becomes unstable: instability would require a mode with \(\operatorname{Im}\omega>0\).  Nor is the contour width an observational error bar.  It measures sensitivity of the chosen finite operator and norm.
 
 \begin{figure}[H]
 \centering
