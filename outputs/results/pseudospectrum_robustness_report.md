@@ -1,6 +1,6 @@
 # Pseudospectrum robustness audit
 
-The endpoint change in the scalar fundamental local susceptibility is
+The scalar-fundamental normalized singular-value endpoint statistic is
 $\Delta[-q_{10}(\log_{10}\eta_N)]$ between $a/M=0$ and $a/M=1$.
 Each one-factor check holds the other settings at the stated reference value.
 

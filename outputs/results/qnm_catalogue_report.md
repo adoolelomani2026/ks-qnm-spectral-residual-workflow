@@ -23,7 +23,7 @@ For a/M > 0 the gravitational potential is the gauge-invariant frozen-source for
 The automated catalogue validation fails if any spectral/Leaver relative
 difference exceeds `1.0e-04`. Literature checks use
 rounded table tolerances because several source tables report six significant figures.
-The Leaver solver is independent of Chebyshev collocation, matrix-pencil data,
+The Leaver solver is collocation-independent: it uses no Chebyshev grid, matrix-pencil data,
 and residual minimization, but it intentionally shares the same perturbation
 equation, compact coordinate, endpoint factorization, and potential model.
 The continued-fraction residual is reported row-by-row; high-deformation second

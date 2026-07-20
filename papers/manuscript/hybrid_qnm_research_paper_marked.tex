@@ -90,8 +90,8 @@
 \noindent\textbf{Abstract.}
 \color{blue}
 We calculate the low-lying quasinormal-mode (QNM) spectrum of the
-Kazakov--Solodukhin (KS) geometry using Chebyshev collocation and an independent
-Frobenius continued fraction. Generalized-eigenvalue roots are retained only
+Kazakov--Solodukhin (KS) geometry using Chebyshev collocation and a
+collocation-independent Frobenius continued fraction. Generalized-eigenvalue roots are retained only
 when they survive tests based on singular-value residuals, spectral convergence,
 continuation in \(a/M\), polynomial backward error, and the continued-fraction
 calculation. In the Schwarzschild limit, the \(N=96\) scalar
@@ -185,13 +185,15 @@ QNMs are non-self-adjoint resonances, and this matters numerically. Outgoing
 boundary conditions lead to complex spectra that may be sensitive to both
 operator perturbations and discretization \cite{Jaramillo2021,Cao2024}. We
 write the finite Chebyshev problem as \(P_N(\omega)u=0\) and monitor
-\(\sigma_{\min}[P_N(\omega)]\), or equivalently the lowest eigenvalue of the
-Hermitian matrix \(P_N^\dagger P_N\). Singular-value tests are standard tools
+\(\sigma_{\min}[P_N(\omega)]\). Equivalently,
+\(\sigma_{\min}[P_N(\omega)]=
+\sqrt{\lambda_{\min}[P_N(\omega)^\dagger P_N(\omega)]}\); the eigenvalue itself
+is the square of the singular-value residual. Singular-value tests are standard tools
 for nonlinear eigenvalue problems \cite{Sadkane2023}, while related resolvent
 and pseudospectral diagnostics have become increasingly important in black-hole
 perturbation theory \cite{Jaramillo2021,Cao2024}. Here they are used to decide
 whether a root of the generalized Chebyshev pencil is a converged KS resonance.
-The independent Frobenius calculation supplies a second discretization of the
+The Frobenius calculation supplies a numerically distinct, collocation-independent discretization of the
 same radial equation and is particularly useful for following a mode as
 \(a/M\) changes \cite{Leaver1985,Bolokhov2025}.
 \color{black}
@@ -470,8 +472,17 @@ V_{\mathrm{ax},\ell}(r;a)
 \color{blue}
 At \(a=0\), \(m=M\), \(\rho=p_r=0\), and
 Eq.~\eqref{eq:reggewheelerpotential} becomes the Schwarzschild
-Regge--Wheeler potential \cite{Regge1957}.  For \(a>0\), it differs from the
-earlier lapse-substitution ansatz by
+Regge--Wheeler potential \cite{Regge1957}. For comparison, define the
+lapse-substitution potential
+\color{black}
+\begin{equation}
+V_{\mathrm{lapse},\ell}(r;a)
+=f_a(r)\left[\frac{\ell(\ell+1)}{r^2}-\frac{6M}{r^3}\right].
+\label{eq:lapsecomparison}
+\end{equation}
+\color{blue}
+For \(a>0\), the inverse-Cowling potential differs from this comparison
+potential by
 \color{black}
 \begin{equation}
 \Delta V_{\mathrm{ax}}
@@ -481,12 +492,12 @@ earlier lapse-substitution ansatz by
 \label{eq:axialproxycorrection}
 \end{equation}
 \color{blue}
-so it is not a relabeling of the earlier lapse-substitution ansatz.  The same
+so the two models are not equivalent.  The same
 effective-source potential is also used in the public high-precision
 Chebyshev calculation of Batic, Dutykh, and Sukaiti
 \cite{BaticDutykhSukaiti2026}; Section~3 compares overlapping modes directly.
-We use this potential to compute the low-lying spectrum with two independent
-radial discretizations, monitoring residuals, backward error, continuation in
+We use this potential to compute the low-lying spectrum with two numerically
+distinct radial discretizations, monitoring residuals, backward error, continuation in
 \(a/M\), and local pseudospectral sensitivity. Gauge
 invariance removes coordinate artifacts from the metric master variable; it
 does not make the inverse-Cowling closure unique.  A nonspherical quantum-source
@@ -639,7 +650,7 @@ We solve Eq.~\eqref{eq:linearizedspectral} with
 frequencies, since polynomial linearizations can magnify scaling and
 conditioning problems. The scalar \(\ell=2\) fundamental is identified from
 the Schwarzschild spectrum, whereas overtones are followed by continuity of
-both frequency and eigenfunction and are checked independently with the
+both frequency and eigenfunction and are checked separately with the
 continued fraction \cite{Leaver1985,Jansen2017}.
 \color{black}
 
@@ -731,7 +742,7 @@ therefore carry equal weight in the mode assignment.
 \subsubsection{Leaver-style validation}
 
 \color{blue}
-As an independent frequency-domain calculation, we also solve a Frobenius
+As a collocation-independent frequency-domain calculation, we also solve a Frobenius
 recurrence in the manner of Leaver \cite{Leaver1985,Nollert1993}. It uses the same compact
 coordinate \(s=1-r_h/r\) and the same physical endpoint behavior, but no
 Chebyshev grid, matrix-pencil roots, or singular-value minimization. We write
@@ -766,12 +777,15 @@ MINPACK hybrid solver exposed by \texttt{scipy.optimize.root} to the real and
 imaginary residual components.  The root tolerance is \(10^{-11}\), the maximum
 number of residual-function evaluations is 1000, and the accepted residual is
 required to be below \(10^{-7}\) for the scalar validation calculation.  The
-initial guesses are the branch-tracked \(N=32\) Chebyshev candidates.  Branch
+initial guesses are the branch-tracked \(N=32\) Chebyshev candidates. At
+\(a/M=0\), those candidates are selected as the nearest distinct roots to the
+18 literature targets listed in Appendix~\ref{tab:schwarzschildseeds}; no
+manual or continued-fraction Schwarzschild seed is used. Branch
 identity is maintained by continuation over \(a/M=0,0.2,0.5,1\) and by keeping
 the fundamental and first-overtone targets distinct.  The catalogue uses the
 same settings, with a relaxed \(10^{-4}\) residual acceptance threshold for the
-most delicate second-overtone recurrence reductions.  This validation layer is
-independent of Chebyshev collocation, matrix-pencil data, and residual
+most delicate second-overtone recurrence reductions. This validation layer is
+collocation-independent: it uses no Chebyshev grid, matrix-pencil data, or residual
 minimization, while sharing the same perturbation equation and endpoint
 factorization.
 \color{black}
@@ -934,7 +948,7 @@ last column compares with the depth-320 root.  The table is generated by
 \label{tab:cfconvergence}
 \end{table}
 
-Taylor-order convergence was tested independently at fixed continued-fraction
+Taylor-order convergence was tested separately at fixed continued-fraction
 depth 320.  Table~\ref{tab:taylorconvergence} reports the complex-frequency
 difference from order 128.  At the production order 96 the largest difference
 among these cases is \(4.32\times10^{-12}\).
@@ -953,7 +967,7 @@ axial \(\ell=2,n=0,a/M=1\) & \(3.09\times10^{-12}\) & \(1.67\times10^{-13}\) & \
 \bottomrule
 \end{tabular}
 \color{blue}
-\caption{Absolute difference \(|\omega_p-\omega_{128}|\) under independent
+\caption{Absolute difference \(|\omega_p-\omega_{128}|\) under one-at-a-time
 variation of the Frobenius Taylor order \(p\), with continued-fraction depth
 320 fixed.  Generated by
 \texttt{scripts/analyze\_solver\_convergence.py}.}
@@ -966,8 +980,8 @@ We next apply the same Chebyshev and continued-fraction calculations to the
 gauge-invariant inverse-Cowling axial equation for \(\ell=2,3,4\) and low-lying
 indices \(n=0,1,2\).  Together with the scalar rows, the working catalogue
 contains 72 entries over \(a/M=0,0.2,0.5,1.0\).  The axial entries are
-conditional inverse-Cowling modes of the explicitly stated closure, rather than modes of the former
-lapse-substitution proxy.  At \(a=0\), the effective source vanishes and the
+conditional inverse-Cowling modes of the explicitly stated closure. At
+\(a=0\), the effective source vanishes and the
 model reduces exactly to the Schwarzschild Regge--Wheeler equation
 \cite{Regge1957,Gerlach1979,Karlovini2002}.
 Table~\ref{tab:gravitationalcatalogue} lists the resulting continued-fraction
@@ -998,10 +1012,11 @@ below.
 \end{tabular}
 \color{blue}
 \caption{Schwarzschild Regge--Wheeler frequencies obtained by the
-continued-fraction solver.  The former relative-error column has been removed
-because the transcribed literature values had uneven precision and therefore
-did not provide a uniform solver-accuracy metric.  Agreement with the named
-high-precision external calculation is reported separately below.}
+continued-fraction solver. At \(a=0\), the effective-source model reduces
+exactly to the Schwarzschild Regge--Wheeler equation. Because available tabulations have uneven numbers
+of significant figures, their rounded entries are used only as
+branch-identification targets; the quantitative accuracy check against a named
+high-precision calculation is reported separately below.}
 \color{black}
 \label{tab:gravitationalcatalogue}
 \end{table}
@@ -1023,7 +1038,8 @@ They are not predictions of an unspecified quantum nonspherical completion.}
 
 \color{blue}
 Figure~\ref{fig:axialpotentialcomparison} compares the inverse-Cowling
-potential with the former lapse-substitution ansatz.  At \(a/M=1\), the
+potential with the lapse-substitution potential in
+Eq.~\eqref{eq:lapsecomparison}. At \(a/M=1\), the
 maximum absolute correction is \(5.77\%\) of the new barrier height; over the
 region where the new potential exceeds \(10^{-3}\) of its peak, the maximum
 pointwise fractional correction is \(15.1\%\).  These definitions avoid a
@@ -1033,9 +1049,10 @@ potentials vanish.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/figure2a_axial_potential_comparison.png}
-\caption{Left: inverse-Cowling axial potential (solid) and the former
-lapse-substitution ansatz (dashed) for \(\ell=2\); circles mark the new
-potential peaks and the vertical line marks \(r=r_h\).  Right: their
+\caption{Left: inverse-Cowling axial potential (solid) and the explicitly
+defined lapse-substitution comparison potential (dashed) for \(\ell=2\);
+circles mark the inverse-Cowling potential peaks and the vertical line marks
+\(r=r_h\). Right: their
 difference normalized by the new barrier height.}
 \label{fig:axialpotentialcomparison}
 \end{figure}
@@ -1053,9 +1070,15 @@ public repository commit, and local source commit are recorded by
 
 As a stability diagnostic, the potential was minimized numerically outside
 the horizon for every sampled \(a/M\) and \(\ell=2,3,4\).  It remained
-non-negative and approached zero only at the two boundaries.  No candidate
-with \(\operatorname{Im}\omega>0\) survived a raw-spectrum comparison at
-\(N=32,48,64\).  Positivity supplies the usual sufficient mode-stability
+non-negative and approached zero only at the two boundaries. The finite-spectrum
+search was applied before the ordinary damped-mode window: all finite roots
+satisfying \(\operatorname{Im}\omega>10^{-8}\) and \(|\omega|<5\) were retained
+at \(N=32,48,64\), and persistence required agreement within \(10^{-4}\) at
+all three sizes. Any persistent candidate was to be locally residual-refined
+within radius \(0.02\) at \(N=64\) and accepted only if its polynomial backward
+error was below \(10^{-8}\). No raw positive-imaginary root occurred, so the
+refinement stage was not invoked and no growing candidate survived. Positivity
+supplies the usual sufficient mode-stability
 argument for this source-free one-dimensional problem.  For a hypothetical
 mode with \(\operatorname{Im}\omega>0\), the QNM boundary conditions make the
 radial solution decay at both asymptotic ends; multiplying the source-free
@@ -1361,7 +1384,7 @@ Hermiticity and positive semidefiniteness of \(R_N=P_N^\dagger P_N\) are
 algebraic properties, up to floating-point roundoff; they are not presented as
 empirical validation.  The automated tests instead check their numerical
 implementation, Schwarzschild recovery, scaling invariance of the selected
-root, the revised axial potential, and the independent validation paths.
+root, the inverse-Cowling axial potential, and the numerically distinct validation paths.
 \color{black}
 
 \subsection{Local singular-value pseudospectral diagnostics of the scalar fundamental mode}
@@ -1388,7 +1411,9 @@ Quantile and area diagnostics give the same trend. Let \(q_p\) denote the \(p\)-
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/figure6_scalar_l2_pseudospectrum_sensitivity.png}
-\caption{Scalar \(\ell=2,n=0\) singular-value pseudospectral sensitivity diagnostics at \(N=64\). Left: quantile-based susceptibility measures increase with \(a/M\). Right: fixed-threshold contour area fractions also grow; the deepest endpoint contour is window-limited and is used only as a local diagnostic.}
+\color{blue}
+\caption{Scalar \(\ell=2,n=0\) singular-value pseudospectral diagnostics at \(N=64\). Left: the normalized singular-value quantiles change with \(a/M\). Right: fixed-threshold contour area fractions also grow; the deepest endpoint contour is window-limited and is used only as a local diagnostic.}
+\color{black}
 \label{fig:pseudosensitivity}
 \end{figure}
 
@@ -1433,8 +1458,8 @@ spectral size & 48 & \(121^2\) & 0.025 & 0.1287\\
 \bottomrule
 \end{tabular}
 \color{blue}
-\caption{Robustness of the scalar-fundamental endpoint susceptibility change
-between \(a/M=0\) and \(a/M=1\).  Every configuration gives the same positive
+\caption{Robustness of the scalar-fundamental endpoint change in
+\(-q_{10}(\log_{10}\eta_N)\) between \(a/M=0\) and \(a/M=1\). Every configuration gives the same positive
 sign and comparable magnitude.  Full-precision values are generated by
 \texttt{scripts/audit\_pseudospectrum\_robustness.py}.}
 \label{tab:pseudorobustness}
@@ -1509,8 +1534,8 @@ The pseudospectral plots are built from finite Chebyshev matrices rather than a
 controlled infinite-dimensional KS operator. Normalizing by
 \(\sigma_{\max}\) removes an overall matrix scale, but not the dependence on
 discretization and norm. The robust statement is consequently limited to the
-observed branch: for \(N=32,48,64\), the endpoint change in the quantile
-susceptibility has the same sign and comparable size. A continuum
+observed branch: for \(N=32,48,64\), the endpoint quantile change has the same
+sign and comparable size. A continuum
 pseudospectrum would require a separate operator-theoretic treatment
 \cite{Jaramillo2021,Cao2024}.
 \color{black}
@@ -1580,7 +1605,7 @@ These commands write the CSV tables, Markdown summaries, and figures under \path
 
 \color{blue}
 We have computed the low-lying QNMs of the KS geometry at fixed mass using two
-independent frequency-domain methods. The scalar fundamentals soften steadily
+numerically distinct frequency-domain methods. The scalar fundamentals soften steadily
 as \(a/M\) is increased. For \(\ell=2\) at \(a/M=1\), the oscillation
 frequency, damping magnitude, and quality factor change by \(-7.29\%\),
 \(-2.59\%\), and \(-4.83\%\), respectively. The dimensionless
@@ -1592,8 +1617,11 @@ geometry \cite{Konoplya2020,Bolokhov2025}.
 \color{black}
 
 \color{blue}
-The Chebyshev fundamentals agree with the independent continued fraction to
-roughly \(10^{-12}\) on the reported grid. The first overtones exhibit a
+At \(N=32\), the scalar fundamentals agree with the continued-fraction values
+to \(7.92\times10^{-13}\) or better on the sampled deformation grid. The
+\(N=96\) values used for the principal scalar convergence study lie on the
+high-resolution plateau and differ from the continued-fraction values by
+\(1.23\times10^{-11}\)--\(2.02\times10^{-10}\). The first overtones exhibit a
 finite-precision optimum near \(N=32\) and are therefore quoted as
 cross-validated low-lying first overtones at \(N=32\). The second overtones
 show larger truncation and branch sensitivity and remain exploratory. This is
@@ -1608,7 +1636,7 @@ obeys a sourced equation on a general spherical background
 effective-source current to zero gives the inverse-Cowling potential used here,
 which differs from a simple lapse-deformed Regge--Wheeler potential. Its
 frequencies provide a useful numerical comparison and agree closely with an
-independent Chebyshev calculation \cite{BaticDutykhSukaiti2026}, but their
+separate Chebyshev calculation \cite{BaticDutykhSukaiti2026}, but their
 physical meaning remains conditional on the frozen-source closure. A complete
 nonspherical quantum theory of the KS source would be needed to remove that
 assumption.
@@ -1620,6 +1648,57 @@ not be confused with a continuum pseudospectrum. More broadly, the combination
 of Chebyshev roots, residual minima, branch continuation, backward error, and a
 Frobenius calculation provides a transparent way to separate well-resolved KS
 resonances from numerically fragile overtones \cite{Leaver1985,Jansen2017,Jaramillo2021}.
+
+\appendix
+\section{Schwarzschild branch-identification seeds}
+
+Table~\ref{tab:schwarzschildseeds} records every initial target used at
+\(a/M=0\). Each is a literature value: no seed was selected manually and no
+continued-fraction result was used as an initial Schwarzschild seed. For each
+\((s,\ell,n)\), the code chooses the nearest distinct \(N=32\) Chebyshev
+candidate and refines it with the continued fraction. The accepted
+continued-fraction root then becomes the target at the next value of \(a/M\).
+The machine-readable table, including a provenance field for every row, is
+generated as \path{outputs/results/schwarzschild_branch_seeds.csv}.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\color{black}
+\begin{tabular}{lrrrr}
+\toprule
+sector & \(\ell\) & \(n\) & \(\operatorname{Re}(M\omega_{\rm seed})\) & \(\operatorname{Im}(M\omega_{\rm seed})\)\\
+\midrule
+scalar & 2 & 0 & 0.483643872211 & -0.096758775978\\
+scalar & 2 & 1 & 0.463850579020 & -0.295603936988\\
+scalar & 2 & 2 & 0.430544 & -0.508558\\
+scalar & 3 & 0 & 0.675366 & -0.096500\\
+scalar & 3 & 1 & 0.660671 & -0.292285\\
+scalar & 3 & 2 & 0.633626 & -0.496008\\
+scalar & 4 & 0 & 0.867416 & -0.096392\\
+scalar & 4 & 1 & 0.855808 & -0.290876\\
+scalar & 4 & 2 & 0.833692 & -0.490325\\
+axial & 2 & 0 & 0.373671680 & -0.088962320\\
+axial & 2 & 1 & 0.346710996 & -0.273914876\\
+axial & 2 & 2 & 0.301053454 & -0.478276983\\
+axial & 3 & 0 & 0.599443288 & -0.092703048\\
+axial & 3 & 1 & 0.582643804 & -0.281298113\\
+axial & 3 & 2 & 0.551684837 & -0.479092791\\
+axial & 4 & 0 & 0.809178378 & -0.094163961\\
+axial & 4 & 1 & 0.796631 & -0.284334\\
+axial & 4 & 2 & 0.772695 & -0.479900\\
+\bottomrule
+\end{tabular}
+\color{blue}
+\caption{Literature tracking targets used to identify the Schwarzschild
+branches. The scalar \(\ell=2,n=0\) value is pinned to Table~I of Cavalcante
+and da Cunha \cite{Cavalcante2021}; the remaining branch targets are drawn from
+the Schwarzschild tabulations reviewed by Berti, Cardoso, and Starinets
+\cite{Berti2009}. Rounded entries identify branches and are not treated as
+high-precision accuracy standards.}
+\label{tab:schwarzschildseeds}
+\end{table}
 \color{black}
 
 \section*{Acknowledgements and declarations}
@@ -1651,9 +1730,9 @@ Not applicable.
 \noindent\textbf{Use of AI tools.}
 \color{blue}
 OpenAI Codex with model identifier \texttt{gpt-5.6-sol}, as recorded in the
-relevant session metadata, was used during June--July 2026 for code development, numerical-analysis
-scripting, algebraic cross-checks, literature discovery, manuscript structure,
-language editing, and formatting.  The author executed the calculations,
+relevant session metadata, was used during June--July 2026 for code generation,
+debugging, and refactoring; numerical-analysis scripting; algebraic cross-checks;
+literature discovery; manuscript drafting and revision; and formatting. The author executed the calculations,
 checked cited claims against the primary sources, reviewed the derivations and
 numerical outputs, and takes responsibility for the final content.
 \color{black}

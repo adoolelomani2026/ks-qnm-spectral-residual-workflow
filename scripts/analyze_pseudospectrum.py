@@ -107,7 +107,7 @@ def main() -> None:
     print(f"Wrote contour figure: {contour_figure}")
     print(f"Wrote sensitivity figure: {sensitivity_figure}")
     print(f"Wrote resolution figure: {resolution_figure}")
-    print(f"q10 susceptibility gain a/M=0 -> 1: {q10_gain:.3f}")
+    print(f"Endpoint change in -q10, a/M=0 -> 1: {q10_gain:.3f}")
     print(f"Area factor for log10(eta)<={threshold:g}: {area_factor:.2f}")
 
 

@@ -1,0 +1,19 @@
+perturbation_type,ell,overtone,seed_real,seed_imag,seed_kind,provenance,selection_role
+gravitational,2,0,0.37367168,-0.08896232,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,2,1,0.346710996,-0.273914876,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,2,2,0.301053454,-0.478276983,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,3,0,0.599443288,-0.092703048,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,3,1,0.582643804,-0.281298113,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,3,2,0.551684837,-0.479092791,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,4,0,0.809178378,-0.094163961,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,4,1,0.796631,-0.284334,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+gravitational,4,2,0.772695,-0.4799,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,2,0,0.483643872211,-0.096758775978,literature tracking target,"Cavalcante and da Cunha (2021), Table I",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,2,1,0.46385057902,-0.295603936988,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,2,2,0.430544,-0.508558,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,3,0,0.675366,-0.0965,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,3,1,0.660671,-0.292285,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,3,2,0.633626,-0.496008,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,4,0,0.867416,-0.096392,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,4,1,0.855808,-0.290876,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement
+scalar,4,2,0.833692,-0.490325,literature tracking target,"Berti, Cardoso, and Starinets (2009) Schwarzschild tables",nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement

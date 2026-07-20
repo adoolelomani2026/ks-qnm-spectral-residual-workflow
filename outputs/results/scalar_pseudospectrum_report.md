@@ -56,24 +56,24 @@ pipeline remains intact.
 
 - Main grid: N=64, grid=81x81, half-width=0.025 in both Re(M omega) and Im(M omega).
 - Maximum center-to-Leaver relative difference: 6.816e-12.
-- The 10% quantile susceptibility, -q10(log10 eta), increases by 0.161 from a/M=0 to a/M=1.
+- The normalized singular-value statistic -q10(log10 eta) increases by 0.161 from a/M=0 to a/M=1.
 - The area fraction satisfying log10(eta)<=-10 grows by a factor 5.06 from Schwarzschild to a/M=1.
-- The sign of the q10 susceptibility trend is stable across N=32, 48, and 64.
+- The sign of the q10 endpoint change is stable across N=32, 48, and 64.
 - The contour-area diagnostic is secondary to the quantile diagnostic because fixed
   epsilon contour areas depend more strongly on N and on the chosen plotting window.
 
 ## Resolution Check
 
-- N=32: q10 susceptibility gain from a/M=0 to 1 is 0.097.
-- N=48: q10 susceptibility gain from a/M=0 to 1 is 0.130.
-- N=64: q10 susceptibility gain from a/M=0 to 1 is 0.161.
+- N=32: endpoint change in -q10 from a/M=0 to 1 is 0.097.
+- N=48: endpoint change in -q10 from a/M=0 to 1 is 0.130.
+- N=64: endpoint change in -q10 from a/M=0 to 1 is 0.161.
 
 ## What Failed Or Was Limited
 
 - The log10(eta)<=-10 contour at a/M=1 touches the local-window boundary: True. The reported area factor is therefore a finite-window diagnostic,
   not a global contour area.
 - Absolute contour levels shift with Chebyshev size N, so the finite-N robustness check
-  uses the sign and sampled-grid behavior of the q10 susceptibility gain rather than exact equality
+  uses the sign and sampled-grid behavior of the q10 endpoint change rather than exact equality
   of epsilon-contour areas.
 
 ## Publishable Claim

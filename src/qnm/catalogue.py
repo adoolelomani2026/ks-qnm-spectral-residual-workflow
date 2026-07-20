@@ -54,6 +54,9 @@ LITERATURE_SOURCE = (
     "Berti-Cardoso-Starinets review/ringdown tables; "
     "rounded scalar references also agree with recent Schwarzschild tables"
 )
+SEED_PROVENANCE = {
+    ("scalar", 2, 0): "Cavalcante and da Cunha (2021), Table I",
+}
 CATALOGUE_CROSS_VALIDATION_THRESHOLD = 1.0e-4
 GRAVITATIONAL_LITERATURE_TOLERANCE = 5.0e-5
 SCALAR_LITERATURE_TOLERANCE = 5.0e-5
@@ -87,6 +90,44 @@ def reference_targets(perturbation_type: str, ell: int) -> list[complex]:
             raise KeyError(f"Missing Schwarzschild reference target for {key}")
         targets.append(SCHWARZSCHILD_REFERENCES[key])
     return targets
+
+
+def write_schwarzschild_seeds(output: Path) -> None:
+    """Write every literature target used to identify the a/M=0 branches."""
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("w", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(
+            [
+                "perturbation_type",
+                "ell",
+                "overtone",
+                "seed_real",
+                "seed_imag",
+                "seed_kind",
+                "provenance",
+                "selection_role",
+            ]
+        )
+        for key in sorted(SCHWARZSCHILD_REFERENCES):
+            perturbation_type, ell, overtone = key
+            seed = SCHWARZSCHILD_REFERENCES[key]
+            provenance = SEED_PROVENANCE.get(
+                key, "Berti, Cardoso, and Starinets (2009) Schwarzschild tables"
+            )
+            writer.writerow(
+                [
+                    perturbation_type,
+                    ell,
+                    overtone,
+                    f"{seed.real:.15g}",
+                    f"{seed.imag:.15g}",
+                    "literature tracking target",
+                    provenance,
+                    "nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement",
+                ]
+            )
 
 
 def select_modes(values: np.ndarray, targets: list[complex]) -> list[complex]:
@@ -269,7 +310,7 @@ def write_catalogue_report(output: Path, rows: list[CatalogueRow]) -> None:
         "The automated catalogue validation fails if any spectral/Leaver relative",
         f"difference exceeds `{CATALOGUE_CROSS_VALIDATION_THRESHOLD:.1e}`. Literature checks use",
         "rounded table tolerances because several source tables report six significant figures.",
-        "The Leaver solver is independent of Chebyshev collocation, matrix-pencil data,",
+        "The Leaver solver is collocation-independent: it uses no Chebyshev grid, matrix-pencil data,",
         "and residual minimization, but it intentionally shares the same perturbation",
         "equation, compact coordinate, endpoint factorization, and potential model.",
         "The continued-fraction residual is reported row-by-row; high-deformation second",
@@ -354,11 +395,17 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("outputs/results/qnm_catalogue.csv"))
     parser.add_argument("--figures-dir", type=Path, default=Path("outputs/figures"))
     parser.add_argument("--report", type=Path, default=Path("outputs/results/qnm_catalogue_report.md"))
+    parser.add_argument(
+        "--seeds-output",
+        type=Path,
+        default=Path("outputs/results/schwarzschild_branch_seeds.csv"),
+    )
     parser.add_argument("--spectral-n", type=int, default=CATALOGUE_SPECTRAL_N)
     args = parser.parse_args()
 
     rows = run_catalogue(spectral_n=args.spectral_n)
     write_catalogue(args.output, rows)
+    write_schwarzschild_seeds(args.seeds_output)
     write_catalogue_report(args.report, rows)
     outputs = plot_mode_trajectories(rows, args.figures_dir)
     assert_catalogue_validation(rows)
@@ -366,6 +413,7 @@ def main() -> None:
     worst = max(rows, key=lambda row: row.spectral_leaver_relative_difference)
     print(f"Wrote catalogue: {args.output}")
     print(f"Wrote report: {args.report}")
+    print(f"Wrote Schwarzschild seed table: {args.seeds_output}")
     print("Wrote trajectory figures:")
     for output in outputs:
         print(f"  {output}")

@@ -10,10 +10,11 @@ backward errors, and an 18-mode comparison with the public 2026
 Batic--Dutykh--Sukaiti calculation. The scalar sector remains the least
 assumption-dependent result. The final preflight also adds a documented
 candidate-selection algorithm and a seven-configuration pseudospectral
-grid/window/resolution analysis. Both 26-page manuscript PDFs were visually
+grid/window/resolution analysis. Both 27-page manuscript PDFs were visually
 inspected page by page.
 
 - `CQG-116364_response_to_referees.pdf`: point-by-point response with page and line locations.
+- `CQG-116364_cover_letter.pdf`: resubmission cover letter using the revised title.
 - `CQG-116364_marked_revised_manuscript.pdf`: blue, line-numbered review copy.
 - `CQG-116364_clean_revised_manuscript.pdf`: clean revised manuscript.
 - `CQG-116364_revision_checklist.pdf`: completed working checklist with authenticated/manual items left open.

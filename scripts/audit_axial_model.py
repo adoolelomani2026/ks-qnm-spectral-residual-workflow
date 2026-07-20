@@ -21,7 +21,13 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 
 from qnm.common import A_VALUES, df_ks, f_ks, horizon_radius, regge_wheeler_potential
-from qnm.spectral import build_spectral_problem, generalized_eigenvalues
+from qnm.spectral import (
+    BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
+    build_spectral_problem,
+    generalized_eigenvalues,
+    minimize_residual,
+    polynomial_backward_error,
+)
 
 
 PUBLIC = ROOT / "papers" / "revision" / "references" / "KS-quantum-public"
@@ -45,7 +51,7 @@ def ensure_public_checkout() -> None:
         raise RuntimeError(f"External checkout mismatch: expected {PUBLIC_COMMIT}, found {actual}")
 
 
-def old_lapse_proxy(r: np.ndarray, ell: int, a: float) -> np.ndarray:
+def lapse_substitution_potential(r: np.ndarray, ell: int, a: float) -> np.ndarray:
     f = f_ks(r, a)
     return f * (ell * (ell + 1.0) / r**2 - 6.0 / r**3)
 
@@ -59,8 +65,8 @@ def plot_potentials() -> list[dict[str, float]]:
         x = np.geomspace(1.0 + 1.0e-7, 15.0, 5000)
         r = rh * x
         new = regge_wheeler_potential(r, 2, a)
-        old = old_lapse_proxy(r, 2, a)
-        delta = new - old
+        lapse = lapse_substitution_potential(r, 2, a)
+        delta = new - lapse
         peak_index = int(np.argmax(new))
         peak = float(new[peak_index])
         mask = new >= 1.0e-3 * peak
@@ -78,14 +84,18 @@ def plot_potentials() -> list[dict[str, float]]:
         )
         label = rf"$a/M={a:g}$"
         axes[0].plot(x, new, color=colors[a], label=label)
-        axes[0].plot(x, old, color=colors[a], linestyle="--", alpha=0.65)
+        axes[0].plot(x, lapse, color=colors[a], linestyle="--", alpha=0.65)
         axes[0].plot(x[peak_index], peak, "o", color=colors[a], ms=4)
         axes[1].plot(x, delta / peak if peak else delta, color=colors[a], label=label)
 
     axes[0].set(xlabel=r"$r/r_h$", ylabel=r"$M^2 V$", xlim=(1, 8))
-    axes[0].set_title("Solid: inverse-Cowling; dashed: old lapse ansatz")
-    axes[1].set(xlabel=r"$r/r_h$", ylabel=r"$(V_{\rm ax}-V_{\rm old})/V_{\rm ax}^{\rm peak}$", xlim=(1, 8))
-    axes[1].set_title("Potential correction")
+    axes[0].set_title("Solid: inverse-Cowling; dashed: lapse substitution")
+    axes[1].set(
+        xlabel=r"$r/r_h$",
+        ylabel=r"$(V_{\rm ax}-V_{\rm lapse})/V_{\rm ax}^{\rm peak}$",
+        xlim=(1, 8),
+    )
+    axes[1].set_title("Comparison-potential difference")
     for ax in axes:
         ax.axvline(1.0, color="k", lw=0.8, alpha=0.35)
         ax.grid(alpha=0.2)
@@ -131,12 +141,13 @@ def positivity_rows() -> list[dict[str, float]]:
 
 def growing_candidate_audit() -> list[dict[str, object]]:
     spectra: dict[tuple[int, float, int], np.ndarray] = {}
+    problems = {}
     for ell in (2, 3, 4):
         for a in A_VALUES:
             for n in (32, 48, 64):
-                values = generalized_eigenvalues(
-                    build_spectral_problem(a, n, ell=ell, perturbation_type="gravitational")
-                )
+                problem = build_spectral_problem(a, n, ell=ell, perturbation_type="gravitational")
+                problems[(ell, a, n)] = problem
+                values = generalized_eigenvalues(problem)
                 spectra[(ell, a, n)] = np.array(
                     [z for z in values if np.isfinite(z) and z.imag > 1.0e-8 and abs(z) < 5.0],
                     dtype=complex,
@@ -146,14 +157,27 @@ def growing_candidate_audit() -> list[dict[str, object]]:
     for ell in (2, 3, 4):
         for a in A_VALUES:
             base = spectra[(ell, a, 32)]
-            survivors = []
+            persistent = []
+            accepted = []
             for z in base:
                 if all(
                     len(spectra[(ell, a, n)])
                     and np.min(np.abs(spectra[(ell, a, n)] - z)) < 1.0e-4
                     for n in (48, 64)
                 ):
-                    survivors.append(z)
+                    persistent.append(z)
+                    n64_values = spectra[(ell, a, 64)]
+                    n64_candidate = n64_values[int(np.argmin(np.abs(n64_values - z)))]
+                    refined, _ = minimize_residual(
+                        problems[(ell, a, 64)], n64_candidate, radius=2.0e-2
+                    )
+                    if (
+                        refined.imag > 1.0e-8
+                        and abs(refined) < 5.0
+                        and polynomial_backward_error(problems[(ell, a, 64)], refined)
+                        < BACKWARD_ERROR_ACCEPTANCE_THRESHOLD
+                    ):
+                        accepted.append(refined)
             rows.append(
                 {
                     "ell": ell,
@@ -161,8 +185,16 @@ def growing_candidate_audit() -> list[dict[str, object]]:
                     "raw_positive_imag_counts_N32_N48_N64": ";".join(
                         str(len(spectra[(ell, a, n)])) for n in (32, 48, 64)
                     ),
-                    "three_resolution_survivors": len(survivors),
-                    "survivor_frequencies": ";".join(f"{z.real:.12g}{z.imag:+.12g}i" for z in survivors),
+                    "positive_imaginary_floor": 1.0e-8,
+                    "modulus_ceiling": 5.0,
+                    "three_resolution_matching_tolerance": 1.0e-4,
+                    "residual_refinement_radius": 2.0e-2,
+                    "backward_error_acceptance_threshold": BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
+                    "persistent_before_residual": len(persistent),
+                    "accepted_growing_mode_survivors": len(accepted),
+                    "accepted_survivor_frequencies": ";".join(
+                        f"{z.real:.12g}{z.imag:+.12g}i" for z in accepted
+                    ),
                 }
             )
     return rows
@@ -260,7 +292,11 @@ def main() -> None:
         "- The public files use the same mass-normalised deformation `a/M` and frequency `M omega`.",
         f"- Largest external relative difference over the 18 overlapping modes: `{max(float(r['relative_difference']) for r in external):.3e}`.",
         f"- Smallest sampled exterior potential: `{min(float(r['minimum_sampled_V_M2']) for r in positivity):.3e}`.",
-        f"- Three-resolution growing-mode survivors: `{sum(int(r['three_resolution_survivors']) for r in growing)}`.",
+        "- The growing-mode search was performed on the unfiltered finite generalized spectrum before the ordinary damped-mode window was applied.",
+        "- Search domain: `Im(omega) > 1e-8` and `|omega| < 5`, at `N=32,48,64`.",
+        "- A candidate had to persist within `1e-4` at all three sizes; any survivor was then locally residual-refined within radius `0.02` at `N=64` and required polynomial backward error below `1e-8`.",
+        f"- Three-resolution candidates before residual acceptance: `{sum(int(r['persistent_before_residual']) for r in growing)}`.",
+        f"- Accepted growing-mode survivors: `{sum(int(r['accepted_growing_mode_survivors']) for r in growing)}`.",
         "",
         "Potential positivity is a sufficient mode-stability diagnostic for the source-free one-dimensional problem; the finite raw-spectrum search is an additional numerical check, not a proof for a different source closure.",
     ]

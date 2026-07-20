@@ -42,6 +42,7 @@ from qnm.catalogue import (
     run_catalogue,
     write_catalogue,
     write_catalogue_report,
+    write_schwarzschild_seeds,
 )
 from qnm.common import (
     A_VALUES,
@@ -286,6 +287,7 @@ def run_pipeline(base_dir: Path) -> None:
     write_leaver_comparison(results_dir / "leaver_comparison.csv", leaver_rows)
     write_catalogue(results_dir / "qnm_catalogue.csv", catalogue_rows)
     write_catalogue_report(results_dir / "qnm_catalogue_report.md", catalogue_rows)
+    write_schwarzschild_seeds(results_dir / "schwarzschild_branch_seeds.csv")
     physics_outputs = write_physics_analysis(results_dir, figures_dir, catalogue_rows)
     write_run_metadata(results_dir / "run_metadata.json", source_commit, source_tree_status_at_start)
     plot_convergence(spectral_rows, figures_dir / "spectral_convergence.png")
@@ -301,6 +303,7 @@ def run_pipeline(base_dir: Path) -> None:
     print(f"Leaver comparison CSV: {results_dir / 'leaver_comparison.csv'}")
     print(f"QNM catalogue CSV: {results_dir / 'qnm_catalogue.csv'}")
     print(f"QNM catalogue report: {results_dir / 'qnm_catalogue_report.md'}")
+    print(f"Schwarzschild branch seeds: {results_dir / 'schwarzschild_branch_seeds.csv'}")
     print(f"Catalogue physics report: {physics_outputs['report']}")
     print(f"Publication spectral CSV: {results_dir / 'spectral_results.csv'}")
     print(f"Exploratory spectral CSV: {results_dir / 'exploratory_spectral_results.csv'}")

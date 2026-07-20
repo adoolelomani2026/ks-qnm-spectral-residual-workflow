@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate independent Taylor-order and Chebyshev-to-CF convergence audits."""
+"""Generate separate Taylor-order and Chebyshev-to-CF convergence audits."""
 
 from __future__ import annotations
 
@@ -92,7 +92,7 @@ def spectral_audit() -> list[dict[str, object]]:
         previous: complex | None = None
         for n in SIZES:
             values = generalized_eigenvalues(build_spectral_problem(a, n))
-            # Use the independent CF value only for diagnostic association;
+            # Use the collocation-independent CF value only for diagnostic association;
             # continuation is recorded as a second distance below.
             omega = select_physical_mode(values, cf)
             rows.append(

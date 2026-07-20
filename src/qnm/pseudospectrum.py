@@ -394,7 +394,7 @@ def plot_pseudospectrum_sensitivity(
         label=r"$-Q_{50}[\log_{10}\eta]$",
     )
     axes[0].set_xlabel(r"$a/M$")
-    axes[0].set_ylabel("local pseudospectral susceptibility")
+    axes[0].set_ylabel("normalized singular-value quantile")
     axes[0].grid(alpha=0.25)
     axes[0].legend(frameon=False, fontsize=8)
 
@@ -450,14 +450,14 @@ def write_report(
     endpoint = rows[-1]
     threshold = thresholds[0]
     area_factor = endpoint.threshold_areas[threshold] / schwarzschild.threshold_areas[threshold]
-    susceptibility_gain = (-endpoint.quantiles[0.10]) - (-schwarzschild.quantiles[0.10])
+    quantile_gain = (-endpoint.quantiles[0.10]) - (-schwarzschild.quantiles[0.10])
     center_error = max(row.center_leaver_relative_difference for row in rows)
     endpoint_boundary_touch = endpoint.threshold_boundary_touches[threshold]
     resolution_lines = []
     for spectral_n in sorted({row.spectral_n for row in resolution_summaries}):
         n_rows = sorted([row for row in resolution_summaries if row.spectral_n == spectral_n], key=lambda row: row.a)
         gain = (-n_rows[-1].quantiles[0.10]) - (-n_rows[0].quantiles[0.10])
-        resolution_lines.append(f"- N={spectral_n}: q10 susceptibility gain from a/M=0 to 1 is {gain:.3f}.")
+        resolution_lines.append(f"- N={spectral_n}: endpoint change in -q10 from a/M=0 to 1 is {gain:.3f}.")
 
     lines = [
         "# Scalar Fundamental Pseudospectrum Upgrade Report",
@@ -519,11 +519,11 @@ def write_report(
         f"- Main grid: N={endpoint.spectral_n}, grid={endpoint.grid_size}x{endpoint.grid_size}, "
         f"half-width={endpoint.half_width:g} in both Re(M omega) and Im(M omega).",
         f"- Maximum center-to-Leaver relative difference: {center_error:.3e}.",
-        f"- The 10% quantile susceptibility, -q10(log10 eta), increases by {susceptibility_gain:.3f} "
+        f"- The normalized singular-value statistic -q10(log10 eta) increases by {quantile_gain:.3f} "
         "from a/M=0 to a/M=1.",
         f"- The area fraction satisfying log10(eta)<={threshold:g} grows by a factor {area_factor:.2f} "
         "from Schwarzschild to a/M=1.",
-        "- The sign of the q10 susceptibility trend is stable across N=32, 48, and 64.",
+        "- The sign of the q10 endpoint change is stable across N=32, 48, and 64.",
         "- The contour-area diagnostic is secondary to the quantile diagnostic because fixed",
         "  epsilon contour areas depend more strongly on N and on the chosen plotting window.",
         "",
@@ -537,7 +537,7 @@ def write_report(
         f"{endpoint_boundary_touch}. The reported area factor is therefore a finite-window diagnostic,",
         "  not a global contour area.",
         "- Absolute contour levels shift with Chebyshev size N, so the finite-N robustness check",
-        "  uses the sign and sampled-grid behavior of the q10 susceptibility gain rather than exact equality",
+        "  uses the sign and sampled-grid behavior of the q10 endpoint change rather than exact equality",
         "  of epsilon-contour areas.",
         "",
         "## Publishable Claim",

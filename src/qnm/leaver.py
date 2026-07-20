@@ -30,7 +30,7 @@ and impose Leaver's minimal-solution condition through the continued fraction
     beta_0 - alpha_0 gamma_1 /
         (beta_1 - alpha_1 gamma_2 / (beta_2 - ...)) = 0.
 
-This is an independent validation layer in the numerical sense: it avoids
+This is a collocation-independent validation layer: it avoids
 Chebyshev collocation, waveform data, and residual minimization, while still
 sharing the same perturbation equation, compact coordinate, endpoint
 factorization, and potential model as the spectral solver.
@@ -153,7 +153,7 @@ def frobenius_coefficient_series(
 
         sqrt(r^2-a^2) = sqrt(r_h^2 - a^2(1-s)^2)/(1-s),
 
-    so the coefficient construction remains independent of the Chebyshev
+    so the coefficient construction remains separate from the Chebyshev
     collocation machinery.
     """
 

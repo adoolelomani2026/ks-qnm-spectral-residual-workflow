@@ -315,7 +315,7 @@ Claim hierarchy:
   for the fundamental `Re(omega)/[-Im(omega)]` ratio at `a/M=1`.
 - Scalar `ell=2,n=0` pseudospectrum diagnostics at `N=64` show increasing
   local finite-`N` sensitivity with deformation: the 10% quantile
-  susceptibility `-Q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
+  statistic `-q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
   `a/M=1`, and the `log10 eta_N <= -10` local area grows by a factor `5.06`
   within the chosen window.
 - Reported first-overtone rows are the cross-validated low-lying first overtones

@@ -10,11 +10,15 @@ inverse-Cowling closure, regenerated the complete axial catalogue, documented
 the spectral candidate-selection algorithm, added continued-fraction depth and
 Taylor-order convergence studies, replaced condition-number reporting with
 scale-aware backward errors, added external high-precision axial comparisons,
-clarified the confidence hierarchy of the overtone catalogue, and added the
-requested physical and graphical diagnostics. The minimally coupled scalar
+documented all 18 Schwarzschild branch seeds, audited the positive-imaginary
+raw spectrum before damped-mode filtering, clarified the confidence hierarchy
+of the overtone catalogue, and added the requested physical and graphical
+diagnostics. The minimally coupled scalar
 sector remains the least assumption-dependent KS result, and the
 methodological contribution is an audited low-lying-mode workflow rather than
 a new high-overtone solver.
+
+We have revised the title to reflect more accurately the manuscript's low-lying spectral scope and its use of two complementary numerical methods. The new title is *Low-lying quasinormal modes of Kazakov--Solodukhin black holes from Chebyshev and continued-fraction methods*.
 
 Page and line references below refer to the blue, line-numbered marked
 manuscript.
@@ -57,8 +61,8 @@ density and radial pressure and differs from simple lapse substitution for
 with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
-**Changes in the manuscript:** Section 2.1, pages 3--6, lines 102--168; axial
-external validation and stability analysis, pages 12--14, lines 324--361.
+**Changes in the manuscript:** Section 2.1, pages 3--6, lines 102--169; axial
+external validation and stability analysis, pages 12--14, lines 327--367.
 
 ### Referee 1, Comment 2
 
@@ -106,10 +110,10 @@ not support one; instead, the paper states precisely that the advantage is
 confidence and traceability.
 
 **Changes in the manuscript:** Introduction, pages 1--3, lines 20--61;
-root-selection algorithm, pages 8--9, lines 218--259;
-continued-fraction methods, pages 9--10, lines 260--282; Schwarzschild benchmark
-and convergence evidence, pages 10--11, lines 284--312; residual diagnostics,
-page 18, lines 436--442; conclusion, page 23, lines 535--561.
+root-selection algorithm, pages 8--9, lines 219--260;
+continued-fraction methods, pages 9--10, lines 261--285; Schwarzschild benchmark
+and convergence evidence, pages 10--12, lines 287--326; residual diagnostics,
+page 18, lines 442--448; conclusion, page 23, lines 541--570.
 
 ### Referee 1, Comment 3
 
@@ -135,9 +139,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--7; Introduction,
-pages 2--3, lines 54--61; catalogue discussion, pages 12--14, lines 324--361;
-branch-status table and limitations, pages 21--22, lines 490--512; conclusion,
-page 23, lines 535--561.
+pages 2--3, lines 54--61; catalogue discussion, pages 12--14, lines 327--367;
+branch-status table and limitations, pages 21--22, lines 497--518; conclusion,
+page 23, lines 541--570.
 
 ### Referee 1, Comment 4
 
@@ -163,13 +167,11 @@ added model assumption. The scalar result remains the least
 assumption-dependent headline, while the axial frequencies are conditional
 odd-parity modes of this explicit model.
 
-All axial tables, figures, validation comparisons, and trend percentages were
-regenerated from the revised inverse-Cowling potential; no lapse-substitution
-numerical results remain in the revised manuscript.
+All axial frequencies, figures, tables, shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
-lines 128--168; axial subsection, pages 12--14, lines 324--361; limitations,
-pages 21--22, lines 490--512; conclusion, page 23, lines 549--557.
+lines 128--169; axial subsection, pages 12--14, lines 327--367; limitations,
+pages 21--22, lines 497--518; conclusion, page 23, lines 558--566.
 
 ## Referee 2
 
@@ -198,7 +200,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 5--6, lines 128--168.
+**Changes in the manuscript:** Section 2.1, pages 5--6, lines 128--169.
 
 ### Referee 2, Comment 2
 
@@ -218,8 +220,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 12--14, lines 324--361; branch-status statement, page 14, lines 357--361;
-interpretive-status table, pages 21--22, lines 490--512.
+pages 12--14, lines 327--367; branch-status statement, page 14, lines 360--367;
+interpretive-status table, pages 21--22, lines 497--518.
 
 ### Referee 2, Comment 3
 
@@ -248,7 +250,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 14--15, lines 362--385.
+pages 14--16, lines 368--391.
 
 ### Referee 2, Comment 4
 
@@ -265,7 +267,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-page 16, lines 386--407.
+page 16, lines 392--413.
 
 ### Referee 2, Comment 5
 
@@ -282,7 +284,7 @@ clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
 **Changes in the manuscript:** Section 2.1, page 4, lines 112--114;
-literature-normalization discussion, pages 16--17, lines 408--432.
+literature-normalization discussion, pages 16--17, lines 414--438.
 
 ### Referee 2, Comment 6
 
