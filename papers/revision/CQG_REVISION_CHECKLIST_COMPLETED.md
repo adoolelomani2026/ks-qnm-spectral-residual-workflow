@@ -1,7 +1,7 @@
 # CQG revised-submission checklist
 
 Manuscript: CQG-116364
-Prepared: 20 July 2026
+Prepared: 21 July 2026
 
 ## Author response
 

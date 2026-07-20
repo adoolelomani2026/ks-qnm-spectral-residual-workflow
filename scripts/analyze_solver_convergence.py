@@ -161,7 +161,7 @@ def main() -> None:
         f"- Maximum order-96 to order-128 frequency difference: `{worst_order96:.3e}`.\n"
         f"- First-overtone N=32 errors from CF: `{min(n1_32):.3e}` to `{max(n1_32):.3e}`.\n"
         f"- First-overtone N>=64 errors from CF: `{min(n1_high):.3e}` to `{max(n1_high):.3e}`.\n"
-        "- The first overtone is therefore described as cross-validated at N=32; higher-N motion is shown rather than hidden.\n",
+        "- These modes are therefore described as cross-validated low-lying first overtones at N=32; higher-N motion is shown rather than hidden.\n",
         encoding="utf-8",
     )
 

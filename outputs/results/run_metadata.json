@@ -21,5 +21,5 @@
   "source_tree_status_at_regeneration_start": "clean",
   "git_worktree_status_after_regeneration": "dirty",
   "backward_error_definition": "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), evaluated on raw unscaled polynomial matrices",
-  "note": "Reported spectral_results.csv freezes first overtones at the Leaver-validated reference grid. exploratory_spectral_results.csv contains tracked high-N overtone rows for diagnostics."
+  "note": "Reported spectral_results.csv freezes cross-validated low-lying first overtones at the N=32 reference grid. exploratory_spectral_results.csv contains tracked high-N overtone rows for diagnostics."
 }

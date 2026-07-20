@@ -1,6 +1,6 @@
 # Catalogue Physics Analysis
 
-This report analyzes the Leaver-validated catalogue by comparing each KS
+This report analyzes the continued-fraction-cross-validated catalogue by comparing each KS
 branch against its Schwarzschild endpoint at a/M=0.
 
 ## Main Observations

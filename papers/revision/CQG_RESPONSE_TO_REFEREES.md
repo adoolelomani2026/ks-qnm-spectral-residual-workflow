@@ -2,7 +2,7 @@
 
 Manuscript: **CQG-116364**, *A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes*
 
-We thank both referees for their careful and constructive reports. The
+We thank the editor and referees for their careful and constructive reports. The
 manuscript has been extensively revised. We have derived the minimally coupled
 scalar equation, replaced the former lapse-substitution axial proxy with a
 gauge-invariant sourced odd-parity formulation under an explicitly stated
@@ -57,8 +57,8 @@ density and radial pressure and differs from simple lapse substitution for
 with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
-**Changes in the manuscript:** Section 2.1, pages 4--6, lines 119--193; axial
-external validation and stability audit, pages 13--15, lines 353--391.
+**Changes in the manuscript:** Section 2.1, pages 4--6, lines 119--186; axial
+external validation and stability audit, pages 13--15, lines 354--392.
 
 ### Referee 1, Comment 2
 
@@ -78,7 +78,8 @@ external validation and stability audit, pages 13--15, lines 353--391.
 \(\ell=2,n=0\) Schwarzschild result reported by Cavalcante and Carneiro da
 Cunha (Table I, page 6), with \(M=1\), \(e^{-i\omega t}\), and
 \(\operatorname{Im}\omega<0\). The manuscript now also defines
-\(\Delta_{\rm rel}(\omega_1,\omega_2)=|\omega_1-\omega_2|/|\omega_2|\).
+\(\Delta_{\rm rel}(\omega_1,\omega_2)=|\omega_1-\omega_2|/|\omega_2|\),
+where \(\omega_2\) is the reference value.
 The revised methods give the actual implementation settings: Taylor order 96,
 continued-fraction/Gaussian-elimination depth 240, IEEE-754 double precision,
 SciPy/MINPACK hybrid root finding, root tolerance \(10^{-11}\), at most 1000
@@ -89,7 +90,8 @@ overtone. A separate Taylor-order table varies orders 64, 80, 96, 112, and
 128 at fixed depth 320. Figure 1 now plots error from an order-128,
 depth-320 continued-fraction root through \(N=128\), for both the fundamental
 and first overtone. It exposes the overtone's high-\(N\) deterioration and
-supports the more precise label “cross-validated at \(N=32\).” The same
+supports the more precise label “cross-validated low-lying first overtones at
+\(N=32\).” The same
 settings are stored in `config/leaver_revision.json`.
 
 We also rewrote the novelty claim. Agreement with Schwarzschild is presented as
@@ -106,8 +108,8 @@ confidence and traceability.
 **Changes in the manuscript:** Introduction, pages 2--3, lines 59--73;
 candidate-selection algorithm, pages 8--9, lines 243--284;
 continued-fraction methods, pages 9--10, lines 285--307; Schwarzschild benchmark
-and convergence evidence, pages 10--13, lines 309--352; residual diagnostics,
-page 19, lines 484--493; conclusion, pages 24--25, lines 597--632.
+and convergence evidence, pages 10--13, lines 309--353; residual diagnostics,
+page 19, lines 485--493; conclusion, pages 24--25, lines 598--629.
 
 ### Referee 1, Comment 3
 
@@ -124,8 +126,8 @@ page 19, lines 484--493; conclusion, pages 24--25, lines 597--632.
 > complete-spectrum method.
 
 **Response:** We agree and have narrowed the scope explicitly. Fundamentals are
-classified as robust fundamental modes, scalar first overtones as cross-validated at \(N=32\),
-low-lying modes, second overtones as exploratory diagnostics, and higher
+classified as robust fundamental modes, scalar \(n=1\) modes as cross-validated
+low-lying first overtones at \(N=32\), second overtones as exploratory diagnostics, and higher
 overtones as outside scope. These tiers appear in the abstract, introduction,
 results, claim-hierarchy table, conclusion, and generated catalogue CSV. We
 also cite Chen *et al.* (2025), explain that confluent-Heun analytic
@@ -133,9 +135,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--9; Introduction,
-pages 2--3, lines 59--73; catalogue discussion, pages 13--15, lines 353--391;
-claim hierarchy and limitations, pages 22--23, lines 544--574; conclusion,
-pages 24--25, lines 597--632.
+pages 2--3, lines 59--73; catalogue discussion, pages 13--15, lines 354--392;
+claim hierarchy and limitations, pages 22--23, lines 545--578; conclusion,
+pages 24--25, lines 598--629.
 
 ### Referee 1, Comment 4
 
@@ -166,8 +168,8 @@ regenerated from the revised inverse-Cowling potential; no lapse-substitution
 numerical results remain in the revised manuscript.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
-lines 141--193; axial subsection, pages 13--15, lines 353--391; limitations,
-pages 22--23, lines 544--574; conclusion, pages 24--25, lines 597--610.
+lines 141--186; axial subsection, pages 13--15, lines 354--392; limitations,
+pages 22--23, lines 545--578; conclusion, pages 24--25, lines 598--608.
 
 ## Referee 2
 
@@ -196,7 +198,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 5--6, lines 141--193.
+**Changes in the manuscript:** Section 2.1, pages 5--6, lines 141--186.
 
 ### Referee 2, Comment 2
 
@@ -216,8 +218,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 13--15, lines 353--391; confidence statement, page 15, lines 386--391;
-claim hierarchy, pages 22--23, lines 544--574.
+pages 13--15, lines 354--392; confidence statement, page 15, lines 386--392;
+claim hierarchy, pages 22--23, lines 545--578.
 
 ### Referee 2, Comment 3
 
@@ -246,7 +248,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 15--16, lines 392--415.
+pages 15--16, lines 393--416.
 
 ### Referee 2, Comment 4
 
@@ -263,7 +265,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-pages 16--18, lines 416--445.
+pages 16--18, lines 417--446.
 
 ### Referee 2, Comment 5
 
@@ -280,7 +282,7 @@ clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
 **Changes in the manuscript:** Section 2.1, page 4, lines 126--131;
-literature-normalization discussion, pages 17--18, lines 446--479.
+literature-normalization discussion, pages 17--18, lines 447--480.
 
 ### Referee 2, Comment 6
 

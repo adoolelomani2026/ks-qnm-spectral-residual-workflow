@@ -1,6 +1,6 @@
 # CQG-116364 resubmission package
 
-Prepared on 20 July 2026.
+Prepared on 21 July 2026.
 
 This build replaces the earlier lapse-substitution axial proxy with a
 gauge-invariant sourced odd-parity construction under an explicitly added

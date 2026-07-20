@@ -69,7 +69,7 @@ def publication_mode_rows(rows: list[ModeResult]) -> list[ModeResult]:
     """Rows safe for headline tables.
 
     Fundamentals use the high-resolution tracked branch. The first overtone is
-    frozen at the Leaver-validated catalogue grid until high-N overtone branch
+    frozen as cross-validated low-lying first overtones at N=32 until high-N overtone branch
     tracking has stronger collocation-independent validation.
     """
 
@@ -227,7 +227,8 @@ def write_run_metadata(output: Path, source_commit: str, source_tree_status_at_s
         ),
         "note": (
             "Reported spectral_results.csv freezes first overtones at "
-            "the Leaver-validated reference grid. exploratory_spectral_results.csv "
+            "the cross-validated low-lying first-overtone reference grid at N=32. "
+            "exploratory_spectral_results.csv "
             "contains tracked high-N overtone rows for diagnostics."
         ),
     }

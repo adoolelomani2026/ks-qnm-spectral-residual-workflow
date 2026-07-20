@@ -281,8 +281,8 @@ effective action.
   quantum nonspherical completion.
 - Catalogue shifts are not observational forecasts; observability would require
   waveform modeling, detector-noise weighting, and parameter-degeneracy studies.
-- First overtones are cross-validated low-lying modes on the Leaver-checked `N=32`
-  grid. Second overtones are exploratory branch diagnostics; higher overtones
+- First overtones are cross-validated low-lying first overtones at `N=32`.
+  Second overtones are exploratory branch diagnostics; higher overtones
   are outside the revision's scope.
 - Pseudospectrum contours are finite-dimensional Chebyshev diagnostics, not
   proofs about the infinite-dimensional KS wave operator. Absolute contour
@@ -318,8 +318,8 @@ Claim hierarchy:
   susceptibility `-Q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
   `a/M=1`, and the `log10 eta_N <= -10` local area grows by a factor `5.06`
   within the chosen window.
-- Reported first-overtone rows are frozen at the Leaver-validated
-  `N=32` grid; tracked high-`N` overtone rows are kept in
+- Reported first-overtone rows are the cross-validated low-lying first overtones
+  at `N=32`; tracked high-`N` overtone rows are kept in
   `outputs/results/exploratory_spectral_results.csv`.
 
 The exact environment for regenerated outputs is recorded in

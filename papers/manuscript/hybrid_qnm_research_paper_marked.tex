@@ -100,7 +100,8 @@ across the four sampled values \(a/M=0,0.2,0.5,1\).  For
 \(\ell=2,n=0\) at \(a/M=1\), the oscillation frequency, damping magnitude, and
 quality factor \(Q=\operatorname{Re}\omega/[2(-\operatorname{Im}\omega)]\)
 shift by \(-7.29\%\), \(-2.59\%\), and \(-4.83\%\).  The low-lying catalogue
-contains scalar \(\ell=2,3,4\) fundamentals, cross-validated first overtones, and
+contains robust scalar \(\ell=2,3,4\) fundamentals, cross-validated low-lying
+first overtones at \(N=32\), and
 exploratory second-overtone diagnostics; higher overtones are outside the
 scope.  A finite-\(N\) singular-value pseudospectral diagnostic of the scalar
 \(\ell=2,n=0\) branch broadens with deformation: at \(N=64\), its 10\%
@@ -621,7 +622,7 @@ score competing matches; (5) refine the selected Chebyshev root by bounded
 singular-value minimization; (6) apply the backward-error and
 spectral--continued-fraction gates; and (7) propagate the validated
 continued-fraction root as the next deformation target.  Thus the
-continued-fraction calculation is collocation independent, although it shares
+continued-fraction calculation is collocation-independent, although it shares
 the perturbation equation and endpoint factorization.
 
 \color{black}
@@ -683,9 +684,11 @@ factorization.
 As an external benchmark we use the spin-zero Schwarzschild fundamental with
 \(\ell=2\), overtone index \(n=0\), mass normalization \(M=1\), time dependence
 \(e^{-\ii\omega t}\), and therefore \(\operatorname{Im}\omega<0\) for a damped
-mode.  Cavalcante and da Cunha report this value in Table~I on page~6 from an
+mode.  In the neutral Schwarzschild limit \(q=Q=0\), Cavalcante and da Cunha
+report the spin-zero \(\ell=2\) entry in Table~I on page~6 from an
 isomonodromic Painlev\'e calculation and reproduce it in the adjacent column
-with a continued-fraction method \cite{Cavalcante2021}:
+with a continued-fraction method \cite{Cavalcante2021}.  After matching our
+\(e^{-\ii\omega t}\) convention, the value is
 \color{black}
 \begin{equation*}
 M\omega_{\mathrm{ref}}=0.483643872211-0.096758775978\,\ii.
@@ -697,6 +700,9 @@ Throughout the numerical comparisons we use
 \Delta_{\mathrm{rel}}(\omega_1,\omega_2)
 =\frac{|\omega_1-\omega_2|}{|\omega_2|}.
 \end{equation*}
+\color{blue}
+Here \(\omega_2\) is the reference value.
+\color{black}
 At \(N=96\), the direct spectral calculation gives
 \begin{equation*}
 M\omega_{\mathrm{spec}}=0.483643872189-0.096758775961\,\ii,
@@ -714,7 +720,7 @@ for the Schwarzschild fundamental mode, with relative difference \(8.24\times10^
 \color{black}
 
 \color{blue}
-The convergence of the direct spectral branches with Chebyshev size is shown in Figure~\ref{fig:spectralconvergence}. The reference in every curve is the collocation-independent order-128, depth-320 continued-fraction root, not another Chebyshev result. The fundamental reaches a double-precision plateau, whereas the first overtone is closest to the continued-fraction root around \(N=32\)--48 and then deteriorates. This nonmonotonic behavior is why the first overtone is described as cross-validated at \(N=32\), not as a high-\(N\) spectral result.
+The convergence of the direct spectral branches with Chebyshev size is shown in Figure~\ref{fig:spectralconvergence}. The reference in every curve is the collocation-independent order-128, depth-320 continued-fraction root, not another Chebyshev result. The fundamental reaches a double-precision plateau, whereas the first overtone is closest to the continued-fraction root around \(N=32\)--48 and then deteriorates. This nonmonotonic behavior is why these modes are described as cross-validated low-lying first overtones at \(N=32\), not as high-\(N\) spectral results.
 \color{black}
 
 \begin{figure}[H]
@@ -768,7 +774,7 @@ Table~\ref{tab:cfconvergence} isolates continued-fraction truncation from the
 spectral comparison.  The fundamental modes stabilize by depth 90 at the shown
 precision.  The deformed first overtone is more sensitive, but its depth-240
 and depth-320 values differ by only \(2.05\times10^{-12}\).  This is consistent
-with treating scalar \(n=1\) as a cross-validated low-lying first overtone at \(N=32\) while retaining a
+with treating the scalar \(n=1\) modes as cross-validated low-lying first overtones at \(N=32\) while retaining a
 stricter claim for the fundamentals.
 \color{black}
 
@@ -1119,7 +1125,7 @@ The scalar rows used for the headline numerical comparison are collected in Tabl
 \bottomrule
 \end{tabular}
 \color{blue}
-\caption{Reported scalar comparison. Fundamental branches are reported at \(N=96\); first overtones are frozen at the Leaver-validated \(N=32\) reference grid. Displayed decimals are for branch identification and table readability; precision claims are set by convergence and Leaver validation, not by residual size alone. Tracked high-\(N\) overtone rows are retained as exploratory diagnostics rather than used as headline results.}
+\caption{Reported scalar comparison. Fundamental branches are reported at \(N=96\); the cross-validated low-lying first overtones at \(N=32\) are frozen on that reference grid. Displayed decimals are for branch identification and table readability; precision claims are set by convergence and continued-fraction validation, not by residual size alone. Tracked high-\(N\) overtone rows are retained as exploratory diagnostics rather than used as headline results.}
 \color{black}
 \label{tab:spectralresults}
 \end{table}
@@ -1257,7 +1263,7 @@ The central physical pattern is successive softening across the sampled KS grid.
 \color{black}
 
 \color{blue}
-The numerical framework is what makes that statement credible. The waveform-derived matrix-pencil path is retained only as a sanity check; the final operator is built directly from the perturbation equation. The Schwarzschild check shows that the direct spectral operator resolves the scalar fundamental mode accurately, and the Leaver comparison reproduces the targeted scalar spectral branches to better than \(10^{-6}\) for the fundamental mode and first overtone at the reference grid. The low-lying catalogue extends this cross-check through \(n=2\); the largest observed spectral--Leaver difference is \(1.202\times10^{-5}\), localized to a second-overtone axial branch. This confirms rather than erases the confidence hierarchy: scalar fundamentals are robust, scalar first overtones are cross-validated low-lying modes at \(N=32\), and second overtones are exploratory diagnostics; every axial tier remains conditional on the inverse-Cowling closure.
+The numerical framework is what makes that statement credible. The waveform-derived matrix-pencil path is retained only as a sanity check; the final operator is built directly from the perturbation equation. The Schwarzschild check shows that the direct spectral operator resolves the scalar fundamental mode accurately, and the Leaver comparison reproduces the targeted scalar spectral branches to better than \(10^{-6}\) for the fundamental mode and first overtone at the reference grid. The low-lying catalogue extends this cross-check through \(n=2\); the largest observed spectral--Leaver difference is \(1.202\times10^{-5}\), localized to a second-overtone axial branch. This confirms rather than erases the confidence hierarchy: scalar fundamentals are robust, scalar \(n=1\) modes are cross-validated low-lying first overtones at \(N=32\), and second overtones are exploratory diagnostics; every axial tier remains conditional on the inverse-Cowling closure.
 \color{black}
 
 The workflow contribution is the KS-specific implementation, validation, and audit of a spectral residual workflow grounded in existing singular-value and pseudospectrum ideas. The generalized eigenproblem supplies candidates, but the accepted QNM claim is attached to a small value of \(\sigma_{\min}(P_N(\omega))\), convergence in \(N\), branch tracking, and Leaver comparison. This is a useful way to discuss the KS non-Hermitian resonance problem in Hermitian positive-semidefinite language, but it should not be read as a priority claim for residual singular-value theory.
@@ -1279,7 +1285,7 @@ The singular-value pseudospectral diagnostics are similarly bounded. They are co
 \color{black}
 
 \color{blue}
-Finally, the overtone hierarchy remains the numerically weakest part of the catalogue. Fundamental modes are the most stable, first overtones are reported quantitatively only on the Leaver-validated \(N=32\) grid, and tracked high-\(N\) first-overtone rows are retained as exploratory diagnostics. Second overtones are included because they are scientifically informative, but the largest spectral--Leaver difference occurs on an \(n=2\) branch. They should be interpreted as branch diagnostics until higher-precision continuation and additional validation are added; higher \(n\) is outside the scope. This claim hierarchy is summarized in Table~\ref{tab:claimhierarchy}.
+Finally, the overtone hierarchy remains the numerically weakest part of the catalogue. Fundamental modes are the most stable; the reported \(n=1\) modes are cross-validated low-lying first overtones at \(N=32\), while tracked high-\(N\) first-overtone rows are retained as exploratory diagnostics. Second overtones are included because they are scientifically informative, but the largest spectral--Leaver difference occurs on an \(n=2\) branch. They should be interpreted as branch diagnostics until higher-precision continuation and additional validation are added; higher \(n\) is outside the scope. This claim hierarchy is summarized in Table~\ref{tab:claimhierarchy}.
 \color{black}
 
 \begin{table}[!htbp]
