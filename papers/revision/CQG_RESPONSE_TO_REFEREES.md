@@ -1,6 +1,6 @@
 # Response to the Referees
 
-Manuscript: **CQG-116364**, *A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes*
+Manuscript: **CQG-116364**, *Low-lying quasinormal modes of Kazakov--Solodukhin black holes from Chebyshev and continued-fraction methods*
 
 We thank the editor and referees for their careful and constructive reports. The
 manuscript has been extensively revised. We have derived the minimally coupled
@@ -57,8 +57,8 @@ density and radial pressure and differs from simple lapse substitution for
 with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
-**Changes in the manuscript:** Section 2.1, pages 4--6, lines 119--186; axial
-external validation and stability audit, pages 13--15, lines 354--392.
+**Changes in the manuscript:** Section 2.1, pages 3--6, lines 102--168; axial
+external validation and stability analysis, pages 12--14, lines 324--361.
 
 ### Referee 1, Comment 2
 
@@ -105,11 +105,11 @@ did not manufacture a rejected-candidate example where the available data did
 not support one; instead, the paper states precisely that the advantage is
 confidence and traceability.
 
-**Changes in the manuscript:** Introduction, pages 2--3, lines 59--73;
-candidate-selection algorithm, pages 8--9, lines 243--284;
-continued-fraction methods, pages 9--10, lines 285--307; Schwarzschild benchmark
-and convergence evidence, pages 10--13, lines 309--353; residual diagnostics,
-page 19, lines 485--493; conclusion, pages 24--25, lines 598--629.
+**Changes in the manuscript:** Introduction, pages 1--3, lines 20--61;
+root-selection algorithm, pages 8--9, lines 218--259;
+continued-fraction methods, pages 9--10, lines 260--282; Schwarzschild benchmark
+and convergence evidence, pages 10--11, lines 284--312; residual diagnostics,
+page 18, lines 436--442; conclusion, page 23, lines 535--561.
 
 ### Referee 1, Comment 3
 
@@ -134,10 +134,10 @@ also cite Chen *et al.* (2025), explain that confluent-Heun analytic
 continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
-**Changes in the manuscript:** Abstract, page 1, lines 1--9; Introduction,
-pages 2--3, lines 59--73; catalogue discussion, pages 13--15, lines 354--392;
-claim hierarchy and limitations, pages 22--23, lines 545--578; conclusion,
-pages 24--25, lines 598--629.
+**Changes in the manuscript:** Abstract, page 1, lines 1--7; Introduction,
+pages 2--3, lines 54--61; catalogue discussion, pages 12--14, lines 324--361;
+branch-status table and limitations, pages 21--22, lines 490--512; conclusion,
+page 23, lines 535--561.
 
 ### Referee 1, Comment 4
 
@@ -168,8 +168,8 @@ regenerated from the revised inverse-Cowling potential; no lapse-substitution
 numerical results remain in the revised manuscript.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
-lines 141--186; axial subsection, pages 13--15, lines 354--392; limitations,
-pages 22--23, lines 545--578; conclusion, pages 24--25, lines 598--608.
+lines 128--168; axial subsection, pages 12--14, lines 324--361; limitations,
+pages 21--22, lines 490--512; conclusion, page 23, lines 549--557.
 
 ## Referee 2
 
@@ -198,7 +198,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 5--6, lines 141--186.
+**Changes in the manuscript:** Section 2.1, pages 5--6, lines 128--168.
 
 ### Referee 2, Comment 2
 
@@ -218,8 +218,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 13--15, lines 354--392; confidence statement, page 15, lines 386--392;
-claim hierarchy, pages 22--23, lines 545--578.
+pages 12--14, lines 324--361; branch-status statement, page 14, lines 357--361;
+interpretive-status table, pages 21--22, lines 490--512.
 
 ### Referee 2, Comment 3
 
@@ -248,7 +248,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 15--16, lines 393--416.
+pages 14--15, lines 362--385.
 
 ### Referee 2, Comment 4
 
@@ -265,7 +265,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-pages 16--18, lines 417--446.
+page 16, lines 386--407.
 
 ### Referee 2, Comment 5
 
@@ -281,8 +281,8 @@ moderate deformation interval selected for this numerical study. We also
 clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
-**Changes in the manuscript:** Section 2.1, page 4, lines 126--131;
-literature-normalization discussion, pages 17--18, lines 447--480.
+**Changes in the manuscript:** Section 2.1, page 4, lines 112--114;
+literature-normalization discussion, pages 16--17, lines 408--432.
 
 ### Referee 2, Comment 6
 
@@ -301,8 +301,7 @@ spectral/pseudospectral eigenvalue methods, and recent confluent-Heun
 high-overtone work. Representative references were checked and added without
 turning the introduction into a general review.
 
-**Changes in the manuscript:** Introduction, pages 1--2, lines 21--45, and
-high-overtone positioning, pages 2--3, lines 66--72.
+**Changes in the manuscript:** Introduction, pages 1--2, lines 20--61.
 
 ### Referee 2, Comment 7
 
@@ -316,7 +315,7 @@ symbol and numerical expression, including \(N\), \(\ell\), \(n\), \(a/M\),
 \(Q\), and scientific notation, is now in math mode. The revised abstract also
 states the low-lying confidence tiers and the axial caveat.
 
-**Changes in the manuscript:** Abstract, page 1, lines 1--9.
+**Changes in the manuscript:** Abstract, page 1, lines 1--7.
 
 ### Referee 2, Comment 8
 

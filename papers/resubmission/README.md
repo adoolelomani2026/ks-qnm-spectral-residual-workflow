@@ -8,9 +8,9 @@ inverse-Cowling effective-source closure. It includes potential-positivity and
 growing-root audits, Taylor-order and `N=128` convergence, raw-polynomial
 backward errors, and an 18-mode comparison with the public 2026
 Batic--Dutykh--Sukaiti calculation. The scalar sector remains the least
-assumption-dependent headline. The final preflight also adds an operational
+assumption-dependent result. The final preflight also adds a documented
 candidate-selection algorithm and a seven-configuration pseudospectral
-grid/window/resolution audit. Both 27-page manuscript PDFs were visually
+grid/window/resolution analysis. Both 26-page manuscript PDFs were visually
 inspected page by page.
 
 - `CQG-116364_response_to_referees.pdf`: point-by-point response with page and line locations.
