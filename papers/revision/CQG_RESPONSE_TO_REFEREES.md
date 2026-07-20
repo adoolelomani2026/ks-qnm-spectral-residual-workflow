@@ -62,7 +62,7 @@ with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
 **Changes in the manuscript:** Section 2.1, pages 3--6, lines 102--169; axial
-external validation and stability analysis, pages 12--14, lines 327--367.
+external validation and stability analysis, pages 13--14, lines 327--367.
 
 ### Referee 1, Comment 2
 
@@ -113,7 +113,7 @@ confidence and traceability.
 root-selection algorithm, pages 8--9, lines 219--260;
 continued-fraction methods, pages 9--10, lines 261--285; Schwarzschild benchmark
 and convergence evidence, pages 10--12, lines 287--326; residual diagnostics,
-page 18, lines 442--448; conclusion, page 23, lines 541--570.
+pages 18--19, lines 442--448; conclusion, page 24, lines 541--570.
 
 ### Referee 1, Comment 3
 
@@ -139,9 +139,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--7; Introduction,
-pages 2--3, lines 54--61; catalogue discussion, pages 12--14, lines 327--367;
-branch-status table and limitations, pages 21--22, lines 497--518; conclusion,
-page 23, lines 541--570.
+pages 2--3, lines 54--61; catalogue discussion, pages 13--15, lines 327--367;
+branch-status table and limitations, pages 22--23, lines 497--518; conclusion,
+page 24, lines 541--570.
 
 ### Referee 1, Comment 4
 
@@ -170,8 +170,8 @@ odd-parity modes of this explicit model.
 All axial frequencies, figures, tables, shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
-lines 128--169; axial subsection, pages 12--14, lines 327--367; limitations,
-pages 21--22, lines 497--518; conclusion, page 23, lines 558--566.
+lines 128--169; axial subsection, pages 13--14, lines 327--367; limitations,
+pages 22--23, lines 497--518; conclusion, page 24, lines 558--566.
 
 ## Referee 2
 
@@ -220,8 +220,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 12--14, lines 327--367; branch-status statement, page 14, lines 360--367;
-interpretive-status table, pages 21--22, lines 497--518.
+pages 13--14, lines 327--367; branch-status statement, page 14, lines 360--367;
+interpretive-status table, pages 22--23, lines 497--518.
 
 ### Referee 2, Comment 3
 
@@ -250,7 +250,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 14--16, lines 368--391.
+pages 15--16, lines 368--391.
 
 ### Referee 2, Comment 4
 
@@ -284,7 +284,7 @@ clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
 **Changes in the manuscript:** Section 2.1, page 4, lines 112--114;
-literature-normalization discussion, pages 16--17, lines 414--438.
+literature-normalization discussion, pages 17--18, lines 414--438.
 
 ### Referee 2, Comment 6
 
@@ -354,5 +354,5 @@ parent output directory already existed. The fast test suite passes 8/8 checks, 
 new axial potential, and the complete validation suite passes,
 with the worst spectral--Leaver catalogue difference
 \(1.202\times10^{-5}\) on the deliberately exploratory axial
-\(\ell=2,n=2,a/M=0.5\) row. Both the clean and marked 27-page manuscripts
+\(\ell=2,n=2,a/M=0.5\) row. Both the clean and marked 28-page manuscripts
 compile independently.

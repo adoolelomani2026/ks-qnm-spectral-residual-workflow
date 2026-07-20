@@ -51,8 +51,8 @@ Strategic spine:
 | Scalar-potential peak analysis | R2.3 | Complete |
 | Quality-factor plot | R2.4 | Complete |
 | Regenerated tables, figures, and metadata | All numerical comments | Complete |
-| Full automated test suite and clean-source LaTeX compilation | Editorial | Complete: 8/8 fast checks and full validation passed; 27-page PDF compiled without warnings |
-| Local revision tags `cqg-r1` and `cqg-major-revision-r1` at the final-preflight commit | Editorial | Complete; remote push remains pending author approval |
+| Full automated test suite and clean-source LaTeX compilation | Editorial | Complete: 8/8 fast checks and full validation passed; 28-page PDF compiled without warnings |
+| Local final-preflight tag `cqg-r2-final` at the resubmission-package commit | Editorial | Complete; remote push remains pending author approval |
 | Final-preflight candidate-score notation and mathematical audit | Reproducibility | Complete; distances, shortlist, `sigma_best`, pre-refinement residual, equilibration, eigenvector mapping, normalization, phase invariance, and raw backward-error gate stated explicitly |
 | Final-preflight confidence and continued-fraction terminology | Claim discipline | Complete; robust/cross-validated/exploratory/conditional labels synchronized and collocation-independent wording used |
 | Final-preflight external-reference and AI-disclosure audit | Editorial integrity | Complete; no persistent identifier found for the external work as of 20 July 2026; exact public commit retained; exact Codex model identifier verified from session metadata |

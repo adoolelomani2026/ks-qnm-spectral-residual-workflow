@@ -17,7 +17,7 @@ File: `papers/revision/CQG_RESPONSE_TO_REFEREES.pdf`
 - [x] PDF format.
 - [x] Revised text is blue and the manuscript is line numbered.
 - [x] Figures and tables are included.
-- [x] All 27 pages were visually inspected after the final compile; no clipped
+- [x] All 28 pages were visually inspected after the final compile; no clipped
   tables, broken paths, blank pages, or unreadable legends were found.
 - [ ] Confirm anonymization requirements.
 - [ ] Designate “Complete Document for Review (PDF Only)” during upload.
@@ -61,6 +61,6 @@ File: `papers/manuscript/hybrid_qnm_research_paper.pdf`
 
 - [ ] Verify the 3 September 2026 deadline in the authenticated Author Centre.
 - [ ] Confirm all submission metadata and file designations.
-- [x] Create local `cqg-r1` and `cqg-major-revision-r1` tags at the exact final-preflight commit.
+- [x] Create local `cqg-r2-final` tag at the exact resubmission-package commit.
 - [x] Record the source commit used for clean regeneration in `run_metadata.json`; the annotated release tag resolves the final artifact commit.
 - [ ] Push the release tags only after author approval.

@@ -16,9 +16,9 @@
   "candidate_cluster_tolerance": 1e-07,
   "maximum_continuation_distance": 0.2,
   "backward_error_acceptance_threshold": 1e-08,
-  "source_commit_used_for_regeneration": "48af496d86a93a29eece77e4e3919c72d55d38d0",
-  "revision_tag": "cqg-major-revision-r1",
-  "source_tree_status_at_regeneration_start": "dirty",
+  "source_commit_used_for_regeneration": "c145cb93884335ecbc2226d66d60ac73a6be7444",
+  "revision_tag": "cqg-r2-final",
+  "source_tree_status_at_regeneration_start": "clean",
   "git_worktree_status_after_regeneration": "dirty",
   "backward_error_definition": "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), evaluated on raw unscaled polynomial matrices",
   "note": "Reported spectral_results.csv freezes first overtones at the cross-validated low-lying first-overtone reference grid at N=32. exploratory_spectral_results.csv contains tracked high-N overtone rows for diagnostics."
