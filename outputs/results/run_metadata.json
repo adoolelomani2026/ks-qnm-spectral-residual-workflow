@@ -16,7 +16,7 @@
   "candidate_cluster_tolerance": 1e-07,
   "maximum_continuation_distance": 0.2,
   "backward_error_acceptance_threshold": 1e-08,
-  "source_commit_used_for_regeneration": "fa34ba9eec9721e1c8be614f360fc1de8a69e649",
+  "source_commit_used_for_regeneration": "2544e48f316c503e6c0d764c51e2e809a20c7d55",
   "revision_tag": "cqg-r2-final",
   "source_tree_status_at_regeneration_start": "clean",
   "git_worktree_status_after_regeneration": "dirty",

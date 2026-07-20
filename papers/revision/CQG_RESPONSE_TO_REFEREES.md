@@ -62,7 +62,7 @@ with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
 **Changes in the manuscript:** Section 2.1, pages 3--6, lines 102--169; axial
-external validation and stability analysis, pages 13--14, lines 327--367.
+external validation and stability analysis, pages 13--15, lines 327--367.
 
 ### Referee 1, Comment 2
 
@@ -170,7 +170,7 @@ odd-parity modes of this explicit model.
 All axial frequencies, tables, figures, deformation shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
-lines 128--169; axial subsection, pages 13--14, lines 327--367; limitations,
+lines 128--169; axial subsection, pages 13--15, lines 327--367; limitations,
 pages 22--23, lines 497--518; conclusion, page 24, lines 558--566.
 
 ## Referee 2
@@ -220,7 +220,7 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 13--14, lines 327--367; branch-status statement, page 14, lines 360--367;
+pages 13--15, lines 327--367; branch-status statement, page 15, lines 360--367;
 interpretive-status table, pages 22--23, lines 497--518.
 
 ### Referee 2, Comment 3
