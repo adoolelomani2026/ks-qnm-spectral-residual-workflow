@@ -1,0 +1,25 @@
+{
+  "physical_window": {
+    "real_min_exclusive": 0.05,
+    "real_max_exclusive": 2.0,
+    "imag_min_exclusive": -3.0,
+    "imag_max_exclusive": -0.02
+  },
+  "remove_non_finite_generalized_eigenvalues": true,
+  "duplicate_cluster_tolerance": 1e-7,
+  "candidate_limit": 20,
+  "continuation_distance_absolute": 0.20,
+  "score": "d_target + 0.45*d_continuation + 0.35*(1-overlap) + 1e-3*min(raw_residual/min_raw_residual,100)",
+  "distance_normalization_floor": 0.1,
+  "equilibration": "common row infinity-norm scaling of (L,R), followed by common column infinity-norm scaling",
+  "equilibration_scale_floor": 1e-300,
+  "equilibration_scale_clip": [1e-100, 1e100],
+  "local_minimizer": "scipy.optimize.minimize L-BFGS-B on sigma_min(P(omega))^2",
+  "local_box_radius_each_component": 0.02,
+  "minimizer_ftol": 1e-18,
+  "minimizer_gtol": 1e-12,
+  "minimizer_max_iterations": 500,
+  "polynomial_backward_error_acceptance_threshold": 1e-8,
+  "catalogue_spectral_cf_relative_threshold": 1e-4,
+  "branch_assignment": "Schwarzschild n=0,1,2 seeds; accepted continued-fraction roots become targets at the next a/M; already assigned roots excluded within duplicate tolerance"
+}

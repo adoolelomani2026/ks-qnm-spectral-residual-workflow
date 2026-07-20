@@ -2,7 +2,7 @@
 
 This report tests the scalar `ell=2,n=0` fundamental branch at the
 Schwarzschild and endpoint-deformed cases, `a/M=0` and `a/M=1`.
-It is a robustness check for the high-condition-number spectral pencils,
+It is a robustness check for the compactified spectral pencils,
 not a claim of additional significant digits.
 
 ## Endpoint Differences
@@ -20,4 +20,4 @@ not a claim of additional significant digits.
   not change any catalogue trend, percent shift, or physics conclusion.
 - The `N=96 -> N=128` movement is not used as a claim of extra digits because
   the high-`N` sequence is on a double-precision plateau for these
-  ill-conditioned compactified pencils.
+  roundoff-sensitive compactified differentiation matrices and pencils.

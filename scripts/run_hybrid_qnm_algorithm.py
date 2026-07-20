@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -42,10 +43,17 @@ from qnm.catalogue import (
     write_catalogue,
     write_catalogue_report,
 )
-from qnm.common import A_VALUES, FINAL_SPECTRAL_N, SCHWARZSCHILD_SCALAR_L2, SPECTRAL_SIZES
+from qnm.common import (
+    A_VALUES,
+    CANDIDATE_CLUSTER_TOLERANCE,
+    FINAL_SPECTRAL_N,
+    MAX_CONTINUATION_DISTANCE,
+    SCHWARZSCHILD_SCALAR_L2,
+    SPECTRAL_SIZES,
+)
 from qnm.leaver import assert_leaver_validation, run_leaver_validation, write_leaver_comparison
 from qnm.spectral import (
-    CONDITION_WARNING_THRESHOLD,
+    BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
     ModeResult,
     OVERTONE_PUBLICATION_N,
     run_self_tests,
@@ -99,8 +107,7 @@ def write_spectral_results(
                 "schwarzschild_reference_relative_error",
                 "matrix_dimension",
                 "sparsity",
-                "condition_number",
-                "conditioning_warning",
+                "polynomial_backward_error_raw",
                 "residual_norm",
                 "hermiticity_error",
                 "psd_min_eigenvalue",
@@ -132,8 +139,7 @@ def write_spectral_results(
                     ref_error,
                     row.matrix_dimension,
                     row.sparsity,
-                    row.condition_number,
-                    row.conditioning_warning,
+                    row.backward_error,
                     row.residual_norm,
                     row.hermiticity_error,
                     row.psd_min_eigenvalue,
@@ -164,8 +170,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                 "residual_norm",
                 "matrix_dimension",
                 "sparsity",
-                "condition_number",
-                "conditioning_warning",
+                "polynomial_backward_error_raw",
                 "branch_status",
                 "selection_score",
                 "eigenvector_overlap",
@@ -186,8 +191,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                     row.residual_norm,
                     row.matrix_dimension,
                     row.sparsity,
-                    row.condition_number,
-                    row.conditioning_warning,
+                    row.backward_error,
                     row.branch_status,
                     "" if row.selection_score is None else row.selection_score,
                     "" if row.eigenvector_overlap is None else row.eigenvector_overlap,
@@ -196,6 +200,12 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
 
 
 def write_run_metadata(output: Path) -> None:
+    def git_value(*args: str) -> str:
+        result = subprocess.run(
+            ["git", *args], cwd=ROOT_DIR, check=False, capture_output=True, text=True
+        )
+        return result.stdout.strip() if result.returncode == 0 else "unavailable"
+
     metadata = {
         "python": sys.version.split()[0],
         "numpy": np.__version__,
@@ -204,7 +214,15 @@ def write_run_metadata(output: Path) -> None:
         "spectral_sizes": SPECTRAL_SIZES,
         "final_spectral_n_for_fundamentals": FINAL_SPECTRAL_N,
         "publication_overtone_n": OVERTONE_PUBLICATION_N,
-        "condition_warning_threshold": CONDITION_WARNING_THRESHOLD,
+        "candidate_cluster_tolerance": CANDIDATE_CLUSTER_TOLERANCE,
+        "maximum_continuation_distance": MAX_CONTINUATION_DISTANCE,
+        "backward_error_acceptance_threshold": BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
+        "git_commit": git_value("rev-parse", "HEAD"),
+        "git_worktree_status": "dirty" if git_value("status", "--porcelain") else "clean",
+        "backward_error_definition": (
+            "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), "
+            "evaluated on raw unscaled polynomial matrices"
+        ),
         "note": (
             "Publication-facing spectral_results.csv freezes first overtones at "
             "the Leaver-validated reference grid. exploratory_spectral_results.csv "

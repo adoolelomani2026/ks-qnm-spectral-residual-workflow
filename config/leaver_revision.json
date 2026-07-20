@@ -1,0 +1,12 @@
+{
+  "taylor_coefficient_order": 96,
+  "continued_fraction_depth": 240,
+  "root_finder": "scipy.optimize.root(method=hybr)",
+  "root_tolerance": 1e-11,
+  "maximum_function_evaluations": 1000,
+  "arithmetic": "IEEE-754 double precision",
+  "fundamental_residual_tolerance": 1e-7,
+  "catalogue_residual_tolerance": 1e-4,
+  "initial_guess": "branch-matched Schwarzschild seed followed by continuation in a/M",
+  "branch_identity": "nearest-target spectral selection plus Leaver continuation and overtone exclusion"
+}

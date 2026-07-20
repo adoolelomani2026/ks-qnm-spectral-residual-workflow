@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build scalar and axial-gravitational KS QNM catalogues.
+"""Build scalar and gauge-invariant inverse-Cowling axial KS QNM catalogues.
 
 The catalogue uses the Chebyshev spectral solver as the primary algorithm and
 keeps Leaver-style continued-fraction cross-validation enabled for every row.
@@ -35,12 +35,19 @@ from .leaver import (
     solve_leaver_mode,
 )
 from .spectral import build_spectral_problem, generalized_eigenvalues
+from .spectral import BACKWARD_ERROR_ACCEPTANCE_THRESHOLD, polynomial_backward_error
 
 
 MODE_LABELS = {
     0: "fundamental",
-    1: "first_overtone",
-    2: "second_overtone",
+    1: "first overtone",
+    2: "second overtone",
+}
+
+CONFIDENCE_TIERS = {
+    0: "robust_quantitative",
+    1: "validated_low_lying",
+    2: "exploratory_diagnostic",
 }
 
 LITERATURE_SOURCE = (
@@ -69,6 +76,7 @@ class CatalogueRow:
     literature_tolerance: float | None
     spectral_leaver_validation_passed: bool
     literature_validation_passed: bool | None
+    polynomial_backward_error: float = float("nan")
 
 
 def reference_targets(perturbation_type: str, ell: int) -> list[complex]:
@@ -123,6 +131,7 @@ def run_catalogue(
                 next_targets: list[complex] = []
 
                 for overtone, omega_spectral in zip(CATALOGUE_OVERTONES, spectral_modes):
+                    backward_error = polynomial_backward_error(problem, omega_spectral)
                     omega_leaver, cf_abs = solve_leaver_mode(
                         a,
                         omega_spectral,
@@ -156,8 +165,12 @@ def run_catalogue(
                             schwarzschild_literature=literature,
                             literature_relative_error=literature_error,
                             literature_tolerance=literature_tolerance if a == 0.0 else None,
-                            spectral_leaver_validation_passed=relative_difference < validation_threshold,
+                            spectral_leaver_validation_passed=(
+                                relative_difference < validation_threshold
+                                and backward_error < BACKWARD_ERROR_ACCEPTANCE_THRESHOLD
+                            ),
                             literature_validation_passed=literature_passed,
+                            polynomial_backward_error=backward_error,
                         )
                     )
                     next_targets.append(omega_leaver)
@@ -175,6 +188,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                 "ell",
                 "overtone",
                 "mode",
+                "confidence_tier",
                 "a_over_M",
                 "spectral_N",
                 "spectral_real",
@@ -183,6 +197,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                 "leaver_imag",
                 "spectral_leaver_relative_difference",
                 "continued_fraction_abs",
+                "polynomial_backward_error_raw",
                 "schwarzschild_literature_real",
                 "schwarzschild_literature_imag",
                 "literature_relative_error",
@@ -199,6 +214,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                     row.ell,
                     row.overtone,
                     row.mode,
+                    CONFIDENCE_TIERS[row.overtone],
                     row.a,
                     row.spectral_n,
                     row.omega_spectral.real,
@@ -207,6 +223,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                     row.omega_leaver.imag,
                     row.spectral_leaver_relative_difference,
                     row.continued_fraction_abs,
+                    row.polynomial_backward_error,
                     "" if row.schwarzschild_literature is None else row.schwarzschild_literature.real,
                     "" if row.schwarzschild_literature is None else row.schwarzschild_literature.imag,
                     "" if row.literature_relative_error is None else row.literature_relative_error,
@@ -227,20 +244,20 @@ def write_catalogue_report(output: Path, rows: list[CatalogueRow]) -> None:
     lines = [
         "# QNM Catalogue Report",
         "",
-        "This is the Leaver-validated catalogue. It extends the scalar Chebyshev spectral",
-        "workflow to the axial gravitational Regge-Wheeler-type sector while preserving",
-        "the scalar sector.",
+        "This low-lying catalogue uses the scalar sector as the least assumption-dependent physics result",
+        "and a gauge-invariant odd-parity sector under an explicit frozen-source closure.",
         "",
         "## Scope",
         "",
         "- Perturbation types: scalar, gravitational.",
         "- Multipoles: ell = 2, 3, 4.",
         "- Modes: fundamental, first overtone, second overtone.",
+        "- Confidence tiers: n=0 robust quantitative; n=1 validated low-lying; n=2 exploratory diagnostic.",
         "- Deformations: a/M = " + ", ".join(f"{a:g}" for a in A_VALUES) + ".",
         "- Spectral comparison size: N = " + str(spectral_n) + ".",
         "",
-        "For a/M > 0 the gravitational potential is the KS-lapse-deformed axial",
-        "Regge-Wheeler model, `V=f_a(r)[ell(ell+1)/r^2 - 6M/r^3]`.",
+        "For a/M > 0 the gravitational potential is the gauge-invariant frozen-source form",
+        "`V=f_a[ell(ell+1)/r^2+2(f_a-1)/r^2-f_a'/r]`.",
         "",
         "## Validation",
         "",

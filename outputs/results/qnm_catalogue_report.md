@@ -1,23 +1,23 @@
 # QNM Catalogue Report
 
-This is the Leaver-validated catalogue. It extends the scalar Chebyshev spectral
-workflow to the axial gravitational Regge-Wheeler-type sector while preserving
-the scalar sector.
+This low-lying catalogue uses the scalar sector as the least assumption-dependent physics result
+and a gauge-invariant odd-parity sector under an explicit frozen-source closure.
 
 ## Scope
 
 - Perturbation types: scalar, gravitational.
 - Multipoles: ell = 2, 3, 4.
 - Modes: fundamental, first overtone, second overtone.
+- Confidence tiers: n=0 robust quantitative; n=1 validated low-lying; n=2 exploratory diagnostic.
 - Deformations: a/M = 0, 0.2, 0.5, 1.
 - Spectral comparison size: N = 32.
 
-For a/M > 0 the gravitational potential is the KS-lapse-deformed axial
-Regge-Wheeler model, `V=f_a(r)[ell(ell+1)/r^2 - 6M/r^3]`.
+For a/M > 0 the gravitational potential is the gauge-invariant frozen-source form
+`V=f_a[ell(ell+1)/r^2+2(f_a-1)/r^2-f_a'/r]`.
 
 ## Validation
 
-- Worst spectral/Leaver relative difference: `1.097e-05` (gravitational, ell=2, n=2, a/M=0.5).
+- Worst spectral/Leaver relative difference: `1.202e-05` (gravitational, ell=2, n=2, a/M=0.5).
 - Worst Schwarzschild literature relative error: `1.833e-05` (gravitational, ell=4, n=2).
 
 The automated catalogue validation fails if any spectral/Leaver relative

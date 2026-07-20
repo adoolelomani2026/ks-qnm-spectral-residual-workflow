@@ -6,11 +6,12 @@ workflow, Leaver-style continued-fraction validation, and fixed-mass
 spectroscopy diagnostics. It also includes a finite-dimensional
 pseudospectrum diagnostic for the validated scalar fundamental branch.
 
-The strongest current interpretation is:
+The revision's strategic scope is:
 
-> A Chebyshev-Leaver spectral residual workflow for KS black-hole
-> quasinormal-mode spectroscopy, with explicit branch-status discipline and
-> dimensionless catalogue diagnostics.
+> The scalar low-lying modes are the least assumption-dependent physics result;
+> the axial sector is gauge invariant under an explicit frozen-source closure.
+> The numerical contribution is auditability and validation, not a new
+> high-overtone solver.
 
 Repository URL:
 <https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow>
@@ -33,18 +34,31 @@ Repository URL:
   ```
 
 - A Leaver-style Frobenius continued-fraction validation layer.
-- Scalar and axial gravitational catalogues for `ell = 2, 3, 4` and
+- Scalar and gauge-invariant inverse-Cowling axial catalogues for `ell = 2, 3, 4` and
   overtone indices `n = 0, 1, 2`.
 - Dimensionless spectroscopic-ratio diagnostics such as `omega0/omega1`,
   `omega0/omega2`, and `Re(omega)/[-Im(omega)]`.
 - Scalar `ell=2,n=0` pseudospectrum diagnostics based on
   `eta_N = sigma_min(P_N)/sigma_max(P_N)`.
-- Literature positioning against Konoplya (2020) and
+- Literature positioning against Konoplya (2020),
   Bolokhov-Bronnikov-Konoplya (2025): earlier KS work established QNM
   deformation and overtone sensitivity, while this project adds fixed-`M`
   Chebyshev-Leaver validation, dimensionless ratios, and quality-factor
   shifts. A normalization-matched scalar `ell=0` side comparison with
   Konoplya's fixed-horizon table is generated separately.
+- Direct comparison of 18 overlapping conditional axial modes with the public
+  2026 Batic-Dutykh-Sukaiti high-precision Chebyshev calculation.
+
+The catalogue Leaver configuration is explicit and reproducible: Taylor
+coefficient order `96`, Gaussian-elimination/continued-fraction depth `240`,
+double-precision arithmetic, SciPy's MINPACK hybrid root finder (`hybr`), root
+tolerance `1e-11`, at most `1000` function evaluations, and continuation in
+`a/M` from branch-matched Schwarzschild seeds. The default fundamental-mode
+continued-fraction residual threshold is `1e-7`; the deliberately cautious
+catalogue threshold is `1e-4` because it includes exploratory `n=2` rows.
+These settings are stored in `config/leaver_revision.json`. The generalized-
+eigenvalue filtering, equilibration, clustering, continuation, refinement, and
+acceptance settings are stored in `config/spectral_selection.json`.
 
 ## Repository Map
 
@@ -112,10 +126,11 @@ python tests/test_qnm_algorithm.py --full
 This checks:
 
 - Hermiticity of `R_N`.
-- Positive semidefiniteness of `R_N` up to numerical roundoff.
+- Numerical consistency with the algebraic Hermiticity and positive
+  semidefiniteness of `R_N`.
 - Schwarzschild scalar reference recovery.
 - Leaver/spectral agreement for scalar validation cases.
-- Catalogue-level scalar and axial gravitational validation.
+- Catalogue-level scalar and inverse-Cowling axial validation.
 
 The default script mode and default pytest mode run only fast checks:
 
@@ -171,11 +186,46 @@ This writes:
 - `outputs/results/n128_spot_check.csv`
 - `outputs/results/n128_spot_check_report.md`
 
+Generate the continued-fraction convergence table:
+
+```powershell
+python scripts/analyze_leaver_convergence.py
+```
+
+Generate Taylor-order and Chebyshev-to-continued-fraction convergence audits:
+
+```powershell
+python scripts/analyze_solver_convergence.py
+```
+
+Generate the axial potential, positivity, growing-root, and independent-public-data audits:
+
+```powershell
+python scripts/audit_axial_model.py
+```
+
+Generate the scalar-potential peak analysis:
+
+```powershell
+python scripts/analyze_scalar_potential_peaks.py
+```
+
+Generate the line-numbered marked manuscript by comparing the revision with
+submitted commit `9090c8c`:
+
+```powershell
+python scripts/build_marked_manuscript.py
+```
+
+Compile the generated TeX with `markedrevision` defined to color only changed
+lines and enable line numbers.
+
 Regenerate the scalar `ell=2,n=0` pseudospectrum grids, summaries, report, and
 figures:
 
 ```powershell
 python scripts/analyze_pseudospectrum.py
+python scripts/audit_pseudospectrum_robustness.py
 ```
 
 This writes:
@@ -195,7 +245,12 @@ the automated tests:
 ```powershell
 python scripts/run_hybrid_qnm_algorithm.py
 python scripts/check_n128_spot.py
+python scripts/analyze_leaver_convergence.py
+python scripts/analyze_solver_convergence.py
+python scripts/analyze_scalar_potential_peaks.py
+python scripts/audit_axial_model.py
 python scripts/analyze_pseudospectrum.py
+python scripts/audit_pseudospectrum_robustness.py
 python scripts/compare_konoplya2020_scalar_l0.py
 pytest
 pytest -m slow
@@ -203,29 +258,32 @@ pytest -m slow
 
 ## Scientific Scope
 
-The scalar sector is the cleanest physics target. The axial gravitational sector
-uses a KS-lapse-deformed Regge-Wheeler potential,
+The scalar sector is the least assumption-dependent physics target.  For the
+axial sector, the repository adopts an additional inverse-Cowling closure of
+the general gauge-invariant sourced odd-parity equations: the background
+effective stress is retained while both odd source amplitudes are set to zero.
 
 ```text
-V_RW,l(r; a) = f_a(r) [ l(l+1)/r^2 - 6M/r^3 ],
+V_ax,ell = f_a [ell(ell+1)/r^2 + 2(f_a-1)/r^2 - f_a'/r].
 ```
 
-which reduces to the standard Schwarzschild Regge-Wheeler model at `a = 0`.
-This is useful for validation and catalogue exploration, but it is not yet a
-complete gauge-invariant treatment of gravitational perturbations in the KS
-spacetime.
+This reduces to the standard Schwarzschild Regge--Wheeler potential at `a=0`
+and differs from simple lapse substitution when `a>0`.  Gauge invariance
+removes coordinate artifacts from the metric variable; it does not make this
+closure the unique nonspherical perturbation theory of the spherical KS
+effective action.
 
 ## Interpretation Boundaries
 
 - Scalar fundamental modes are the safest physics claim in the current project.
-- Axial gravitational entries are phenomenological KS-lapse-deformed
-  Regge-Wheeler diagnostics, not final gauge-invariant KS gravitational
-  predictions.
+- Axial entries are conditional odd-parity modes of the gauge-invariant
+  inverse-Cowling effective-source model, not predictions of an unspecified
+  quantum nonspherical completion.
 - Catalogue shifts are not observational forecasts; observability would require
   waveform modeling, detector-noise weighting, and parameter-degeneracy studies.
-- Overtones remain the least robust numerical sector. First overtones are
-  publication-facing only on the Leaver-validated `N=32` grid, while `n=2`
-  branches should be treated as branch diagnostics until further stress-tested.
+- First overtones are cross-validated low-lying modes on the Leaver-checked `N=32`
+  grid. Second overtones are exploratory branch diagnostics; higher overtones
+  are outside the revision's scope.
 - Pseudospectrum contours are finite-dimensional Chebyshev diagnostics, not
   proofs about the infinite-dimensional KS wave operator. Absolute contour
   levels depend on `N` and operator normalization.
@@ -234,20 +292,20 @@ Claim hierarchy:
 
 | Sector or branch | Status | Use |
 |---|---|---|
-| Scalar `n=0` fundamentals | Strongest validated sector | Main physics claim |
-| Scalar `n=1` first overtones | Leaver-validated at `N=32` | Secondary catalogue and ratio diagnostics |
-| `n=2` overtones | Informative but most delicate | Branch diagnostics only |
-| Axial gravitational rows | Phenomenological KS-lapse-deformed Regge-Wheeler model | Validation and trend comparison only |
+| Scalar `n=0` fundamentals | Robust quantitative | Main physics claim |
+| Scalar `n=1` first overtones | Validated low-lying at `N=32` | Secondary catalogue and ratio diagnostics |
+| `n=2` overtones | Exploratory/diagnostic | Branch diagnostics only |
+| Axial rows | Gauge invariant, closure dependent | Conditional modes with frozen axial effective-source current |
 
 ## Current Numerical Highlights
 
-- Direct spectral Schwarzschild scalar `ell=2` fundamental relative error:
-  `1.462e-10` at `N=96` in the current regenerated outputs.
-- Leaver-style Schwarzschild scalar fundamental relative error:
-  about `1e-10`.
+- The external Schwarzschild scalar `ell=2,n=0` benchmark is
+  `M omega = 0.483643872211 - 0.096758775978 i` (Cavalcante and Carneiro da
+  Cunha, 2021). The regenerated `N=96` spectral and Leaver differences are
+  about `5.60e-11` and `8.24e-13`, respectively.
 - Catalogue spectral/Leaver disagreement is worst for second overtones and
-  is currently `1.097e-05`, below the project threshold of `1e-4`.
-- Catalogue-level physics diagnostics show monotonic decreases in both
+  is currently `1.202e-05`, below the project threshold of `1e-4`.
+- Catalogue-level physics diagnostics show successive decreases across the sampled grid in both
   oscillation frequency and damping magnitude across the validated deformation
   grid. For the scalar `ell=2` fundamental branch at `a/M=1`, the shifts are
   `-7.29%` in `Re(M omega)`, `-2.59%` in `-Im(M omega)`, and `-4.83%`
@@ -260,7 +318,7 @@ Claim hierarchy:
   susceptibility `-Q10(log10 eta_N)` increases by `0.161` from `a/M=0` to
   `a/M=1`, and the `log10 eta_N <= -10` local area grows by a factor `5.06`
   within the chosen window.
-- Publication-facing first-overtone rows are frozen at the Leaver-validated
+- Reported first-overtone rows are frozen at the Leaver-validated
   `N=32` grid; tracked high-`N` overtone rows are kept in
   `outputs/results/exploratory_spectral_results.csv`.
 

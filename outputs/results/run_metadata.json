@@ -13,6 +13,11 @@
   ],
   "final_spectral_n_for_fundamentals": 96,
   "publication_overtone_n": 32,
-  "condition_warning_threshold": 100000000000000.0,
+  "candidate_cluster_tolerance": 1e-07,
+  "maximum_continuation_distance": 0.2,
+  "backward_error_acceptance_threshold": 1e-08,
+  "git_commit": "9090c8cc5b55549bb4f25a16e701a1c6858a64c7",
+  "git_worktree_status": "dirty",
+  "backward_error_definition": "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), evaluated on raw unscaled polynomial matrices",
   "note": "Publication-facing spectral_results.csv freezes first overtones at the Leaver-validated reference grid. exploratory_spectral_results.csv contains tracked high-N overtone rows for diagnostics."
 }

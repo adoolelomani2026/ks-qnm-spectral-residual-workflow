@@ -1,0 +1,352 @@
+# Response to the Referees
+
+Manuscript: **CQG-116364**, *A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes*
+
+We thank both referees for their careful and constructive reports. The revision
+has been reorganized around a clearer hierarchy: the minimally coupled scalar
+sector supplies the least assumption-dependent KS result; the axial metric
+variable is gauge invariant and is studied under an explicitly added
+inverse-Cowling effective-source closure; and the methodological contribution is an audited low-lying-mode
+workflow rather than a new high-overtone solver. We have added the provenance
+and derivation of the theoretical input, documented and convergence-tested the Leaver calculation,
+qualified the overtone claims, added scalar- and axial-potential audits,
+potential-positivity and growing-root checks, a quality-factor panel, and an
+18-mode comparison with the public Batic--Dutykh--Sukaiti calculation;
+clarified the sampled deformation range, expanded the
+numerical-method context, and completed a manuscript-wide notation and
+cross-reference audit.
+
+Page and line references below refer to the blue, line-numbered marked
+manuscript.
+
+## Referee 1
+
+### Referee 1, Comment 1
+
+> My first concern is about the theoretical setup in Sec. 2.1. The spacetime
+> form in Eq. (1) is introduced without any reference or derivation, although it
+> is not, at least to me, a completely standard expression. The same issue
+> occurs for the effective potentials in Eqs. (3) and (4). The authors simply
+> write down these potentials, but do not explain where they come from. This is
+> particularly important for the axial-gravitational case, because the
+> potential is later used more like a lapse-deformed Regge-Wheeler potential
+> than a perturbation equation derived from a full gauge-invariant analysis.
+> The authors should either provide a derivation or clearly cite the original
+> source and state the assumptions behind these equations.
+
+**Response:** We agree that the provenance and assumptions were previously
+underexplained. Section 2.1 now cites the original Kazakov--Solodukhin
+construction and a later paper using the same lapse convention, explains the
+areal-radius and deformation-parameter notation without introducing an unused
+renormalized coupling, states the coordinate domain \(r\geq a\), derives
+\(r_h=\sqrt{4M^2+a^2}\), and displays the Schwarzschild limit. We now derive
+the scalar potential from \(\Box\Phi=0\) using
+\(\Phi=e^{-i\omega t}Y_{\ell m}\Psi/r\). For the axial equation, we went beyond
+retaining a phenomenological disclaimer. Following Gerlach--Sengupta,
+Gundlach--Martínez-García, and Karlovini, the revision maps the harmonic and
+volume-form conventions; defines the odd gauge transformation, invariant
+one-form \(k_a\), invariant curl \(\Pi\), and invariant source current \(L_a\);
+and displays the general sourced master equation before imposing a closure.
+We corrected the foundational citation to Physical Review D 19, 2268 (1979)
+and give the exact equation numbers used. Setting \(L_a=L=0\) both removes the
+source and satisfies its conservation equation. This is stated as an
+additional inverse-Cowling closure motivated by, but not uniquely prescribed
+by, the original KS mode split. The resulting potential contains the effective
+density and radial pressure and differs from simple lapse substitution for
+\(a>0\). We also compare the same potential and 18 overlapping frequencies
+with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
+repository commit.
+
+**Changes in the manuscript:** Section 2.1, pages 4--6, lines 119--185; axial
+external validation and stability audit, pages 13--15, lines 346--382.
+
+### Referee 1, Comment 2
+
+> The Schwarzschild benchmark in Sec. 3.1 also needs clarification. The authors
+> quote a “known” scalar Schwarzschild fundamental frequency, but it is not
+> clear where this number comes from or how it was obtained. Similarly, when
+> they say that “the Leaver-style solver gives” a certain value, the truncation
+> order, convergence criterion, and numerical stability are not specified. For
+> the scalar Schwarzschild fundamental mode, many standard methods can reach
+> very high precision once the order is high enough. Therefore, reproducing
+> this number does not by itself show the advantage of the present workflow.
+> The authors need to explain more clearly what is actually improved by their
+> method.
+
+**Response:** We now identify the external value
+\(M\omega=0.483643872211-0.096758775978i\) as the spin-zero,
+\(\ell=2,n=0\) Schwarzschild result reported by Cavalcante and Carneiro da
+Cunha (Table I, page 6), with \(M=1\), \(e^{-i\omega t}\), and
+\(\operatorname{Im}\omega<0\). The manuscript now also defines
+\(\Delta_{\rm rel}(\omega_1,\omega_2)=|\omega_1-\omega_2|/|\omega_2|\).
+The revised methods give the actual implementation settings: Taylor order 96,
+continued-fraction/Gaussian-elimination depth 240, IEEE-754 double precision,
+SciPy/MINPACK hybrid root finding, root tolerance \(10^{-11}\), at most 1000
+function evaluations, the residual thresholds, branch-matched \(N=32\)
+initial guesses, and continuation in \(a/M\). A new depth-truncation table covers the
+Schwarzschild fundamental, one KS-deformed fundamental, and a KS first
+overtone. A separate Taylor-order table varies orders 64, 80, 96, 112, and
+128 at fixed depth 320. Figure 1 now plots error from an order-128,
+depth-320 continued-fraction root through \(N=128\), for both the fundamental
+and first overtone. It exposes the overtone's high-\(N\) deterioration and
+supports the more precise label “cross-validated at \(N=32\).” The same
+settings are stored in `config/leaver_revision.json`.
+
+We also rewrote the novelty claim. Agreement with Schwarzschild is presented as
+a cross-discretization check, not a claim of superior precision. The
+contribution is the traceable chain from equilibrated generalized-eigenvalue
+candidates through explicit filtering, clustering, continuation, branch
+scoring, singular-value refinement, spectral-size convergence, polynomial
+backward-error diagnostics on the raw matrices, and collocation-independent
+continued-fraction validation. We
+did not manufacture a rejected-candidate example where the available data did
+not support one; instead, the paper states precisely that the advantage is
+confidence and traceability.
+
+**Changes in the manuscript:** Introduction, pages 2--3, lines 59--73;
+candidate-selection algorithm, pages 8--9, lines 242--277;
+continued-fraction methods, pages 9--10, lines 278--301; Schwarzschild benchmark
+and convergence evidence, pages 10--13, lines 302--345; residual diagnostics,
+page 19, lines 475--481; conclusion, pages 24--25, lines 587--613.
+
+### Referee 1, Comment 3
+
+> I am also not fully convinced by the claimed capability of the method for
+> higher overtones. The paper mainly focuses on low-lying modes, and even the
+> second overtone already shows larger discrepancies and requires some caution.
+> This suggests that the present method may be more reliable for low-lying modes
+> than for high-\(n\) modes. This limitation should be stated explicitly. In
+> particular, recent Chen-Heun-type methods have already made substantial
+> progress on the accuracy of high overtones and have obtained complete
+> quasinormal-mode spectra with very high precision. In comparison, the present
+> method does not seem to solve the high-overtone problem, and the authors
+> should avoid giving the impression that it provides a general
+> complete-spectrum method.
+
+**Response:** We agree and have narrowed the scope explicitly. Fundamentals are
+classified as robust quantitative results, first overtones as validated
+low-lying modes, second overtones as exploratory diagnostics, and higher
+overtones as outside scope. These tiers appear in the abstract, introduction,
+results, claim-hierarchy table, conclusion, and generated catalogue CSV. We
+also cite Chen *et al.* (2025), explain that confluent-Heun analytic
+continuation targets complete and highly damped type-D spectra, and state that
+our workflow serves the different purpose of auditing low-lying KS branches.
+
+**Changes in the manuscript:** Abstract, page 1, lines 1--9; Introduction,
+pages 2--3, lines 59--73; catalogue discussion, pages 13--15, lines 346--382;
+claim hierarchy and limitations, pages 22--23, lines 534--564; conclusion,
+pages 24--25, lines 587--613.
+
+### Referee 1, Comment 4
+
+> Finally, I think the axial-gravitational results should be presented more
+> carefully. Since the axial potential is not derived from a full
+> gauge-invariant perturbation theory for the KS spacetime, these results should
+> not be put on exactly the same physical footing as the scalar results. In my
+> view, the scalar sector is the more solid part of the manuscript, while the
+> axial sector is better regarded as a phenomenological extension unless a more
+> complete derivation is supplied.
+
+**Response:** We agreed with the referee's conditional phrase “unless a more
+complete derivation is supplied” and supplied that derivation. The revision now
+uses the general sourced gauge-invariant odd-parity formalism for spherical
+backgrounds, includes the effective-source contribution, and replaces the old
+lapse-substitution potential in both numerical solvers. Gauge invariance is
+proved at the perturbation-variable level, but is not equated with a unique KS
+quantum-source perturbation theory. We separately state the dynamical
+closure—zero invariant axial effective-source current—so the reader can see
+exactly what follows mathematically and what remains an assumption about the
+unprovided quantum nonspherical sector. This inverse-Cowling closure is our
+added model assumption. The scalar result remains the least
+assumption-dependent headline, while the axial frequencies are conditional
+odd-parity modes of this explicit model.
+
+All axial tables, figures, validation comparisons, and trend percentages were
+regenerated from the revised inverse-Cowling potential; no lapse-substitution
+numerical results remain in the revised manuscript.
+
+**Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--6,
+lines 141--185; axial subsection, pages 13--15, lines 346--382; limitations,
+pages 22--23, lines 534--564; conclusion, pages 24--25, lines 587--600.
+
+## Referee 2
+
+### Referee 2, Comment 1
+
+> The lapse-deformed Regge-Wheeler potential introduced in Equation (4) is a
+> helpful phenomenological toy model for testing the numerical limits of your
+> Chebyshev-Leaver workflow. However, as correctly noted later in the
+> discussion, it is not derived from first-principles gauge-invariant
+> perturbations of the true quantum-corrected field equations. In a full
+> effective field theory framework, modifications to the spacetime geometry
+> usually alter the linearized field equations themselves, introducing extra
+> dynamic terms beyond a simple swap of the lapse function. To ensure physical
+> clarity for the reader, please add a brief, explicit disclaimer directly
+> below Equation (4) in Section 2.1 stating that this sector is intentionally
+> phenomenological and serves primarily as a numerical benchmark. This will
+> properly align the physical claims with the excellent numerical strengths of
+> the paper.
+
+**Response:** We addressed the underlying concern more fully than the requested
+disclaimer: the lapse-substitution toy model has been removed. Revised
+Section 2.1 begins with the general sourced gauge-invariant odd-parity equation for the
+effective KS background, displays the density/pressure terms missing from the
+toy model, and gives the explicit correction relative to the old potential.
+Immediately after the result we impose an explicitly additional
+inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
+source modes could add source terms or couplings.
+
+**Changes in the manuscript:** Section 2.1, pages 5--6, lines 141--185.
+
+### Referee 2, Comment 2
+
+> In Table 2, the relative error increases for the higher overtones, reaching
+> \(1.833\times10^{-5}\) for the \(\ell=4,n=2\) mode. Please clarify whether
+> these higher-overtone results are intended primarily as numerical diagnostics
+> or should be interpreted as quantitative physical predictions with the same
+> level of confidence as the fundamental modes.
+
+**Response:** They are not assigned equal confidence. The revision labels
+\(n=0\) as robust quantitative, \(n=1\) as validated low lying, and \(n=2\)
+as exploratory/diagnostic. We also separated two different error notions. The
+former \(1.833\times10^{-5}\) number compared the computed Schwarzschild axial
+root with an unevenly rounded transcribed reference, so it was not a clean
+solver-error estimate. We removed that literature-relative-error column.
+Spectral--Leaver disagreement and the uniform high-precision external
+Batic--Dutykh--Sukaiti comparison are reported separately.
+
+**Changes in the manuscript:** Axial continued-fraction table and caption,
+pages 13--15, lines 346--382; confidence statement, page 15, lines 374--382;
+claim hierarchy, pages 22--23, lines 534--564.
+
+### Referee 2, Comment 3
+
+> In Section 3.4, the author mentions that the largest endpoint fractional
+> frequency shift observed across the full fixed-mass catalog is 7.23%,
+> occurring specifically for the scalar \(\ell=4\) fundamental branch. Since
+> larger multipole numbers probe different regions of the effective potential
+> barrier compared to the dominant \(\ell=2\) mode, this maximal shift is an
+> interesting physical result. The author should include a brief physical
+> intuition explaining why the higher angular number shows a heightened
+> sensitivity to the parameter \(a/M\) under a fixed mass scale.
+
+**Response:** We first audited the percentages and now distinguish real-part
+shift, damping-magnitude shift, quality-factor shift, and complex-plane
+displacement. The quoted 7.23% is the \(\ell=4\) fundamental complex-plane
+displacement; its real-part shift is \(-7.27\%\). We then computed
+\(r_{\rm peak}\), \(V_{\rm peak}\), and the tortoise-coordinate curvature for
+\(\ell=2,3,4\). At \(a/M=1\), the WKB height proxies change by
+\(-7.01\%\), \(-7.13\%\), and \(-7.18\%\), respectively, with a similarly
+modest multipole dependence in curvature. The revised explanation therefore
+uses cautious barrier intuition and does not claim a qualitatively distinct
+\(\ell=4\) mechanism. Because the axial equation itself has now been replaced
+by the derived matter-corrected potential, the revised full-catalogue maximum
+is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
+\(7.23\%\) statement is retained only as the scalar-fundamental comparison the
+referee asked us to explain.
+
+**Changes in the manuscript:** Catalogue trends and new potential-peak table,
+pages 15--16, lines 383--406.
+
+### Referee 2, Comment 4
+
+> In Section 3.5, the text highlights a 4.83% decrease in the quality factor
+> \(Q=\operatorname{Re}(\omega)/(2|-\operatorname{Im}(\omega)|)\) as a key
+> physical insight for the scalar fundamental branch. To complement this
+> discussion, the author may consider adding a small inset or an extra panel to
+> Figure 3 or 4 that explicitly plots \(Q\) versus \(a/M\). This will provide a
+> direct visual complement for the spectroscopic trends described in the text.
+
+**Response:** Figure 5 now contains a dedicated right panel showing
+\(Q=\operatorname{Re}\omega/[2(-\operatorname{Im}\omega)]\) versus \(a/M\)
+for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
+abstract, text, and caption.
+
+**Changes in the manuscript:** Spectroscopy subsection and Figure 5,
+pages 16--18, lines 407--436.
+
+### Referee 2, Comment 5
+
+> In Section 3.6, please clarify the physical significance of the endpoint
+> \(a/M=1\). Specifically, state whether it corresponds to a physical boundary
+> of the Kazakov-Solodukhin black hole (e.g., extremality or horizon
+> degeneracy) or is simply a numerical cutoff adopted for the parameter scan.
+
+**Response:** The revised text derives
+\(r_h=\sqrt{4M^2+a^2}>a\) and explicitly states that \(a/M=1\) is neither
+extremal nor a degenerate-horizon limit. It is the upper endpoint of the
+moderate deformation interval selected for this numerical study. We also
+clarify the conversion to the horizon-normalized convention:
+\(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
+
+**Changes in the manuscript:** Section 2.1, page 4, lines 126--131;
+literature-normalization discussion, pages 18--19, lines 437--470.
+
+### Referee 2, Comment 6
+
+> To provide a more comprehensive background, please add a few brief sentences
+> in the introduction summarizing other standard numerical methods used for
+> calculating quasinormal modes such as the WKB approximation, Asymptotic
+> Iteration Method (AIM), Frobenius method or direct time-domain integration
+> etc. The discussion may be supported by citing representative references such
+> as Rev. Mod. Phys. 83 (2011) 793, Phys. Rev. D 68, 024018 (2003), Eur. Phys.
+> J. C 84, 1245 (2024), Class. Quantum Gravity 27, 155004 (2010), Eur. Phys. J.
+> C 85 (2025) 1223, Phys. Rev. D 30, 295 (1984).
+
+**Response:** We added a focused numerical-method paragraph covering WKB,
+direct time-domain evolution, Frobenius/Leaver continued fractions, AIM,
+spectral/pseudospectral eigenvalue methods, and recent confluent-Heun
+high-overtone work. Representative references were checked and added without
+turning the introduction into a general review.
+
+**Changes in the manuscript:** Introduction, pages 1--2, lines 21--45, and
+high-overtone positioning, pages 2--3, lines 66--72.
+
+### Referee 2, Comment 7
+
+> In the abstract, several variables and parameters are rendered as normal prose
+> text rather than in standard math font. Please ensure that all mathematical
+> symbols throughout the abstract are consistently formatted in math font to
+> maintain structural uniformity with the main text.
+
+**Response:** The abstract was rewritten after the scientific revisions. Every
+symbol and numerical expression, including \(N\), \(\ell\), \(n\), \(a/M\),
+\(Q\), and scientific notation, is now in math mode. The revised abstract also
+states the low-lying confidence tiers and the axial caveat.
+
+**Changes in the manuscript:** Abstract, page 1, lines 1--9.
+
+### Referee 2, Comment 8
+
+> Please use “Figure 2” instead of “figure 2” (apply this consistently
+> throughout the manuscript).
+
+**Response:** All prose figure references now use “Figure.” We also audited
+table and equation references, \(\ell\) notation, and the hyphenation of
+“gauge-invariant,” “continued-fraction,” “high-overtone,” and
+“lapse-deformed.”
+
+**Changes in the manuscript:** Manuscript-wide editorial correction.
+
+## Verification and reproducibility
+
+All generated tables and figures were regenerated from the revised code. The
+candidate-selection subsection now records the physical frequency window,
+non-finite-root removal, \(10^{-7}\) clustering, row/column equilibration,
+\(0.20\) continuation gate, competing-match score, L-BFGS-B settings, and the
+backward-error and continued-fraction acceptance gates. Figure legends use
+publication terminology, including “axial inverse-Cowling.” The scalar
+pseudospectral endpoint diagnostic was rerun for grids \(81^2,121^2,161^2\),
+half-widths \(0.020,0.025,0.030\), and \(N=32,48,64\); its endpoint change is
+positive in every test and spans \(0.1002\)--\(0.1647\), so the abstract now
+states the robust sign rather than a single window-dependent decimal.
+The AI disclosure names the verifiable product, OpenAI Codex, and does not add
+an unverified parenthetical backend-model label; the detailed uses and author
+responsibility statement are retained.
+
+The fast test suite passes 8/8 checks, including a symbolic/numerical audit of the
+new axial potential, and the complete validation suite passes,
+with the worst spectral--Leaver catalogue difference
+\(1.202\times10^{-5}\) on the deliberately exploratory axial
+\(\ell=2,n=2,a/M=0.5\) row. Both the clean and marked 27-page manuscripts
+compile independently.

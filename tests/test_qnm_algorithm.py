@@ -30,7 +30,7 @@ except ImportError:  # pragma: no cover - only used outside the test environment
 
 from qnm.analysis import compute_branch_summaries, compute_spectroscopic_ratios, compute_trend_rows
 from qnm.catalogue import CatalogueRow, assert_catalogue_validation, run_catalogue
-from qnm.common import SCHWARZSCHILD_SCALAR_L2
+from qnm.common import SCHWARZSCHILD_SCALAR_L2, df_ks, f_ks, regge_wheeler_potential
 from qnm.leaver import assert_leaver_validation, run_leaver_validation
 from qnm.normalization import (
     alpha_from_horizon_beta,
@@ -44,6 +44,7 @@ from qnm.pseudospectrum import compute_pseudospectrum_grid, summarize_grid
 from qnm.spectral import (
     build_spectral_problem,
     generalized_eigenvalues,
+    polynomial_backward_error,
     run_self_tests,
     select_physical_mode,
 )
@@ -81,6 +82,38 @@ def test_pencil_scaling_preserves_schwarzschild_fundamental() -> None:
     omega_unscaled = select_physical_mode(generalized_eigenvalues(problem, scale=False), SCHWARZSCHILD_SCALAR_L2)
     relative_difference = abs(omega_scaled - omega_unscaled) / abs(omega_scaled)
     assert relative_difference < 1.0e-9
+
+
+def test_polynomial_backward_error_is_finite_and_scale_aware() -> None:
+    problem = build_spectral_problem(0.0, 32)
+    omega = select_physical_mode(generalized_eigenvalues(problem), SCHWARZSCHILD_SCALAR_L2)
+    eta = polynomial_backward_error(problem, omega)
+    assert np.isfinite(eta)
+    assert 0.0 <= eta < 1.0e-12
+
+
+def test_gauge_invariant_axial_potential_closure() -> None:
+    r = np.array([3.0, 4.5, 8.0])
+    ell = 2
+    mass = 1.0
+
+    schwarzschild = regge_wheeler_potential(r, ell, 0.0, mass)
+    expected_schwarzschild = (1.0 - 2.0 * mass / r) * (
+        ell * (ell + 1.0) / r**2 - 6.0 * mass / r**3
+    )
+    assert np.allclose(schwarzschild, expected_schwarzschild, rtol=0.0, atol=1.0e-14)
+
+    a = 1.0
+    f = f_ks(r, a, mass)
+    derived = f * (
+        ell * (ell + 1.0) / r**2
+        + 2.0 * (f - 1.0) / r**2
+        - df_ks(r, a, mass) / r
+    )
+    assert np.allclose(regge_wheeler_potential(r, ell, a, mass), derived, rtol=0.0, atol=1.0e-14)
+
+    lapse_substitution_proxy = f * (ell * (ell + 1.0) / r**2 - 6.0 * mass / r**3)
+    assert np.max(np.abs(derived - lapse_substitution_proxy)) > 1.0e-5
 
 
 def test_catalogue_physics_analysis_tracks_endpoint_shifts() -> None:
