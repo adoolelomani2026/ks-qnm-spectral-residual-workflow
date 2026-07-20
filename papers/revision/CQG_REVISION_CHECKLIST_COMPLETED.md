@@ -60,5 +60,6 @@ File: `papers/manuscript/hybrid_qnm_research_paper.pdf`
 
 - [ ] Verify the 3 September 2026 deadline in the authenticated Author Centre.
 - [ ] Confirm all submission metadata and file designations.
-- [x] Create the local `cqg-r1` tag at the exact final-preflight commit.
-- [ ] Push the `cqg-r1` tag only after author approval.
+- [x] Create local `cqg-r1` and `cqg-major-revision-r1` tags at the exact final-preflight commit.
+- [x] Record the source commit used for clean regeneration in `run_metadata.json`; the annotated release tag resolves the final artifact commit.
+- [ ] Push the release tags only after author approval.

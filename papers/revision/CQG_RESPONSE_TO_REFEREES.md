@@ -2,19 +2,19 @@
 
 Manuscript: **CQG-116364**, *A Chebyshev--Leaver Spectral Residual Workflow for Kazakov--Solodukhin Quasinormal Modes*
 
-We thank both referees for their careful and constructive reports. The revision
-has been reorganized around a clearer hierarchy: the minimally coupled scalar
-sector supplies the least assumption-dependent KS result; the axial metric
-variable is gauge invariant and is studied under an explicitly added
-inverse-Cowling effective-source closure; and the methodological contribution is an audited low-lying-mode
-workflow rather than a new high-overtone solver. We have added the provenance
-and derivation of the theoretical input, documented and convergence-tested the Leaver calculation,
-qualified the overtone claims, added scalar- and axial-potential audits,
-potential-positivity and growing-root checks, a quality-factor panel, and an
-18-mode comparison with the public Batic--Dutykh--Sukaiti calculation;
-clarified the sampled deformation range, expanded the
-numerical-method context, and completed a manuscript-wide notation and
-cross-reference audit.
+We thank both referees for their careful and constructive reports. The
+manuscript has been extensively revised. We have derived the minimally coupled
+scalar equation, replaced the former lapse-substitution axial proxy with a
+gauge-invariant sourced odd-parity formulation under an explicitly stated
+inverse-Cowling closure, regenerated the complete axial catalogue, documented
+the spectral candidate-selection algorithm, added continued-fraction depth and
+Taylor-order convergence studies, replaced condition-number reporting with
+scale-aware backward errors, added external high-precision axial comparisons,
+clarified the confidence hierarchy of the overtone catalogue, and added the
+requested physical and graphical diagnostics. The minimally coupled scalar
+sector remains the least assumption-dependent KS result, and the
+methodological contribution is an audited low-lying-mode workflow rather than
+a new high-overtone solver.
 
 Page and line references below refer to the blue, line-numbered marked
 manuscript.
@@ -124,7 +124,7 @@ page 19, lines 475--481; conclusion, pages 24--25, lines 587--613.
 > complete-spectrum method.
 
 **Response:** We agree and have narrowed the scope explicitly. Fundamentals are
-classified as robust quantitative results, first overtones as validated
+classified as robust fundamental modes, scalar first overtones as cross-validated at \(N=32\),
 low-lying modes, second overtones as exploratory diagnostics, and higher
 overtones as outside scope. These tiers appear in the abstract, introduction,
 results, claim-hierarchy table, conclusion, and generated catalogue CSV. We
@@ -340,9 +340,9 @@ pseudospectral endpoint diagnostic was rerun for grids \(81^2,121^2,161^2\),
 half-widths \(0.020,0.025,0.030\), and \(N=32,48,64\); its endpoint change is
 positive in every test and spans \(0.1002\)--\(0.1647\), so the abstract now
 states the robust sign rather than a single window-dependent decimal.
-The AI disclosure names the verifiable product, OpenAI Codex, and does not add
-an unverified parenthetical backend-model label; the detailed uses and author
-responsibility statement are retained.
+The AI disclosure now records the exact model identifier
+`gpt-5.6-sol`, verified from the relevant local Codex session metadata, together
+with the dates, detailed uses, and author-responsibility statement.
 
 The fast test suite passes 8/8 checks, including a symbolic/numerical audit of the
 new axial potential, and the complete validation suite passes,

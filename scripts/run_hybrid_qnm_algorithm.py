@@ -70,7 +70,7 @@ def publication_mode_rows(rows: list[ModeResult]) -> list[ModeResult]:
 
     Fundamentals use the high-resolution tracked branch. The first overtone is
     frozen at the Leaver-validated catalogue grid until high-N overtone branch
-    tracking has stronger independent validation.
+    tracking has stronger collocation-independent validation.
     """
 
     selected = [
@@ -199,7 +199,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
             )
 
 
-def write_run_metadata(output: Path) -> None:
+def write_run_metadata(output: Path, source_commit: str, source_tree_status_at_start: str) -> None:
     def git_value(*args: str) -> str:
         result = subprocess.run(
             ["git", *args], cwd=ROOT_DIR, check=False, capture_output=True, text=True
@@ -217,14 +217,16 @@ def write_run_metadata(output: Path) -> None:
         "candidate_cluster_tolerance": CANDIDATE_CLUSTER_TOLERANCE,
         "maximum_continuation_distance": MAX_CONTINUATION_DISTANCE,
         "backward_error_acceptance_threshold": BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
-        "git_commit": git_value("rev-parse", "HEAD"),
-        "git_worktree_status": "dirty" if git_value("status", "--porcelain") else "clean",
+        "source_commit_used_for_regeneration": source_commit,
+        "revision_tag": "cqg-major-revision-r1",
+        "source_tree_status_at_regeneration_start": source_tree_status_at_start,
+        "git_worktree_status_after_regeneration": "dirty" if git_value("status", "--porcelain") else "clean",
         "backward_error_definition": (
             "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), "
             "evaluated on raw unscaled polynomial matrices"
         ),
         "note": (
-            "Publication-facing spectral_results.csv freezes first overtones at "
+            "Reported spectral_results.csv freezes first overtones at "
             "the Leaver-validated reference grid. exploratory_spectral_results.csv "
             "contains tracked high-N overtone rows for diagnostics."
         ),
@@ -252,6 +254,12 @@ def plot_convergence(rows: list[ModeResult], output: Path) -> None:
 
 
 def run_pipeline(base_dir: Path) -> None:
+    source_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT_DIR, check=True, capture_output=True, text=True
+    ).stdout.strip()
+    source_tree_status_at_start = "dirty" if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ROOT_DIR, check=True, capture_output=True, text=True
+    ).stdout.strip() else "clean"
     results_dir = base_dir / "outputs" / "results"
     figures_dir = base_dir / "outputs" / "figures"
     results_dir.mkdir(exist_ok=True)
@@ -278,7 +286,7 @@ def run_pipeline(base_dir: Path) -> None:
     write_catalogue(results_dir / "qnm_catalogue.csv", catalogue_rows)
     write_catalogue_report(results_dir / "qnm_catalogue_report.md", catalogue_rows)
     physics_outputs = write_physics_analysis(results_dir, figures_dir, catalogue_rows)
-    write_run_metadata(results_dir / "run_metadata.json")
+    write_run_metadata(results_dir / "run_metadata.json", source_commit, source_tree_status_at_start)
     plot_convergence(spectral_rows, figures_dir / "spectral_convergence.png")
     trajectory_plots = plot_mode_trajectories(catalogue_rows, figures_dir)
 

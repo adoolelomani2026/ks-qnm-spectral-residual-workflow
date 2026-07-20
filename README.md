@@ -198,7 +198,7 @@ Generate Taylor-order and Chebyshev-to-continued-fraction convergence audits:
 python scripts/analyze_solver_convergence.py
 ```
 
-Generate the axial potential, positivity, growing-root, and independent-public-data audits:
+Generate the axial potential, positivity, growing-root, and external-public-data audits:
 
 ```powershell
 python scripts/audit_axial_model.py

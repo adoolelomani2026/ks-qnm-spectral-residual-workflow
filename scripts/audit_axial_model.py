@@ -25,8 +25,24 @@ from qnm.spectral import build_spectral_problem, generalized_eigenvalues
 
 
 PUBLIC = ROOT / "papers" / "revision" / "references" / "KS-quantum-public"
+PUBLIC_URL = "https://github.com/dutykh/KS-quantum.git"
+PUBLIC_COMMIT = "f53435ebdb8d1124d13bee75fa54972ac1613a03"
 RESULTS = ROOT / "outputs" / "results"
 FIGURES = ROOT / "outputs" / "figures"
+
+
+def ensure_public_checkout() -> None:
+    """Materialize and pin the external comparison data when absent."""
+
+    if not (PUBLIC / ".git").is_dir():
+        PUBLIC.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["git", "clone", PUBLIC_URL, str(PUBLIC)], check=True)
+    subprocess.run(["git", "checkout", "--detach", PUBLIC_COMMIT], cwd=PUBLIC, check=True)
+    actual = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=PUBLIC, capture_output=True, text=True, check=True
+    ).stdout.strip()
+    if actual != PUBLIC_COMMIT:
+        raise RuntimeError(f"External checkout mismatch: expected {PUBLIC_COMMIT}, found {actual}")
 
 
 def old_lapse_proxy(r: np.ndarray, ell: int, a: float) -> np.ndarray:
@@ -205,6 +221,7 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 def main() -> None:
     RESULTS.mkdir(parents=True, exist_ok=True)
     FIGURES.mkdir(parents=True, exist_ok=True)
+    ensure_public_checkout()
     potential = plot_potentials()
     positivity = positivity_rows()
     growing = growing_candidate_audit()

@@ -76,7 +76,7 @@ The helper functions live in `src/qnm/normalization.py`.
 
 The repository includes one concrete side comparison against the scalar
 `ell=0`, `n=0` fixed-horizon table of Konoplya (2020). It is outside the
-publication-facing `ell=2,3,4` catalogue, but it is useful for checking the
+reported `ell=2,3,4` catalogue, but it is useful for checking the
 normalization conversion and the scalar fundamental branch:
 
 ```text

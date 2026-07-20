@@ -4,7 +4,7 @@
 Konoplya's published table fixes the horizon radius, r_h=1, and reports
 frequencies in the horizon-scaled convention r_h omega. The main catalogue in
 this repository is fixed-mass and starts at ell=2, so this script is deliberately
-a side diagnostic rather than part of the publication-facing catalogue.
+a side diagnostic rather than part of the reported catalogue.
 """
 
 from __future__ import annotations

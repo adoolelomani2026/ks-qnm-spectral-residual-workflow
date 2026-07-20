@@ -376,13 +376,13 @@ def select_tracked_mode(
             }
         )
 
-    residual_scale = min(candidate["residual_norm"] for candidate in candidates) + 1.0e-30
+    sigma_best = min(candidate["residual_norm"] for candidate in candidates) + 1.0e-30
     best = None
     best_score = math.inf
     for candidate in candidates:
         overlap = candidate["overlap"]
         overlap_term = 0.0 if overlap is None else (1.0 - overlap)
-        residual_term = min(candidate["residual_norm"] / residual_scale, 100.0) * 1.0e-3
+        residual_term = min(candidate["residual_norm"] / sigma_best, 100.0) * 1.0e-3
         score = (
             float(candidate["freq_term"])
             + 0.45 * float(candidate["continuity_term"])
