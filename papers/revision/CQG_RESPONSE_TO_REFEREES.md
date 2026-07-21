@@ -72,9 +72,9 @@ density and radial pressure and differs from simple lapse substitution for
 with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
-**Changes in the manuscript:** Introduction, pages 1--3, lines 8--72;
-Section 2.1, pages 4--7, lines 113--203; axial external validation and
-stability analysis, pages 14--17, lines 414--454.
+**Changes in the manuscript:** Introduction, pages 1--3, lines 8--73;
+Section 2.1, pages 4--7, lines 114--204; axial external validation and
+stability analysis, pages 14--17, lines 415--455.
 
 ### Referee 1, Comment 2
 
@@ -121,12 +121,12 @@ did not manufacture a rejected-candidate example where the available data did
 not support one; instead, the paper states precisely that the advantage is
 confidence and traceability.
 
-**Changes in the manuscript:** Introduction, pages 1--3, lines 8--72;
-root-selection algorithm, pages 9--10, lines 280--329;
-continued-fraction methods, pages 10--11, lines 330--358; physical
+**Changes in the manuscript:** Introduction, pages 1--3, lines 8--73;
+root-selection algorithm, pages 9--10, lines 281--330;
+continued-fraction methods, pages 10--11, lines 331--359; physical
 interpretation, Schwarzschild benchmark, and convergence evidence, pages
-11--14, lines 359--413; residual diagnostics, page 20, lines 532--543;
-conclusion, pages 26--27, lines 670--700.
+11--14, lines 360--414; residual diagnostics, page 20, lines 533--544;
+conclusion, pages 26--27, lines 671--701.
 
 ### Referee 1, Comment 3
 
@@ -152,9 +152,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--7; Introduction,
-pages 2--3, lines 57--72; catalogue discussion, pages 14--18, lines 414--478;
-branch-status table and limitations, pages 25--26, lines 625--669; conclusion,
-pages 26--27, lines 670--700.
+pages 2--3, lines 57--73; catalogue discussion, pages 14--18, lines 415--479;
+branch-status table and limitations, pages 25--26, lines 626--670; conclusion,
+pages 26--27, lines 671--701.
 
 ### Referee 1, Comment 4
 
@@ -183,8 +183,8 @@ odd-parity modes of this explicit model.
 All axial frequencies, tables, figures, deformation shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--7,
-lines 142--203; axial subsection, pages 14--17, lines 414--454; limitations,
-pages 25--26, lines 625--669; conclusion, page 27, lines 688--695.
+lines 143--204; axial subsection, pages 14--17, lines 415--455; limitations,
+pages 25--26, lines 626--670; conclusion, page 27, lines 689--696.
 
 ## Referee 2
 
@@ -213,7 +213,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 5--7, lines 142--203.
+**Changes in the manuscript:** Section 2.1, pages 5--7, lines 143--204.
 
 ### Referee 2, Comment 2
 
@@ -233,8 +233,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 14--17, lines 414--454; branch-status statement, page 17, lines 450--454;
-interpretive-status table, pages 25--26, lines 625--669.
+pages 14--17, lines 415--455; branch-status statement, page 17, lines 451--455;
+interpretive-status table, pages 25--26, lines 626--670.
 
 ### Referee 2, Comment 3
 
@@ -263,7 +263,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 17--18, lines 455--478.
+pages 17--18, lines 456--479.
 
 ### Referee 2, Comment 4
 
@@ -280,7 +280,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-pages 18--19, lines 479--503.
+pages 18--19, lines 480--504.
 
 ### Referee 2, Comment 5
 
@@ -296,8 +296,8 @@ moderate deformation interval selected for this numerical study. We also
 clarify the conversion to the horizon-normalized convention:
 \(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
 
-**Changes in the manuscript:** Section 2.1, page 4, lines 118--130;
-literature-normalization discussion, pages 19--20, lines 504--528.
+**Changes in the manuscript:** Section 2.1, page 4, lines 119--131;
+literature-normalization discussion, pages 19--20, lines 505--529.
 
 ### Referee 2, Comment 6
 
@@ -316,7 +316,7 @@ spectral/pseudospectral eigenvalue methods, and recent confluent-Heun
 high-overtone work. Representative references were checked and added without
 turning the introduction into a general review.
 
-**Changes in the manuscript:** Introduction, pages 1--3, lines 22--72.
+**Changes in the manuscript:** Introduction, pages 1--3, lines 22--73.
 
 ### Referee 2, Comment 7
 
