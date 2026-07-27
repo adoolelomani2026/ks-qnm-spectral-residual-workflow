@@ -54,7 +54,7 @@ underexplained. Section 2.1 now cites the original Kazakov--Solodukhin
 construction and a later paper using the same lapse convention, explains the
 areal-radius and deformation-parameter notation without introducing an unused
 renormalized coupling, states the coordinate domain \(r\geq a\), derives
-\(r_h=\sqrt{4M^2+a^2}\), and displays the Schwarzschild limit. We now derive
+the horizon relation \(r_h^2=4M^2+a^2\), and displays the Schwarzschild limit. We now derive
 the scalar potential from \(\Box\Phi=0\) using
 \(\Phi=e^{-i\omega t}Y_{\ell m}\Psi/r\). For the axial equation, we went beyond
 retaining a phenomenological disclaimer. Following Gerlach--Sengupta,
@@ -69,12 +69,12 @@ additional inverse-Cowling closure motivated by, but not uniquely prescribed
 by, the original KS mode split. The resulting potential contains the effective
 density and radial pressure and differs from simple lapse substitution for
 \(a>0\). We also compare the same potential and 18 overlapping frequencies
-with the public 2026 Batic--Dutykh--Sukaiti calculation at an exactly cited
+with the published Batic--Dutykh--Sukaiti calculation at an exactly cited
 repository commit.
 
 **Changes in the manuscript:** Introduction, pages 1--3, lines 8--74;
-Section 2.1, pages 4--7, lines 115--205; axial external validation and
-stability analysis, pages 14--16, lines 417--457.
+Section 2.1, pages 4--7, lines 115--208; axial external validation and
+stability analysis, pages 14--16, lines 420--461.
 
 ### Referee 1, Comment 2
 
@@ -94,7 +94,7 @@ stability analysis, pages 14--16, lines 417--457.
 \(\ell=2,n=0\) Schwarzschild result reported by Cavalcante and Carneiro da
 Cunha (Table I, page 6), with \(M=1\), \(e^{-i\omega t}\), and
 \(\operatorname{Im}\omega<0\). The manuscript now also defines
-\(\Delta_{\rm rel}(\omega_1,\omega_2)=|\omega_1-\omega_2|/|\omega_2|\),
+\(\Delta_{\mathrm{rel}}(\omega_1,\omega_2)=|\omega_1-\omega_2|/|\omega_2|\),
 where \(\omega_2\) is the reference value.
 The revised methods give the actual implementation settings: Taylor order 96,
 continued-fraction/Gaussian-elimination depth 240, IEEE-754 double precision,
@@ -116,17 +116,16 @@ contribution is the traceable chain from equilibrated generalized-eigenvalue
 candidates through explicit filtering, clustering, continuation, branch
 scoring, singular-value refinement, spectral-size convergence, polynomial
 backward-error diagnostics on the raw matrices, and collocation-independent
-continued-fraction validation. We
-did not manufacture a rejected-candidate example where the available data did
-not support one; instead, the paper states precisely that the advantage is
-confidence and traceability.
+continued-fraction validation. No illustrative rejected candidate was included
+because the available audit data did not provide a representative example;
+instead, the acceptance and rejection criteria are now stated explicitly.
 
 **Changes in the manuscript:** Introduction, pages 1--3, lines 8--74;
-root-selection algorithm, pages 9--10, lines 283--332;
-continued-fraction methods, pages 10--11, lines 333--361; physical
+root-selection algorithm, pages 9--10, lines 286--335;
+continued-fraction methods, pages 10--11, lines 336--364; physical
 interpretation, Schwarzschild benchmark, and convergence evidence, pages
-11--14, lines 362--416; residual diagnostics, pages 20--21, lines 535--547;
-conclusion, pages 26--27, lines 674--704.
+11--14, lines 365--419; residual diagnostics, pages 20--23, lines 539--599;
+conclusion, pages 26--27, lines 678--708.
 
 ### Referee 1, Comment 3
 
@@ -152,9 +151,9 @@ continuation targets complete and highly damped type-D spectra, and state that
 our workflow serves the different purpose of auditing low-lying KS branches.
 
 **Changes in the manuscript:** Abstract, page 1, lines 1--7; Introduction,
-pages 2--3, lines 59--74; catalogue discussion, pages 14--18, lines 417--481;
-branch-status table and limitations, pages 25--26, lines 629--673; conclusion,
-pages 26--27, lines 674--704.
+pages 2--3, lines 59--74; catalogue discussion, pages 14--18, lines 420--485;
+branch-status table and limitations, page 25, lines 633--655; conclusion,
+pages 26--27, lines 678--708.
 
 ### Referee 1, Comment 4
 
@@ -170,8 +169,9 @@ pages 26--27, lines 674--704.
 complete derivation is supplied” and supplied that derivation. The revision now
 uses the general sourced gauge-invariant odd-parity formalism for spherical
 backgrounds, includes the effective-source contribution, and replaces the old
-lapse-substitution potential in both numerical solvers. Gauge invariance is
-proved at the perturbation-variable level, but is not equated with a unique KS
+lapse-substitution potential in both numerical solvers. The master variable is
+gauge invariant by construction, while the inverse-Cowling closure remains an
+additional physical assumption. It is not equated with a unique KS
 quantum-source perturbation theory. We separately state the dynamical
 closure—zero invariant axial effective-source current—so the reader can see
 exactly what follows mathematically and what remains an assumption about the
@@ -183,8 +183,8 @@ odd-parity modes of this explicit model.
 All axial frequencies, tables, figures, deformation shifts, stability diagnostics, and external comparisons in the revised manuscript were regenerated using the inverse-Cowling effective-source potential. No accepted numerical results from the earlier lapse-substitution ansatz remain.
 
 **Changes in the manuscript:** Abstract, page 1; Section 2.1, pages 5--7,
-lines 149--205; axial subsection, pages 14--16, lines 417--457; limitations,
-pages 25--26, lines 629--673; conclusion, page 27, lines 692--699.
+lines 149--208; axial subsection, pages 14--16, lines 420--461; limitations,
+page 25, lines 633--655; conclusion, pages 26--27, lines 696--703.
 
 ## Referee 2
 
@@ -213,7 +213,7 @@ Immediately after the result we impose an explicitly additional
 inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
 source modes could add source terms or couplings.
 
-**Changes in the manuscript:** Section 2.1, pages 5--7, lines 149--205.
+**Changes in the manuscript:** Section 2.1, pages 5--7, lines 149--208.
 
 ### Referee 2, Comment 2
 
@@ -233,8 +233,8 @@ Spectral--Leaver disagreement and the uniform high-precision external
 Batic--Dutykh--Sukaiti comparison are reported separately.
 
 **Changes in the manuscript:** Axial continued-fraction table and caption,
-pages 14--16, lines 417--457; branch-status statement, page 16, lines 453--457;
-interpretive-status table, pages 25--26, lines 629--673.
+pages 14--16, lines 420--461; branch-status statement, page 16, lines 457--461;
+interpretive-status table, page 25, lines 633--655.
 
 ### Referee 2, Comment 3
 
@@ -251,7 +251,7 @@ interpretive-status table, pages 25--26, lines 629--673.
 shift, damping-magnitude shift, quality-factor shift, and complex-plane
 displacement. The quoted 7.23% is the \(\ell=4\) fundamental complex-plane
 displacement; its real-part shift is \(-7.27\%\). We then computed
-\(r_{\rm peak}\), \(V_{\rm peak}\), and the tortoise-coordinate curvature for
+\(r_{\mathrm{peak}}\), \(V_{\mathrm{peak}}\), and the tortoise-coordinate curvature for
 \(\ell=2,3,4\). At \(a/M=1\), the WKB height proxies change by
 \(-7.01\%\), \(-7.13\%\), and \(-7.18\%\), respectively, with a similarly
 modest multipole dependence in curvature. The revised explanation therefore
@@ -263,7 +263,7 @@ is the closure-dependent axial \(\ell=2\) fundamental at \(7.37\%\); the
 referee asked us to explain.
 
 **Changes in the manuscript:** Catalogue trends and new potential-peak table,
-pages 16--18, lines 458--481.
+pages 16--18, lines 462--485.
 
 ### Referee 2, Comment 4
 
@@ -280,7 +280,7 @@ for the robust scalar \(\ell=2,n=0\) branch. The definition is identical in the
 abstract, text, and caption.
 
 **Changes in the manuscript:** Spectroscopy subsection and Figure 5,
-pages 18--19, lines 482--506.
+pages 18--19, lines 486--510.
 
 ### Referee 2, Comment 5
 
@@ -290,14 +290,14 @@ pages 18--19, lines 482--506.
 > degeneracy) or is simply a numerical cutoff adopted for the parameter scan.
 
 **Response:** The revised text derives
-\(r_h=\sqrt{4M^2+a^2}>a\) and explicitly states that \(a/M=1\) is neither
+\(r_h^2=4M^2+a^2\), with \(r_h>a\), and explicitly states that \(a/M=1\) is neither
 extremal nor a degenerate-horizon limit. It is the upper endpoint of the
 moderate deformation interval selected for this numerical study. We also
 clarify the conversion to the horizon-normalized convention:
-\(a/M=1\) corresponds to \(a/r_h=1/\sqrt5\), not \(a/r_h=1\).
+\(a/M=1\) corresponds to \((a/r_h)^2=1/5\), not \(a/r_h=1\).
 
 **Changes in the manuscript:** Section 2.1, page 4, lines 120--130;
-literature-normalization discussion, pages 19--20, lines 507--531.
+literature-normalization discussion, pages 19--20, lines 511--535.
 
 ### Referee 2, Comment 6
 
@@ -356,7 +356,8 @@ pseudospectral endpoint diagnostic was rerun for grids \(81^2,121^2,161^2\),
 half-widths \(0.020,0.025,0.030\), and \(N=32,48,64\); its endpoint change is
 positive in every test and spans \(0.1002\)--\(0.1647\), so the abstract now
 states the robust sign rather than a single window-dependent decimal.
-The manuscript includes a general AI-use disclosure together with an explicit
+The manuscript identifies OpenAI Codex, model identifier `gpt-5.6-sol`, and
+lists the tasks for which it was used, together with an explicit
 author-responsibility statement.
 
 Every documented generator and test command was also run successfully from a

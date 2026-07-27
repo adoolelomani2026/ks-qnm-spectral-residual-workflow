@@ -495,6 +495,10 @@ V_{\mathrm{ax},\ell}(r;a)
 -\frac{f_a'}{r}\right].
 \label{eq:reggewheelerpotential}
 \end{equation}
+Equation~\eqref{eq:reggewheelerpotential} is the gauge-invariant master
+potential obtained under the inverse-Cowling closure \(L_a=L=0\), not a unique
+prediction of the nonspherical KS quantum theory; the associated axial
+frequencies should therefore be interpreted as conditional model results.
 At \(a=0\), \(m=M\), \(\rho=p_r=0\), and
 Eq.~\eqref{eq:reggewheelerpotential} becomes the Schwarzschild
 Regge--Wheeler potential \cite{Regge1957}. For comparison, define the
@@ -514,7 +518,7 @@ potential by
 \label{eq:axialproxycorrection}
 \end{equation}
 so the two models are not equivalent.  The same
-effective-source potential is also used in the public high-precision
+effective-source potential is also used in the published high-precision
 Chebyshev calculation of Batic, Dutykh, and Sukaiti
 \cite{BaticDutykhSukaiti2026}; Section~3 compares overlapping modes directly.
 We use this potential to compute the low-lying spectrum with two numerically
@@ -1154,7 +1158,7 @@ difference normalized by the new barrier height.}
 \label{fig:axialpotentialcomparison}
 \end{figure}
 
-The same potential and mass normalization are used by the public 2026
+The same potential and mass normalization are used by the published
 high-precision Chebyshev calculation of Batic, Dutykh, and Sukaiti
 \cite{BaticDutykhSukaiti2026}.  We compared all 18 overlapping
 \(a/M=0.5,1\), \(\ell=2,3,4\), \(n=0,1,2\) entries.  The largest relative
@@ -1163,7 +1167,10 @@ difference is \(1.98\times10^{-13}\) for fundamentals,
 second overtones.  The last occurs at \(a/M=1,\ell=2,n=2\) and reinforces the
 exploratory status of that tier.  The comparison, parameter conversion check,
 public repository commit, and local source commit are recorded by
-\texttt{scripts/audit\_axial\_model.py}.
+\texttt{scripts/audit\_axial\_model.py}.  The external numerical audit used
+repository commit
+\nolinkurl{f53435ebdb8d1124d13bee75fa54972ac1613a03}
+\cite{BaticDutykhSukaitiCode2026}.
 
 As a stability diagnostic, the potential was minimized numerically outside
 the horizon for every sampled \(a/M\) and \(\ell=2,3,4\).  It remained
@@ -1876,10 +1883,20 @@ No funding was received to assist with the preparation of this manuscript.
 The author declares no competing interests.
 
 \noindent\textbf{Data availability.}
-The numerical data generated in this study, including catalogue rows, spectroscopy diagnostics, and scalar pseudospectrum grids, are available from the accompanying code repository and supplementary output files at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
+\color{blue}
+The numerical data generated in this study, including catalogue rows,
+spectroscopy diagnostics, and scalar pseudospectrum grids, are preserved in
+release \texttt{cqg-r2-final} at
+\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow/releases/tag/cqg-r2-final}.
+\color{black}
 
 \noindent\textbf{Code availability.}
-The code used to generate the spectral results, Leaver validation, catalogue tables, pseudospectrum diagnostics, and figures is available from the accompanying repository at \url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow}.
+\color{blue}
+The code used to generate the spectral results, continued-fraction validation,
+catalogue tables, pseudospectrum diagnostics, and figures is preserved in the
+same tagged release:
+\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow/releases/tag/cqg-r2-final}.
+\color{black}
 
 \noindent\textbf{Author contribution.}
 Adel H. Al-Yoorby conceived the study, developed the numerical implementation, generated and analyzed the data, prepared the figures and tables, and wrote the manuscript.
@@ -1895,10 +1912,13 @@ Not applicable.
 
 \noindent\textbf{Use of AI tools.}
 \color{blue}
-Artificial intelligence (AI) tools were used during preparation of this work.
-The author executed the calculations, checked cited claims against the primary
-sources, reviewed the derivations and numerical outputs, and takes
-responsibility for the final content.
+OpenAI Codex, model identifier \texttt{gpt-5.6-sol}, was used during
+June--July 2026 to assist with code generation, debugging and refactoring,
+numerical-analysis scripting, algebraic cross-checks, literature discovery,
+manuscript drafting, language revision, and formatting. The author executed
+the calculations, checked cited claims against primary sources, independently
+reviewed the derivations and numerical outputs, and takes responsibility for
+the final content.
 \color{black}
 
 \begin{thebibliography}{99}
@@ -1940,9 +1960,15 @@ black holes,''
 \bibitem{BaticDutykhSukaiti2026}
 D. Batic, D. Dutykh, and M. E. Sukaiti,
 ``Quasinormal modes of the Kazakov--Solodukhin quantum-corrected black hole:
-a spectral analysis,'' public manuscript and reproducibility repository (2026),
-commit \nolinkurl{f53435ebdb8d1124d13bee75fa54972ac1613a03}, accessed 20 July 2026.
-\url{https://github.com/dutykh/KS-quantum}
+a spectral analysis,''
+\emph{European Physical Journal C} \textbf{86}, 847 (2026).
+\url{https://doi.org/10.1140/epjc/s10052-026-16102-3}
+
+\bibitem{BaticDutykhSukaitiCode2026}
+D. Batic, D. Dutykh, and M. E. Sukaiti,
+``KS-quantum: reproducibility repository,'' commit
+\nolinkurl{f53435ebdb8d1124d13bee75fa54972ac1613a03}, accessed 20 July 2026.
+\url{https://github.com/dutykh/KS-quantum/tree/f53435ebdb8d1124d13bee75fa54972ac1613a03}
 \color{black}
 
 \bibitem{Vishveshwara1970}

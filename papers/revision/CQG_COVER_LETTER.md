@@ -1,6 +1,6 @@
 # Cover letter
 
-21 July 2026
+27 July 2026
 
 Dear Editors of *Classical and Quantum Gravity*,
 
@@ -31,8 +31,8 @@ inverse-Cowling effective-source potential. No accepted numerical results from
 the earlier lapse-substitution ansatz remain.
 
 A clean manuscript, a marked line-numbered manuscript, a point-by-point
-response, the completed revision checklist, and the updated source archive are
-included. Thank you for considering the revised work.
+response, and the updated source archive are included. Thank you for
+considering the revised work.
 
 Yours sincerely,
 
