@@ -33,31 +33,36 @@ def mark_changed_lines(original: str, revised: str) -> str:
         if opcode != "equal":
             changed.update(range(new_start, new_end))
 
+    # Color a protected LaTeX environment as one unit whenever any line inside
+    # it changed.  This keeps color switches outside tabular, verbatim, and
+    # display-math environments while ensuring revisions within those blocks
+    # are still visibly marked.
+    protected_names = ("tabular", "tabularx", "verbatim", "equation", "equation*", "align", "align*")
+    protected_ranges: list[tuple[int, int]] = []
+    stack: list[tuple[str, int]] = []
+    for index, line in enumerate(new_lines):
+        for name in protected_names:
+            if f"\\begin{{{name}}}" in line:
+                stack.append((name, index))
+                break
+        for name in protected_names:
+            if f"\\end{{{name}}}" in line:
+                for position in range(len(stack) - 1, -1, -1):
+                    open_name, start = stack[position]
+                    if open_name == name:
+                        del stack[position]
+                        protected_ranges.append((start, index + 1))
+                        break
+                break
+    for start, end in protected_ranges:
+        if any(index in changed for index in range(start, end)):
+            changed.update(range(start, end))
+
     output: list[str] = []
     document_started = False
-    tabular_depth = 0
-    verbatim_depth = 0
-    math_depth = 0
     blue_active = False
     for index, line in enumerate(new_lines):
-        enters_tabular = "\\begin{tabular" in line
-        leaves_tabular = "\\end{tabular" in line
-        enters_verbatim = "\\begin{verbatim}" in line
-        leaves_verbatim = "\\end{verbatim}" in line
-        enters_math = any(f"\\begin{{{name}}}" in line for name in ("equation", "equation*", "align", "align*"))
-        leaves_math = any(f"\\end{{{name}}}" in line for name in ("equation", "equation*", "align", "align*"))
-        unsafe = (
-            tabular_depth > 0
-            or verbatim_depth > 0
-            or enters_tabular
-            or leaves_tabular
-            or enters_verbatim
-            or leaves_verbatim
-            or math_depth > 0
-            or enters_math
-            or leaves_math
-        )
-        should_be_blue = index in changed and document_started and not unsafe
+        should_be_blue = index in changed and document_started
         if should_be_blue and not blue_active:
             output.append("\\color{blue}\n")
             blue_active = True
@@ -67,23 +72,11 @@ def mark_changed_lines(original: str, revised: str) -> str:
         output.append(line)
         if "\\begin{document}" in line:
             document_started = True
-        if enters_tabular:
-            tabular_depth += 1
-        if leaves_tabular:
-            tabular_depth = max(0, tabular_depth - 1)
-        if enters_verbatim:
-            verbatim_depth += 1
-        if leaves_verbatim:
-            verbatim_depth = max(0, verbatim_depth - 1)
-        if enters_math:
-            math_depth += 1
-        if leaves_math:
-            math_depth = max(0, math_depth - 1)
 
     if blue_active:
         output.append("\\color{black}\n")
 
-    return "".join(output)
+    return "\\def\\markedrevision{1}\n" + "".join(output)
 
 
 def main() -> None:

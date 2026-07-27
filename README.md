@@ -217,8 +217,8 @@ submitted commit `9090c8c`:
 python scripts/build_marked_manuscript.py
 ```
 
-Compile the generated TeX with `markedrevision` defined to color only changed
-lines and enable line numbers.
+The generated TeX defines `markedrevision`, colors only changed lines or
+changed equation/table blocks blue, and enables line numbers.
 
 Regenerate the scalar `ell=2,n=0` pseudospectrum grids, summaries, report, and
 figures:
