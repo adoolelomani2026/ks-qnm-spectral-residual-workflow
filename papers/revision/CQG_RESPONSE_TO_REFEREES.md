@@ -94,7 +94,7 @@ stability analysis, pages 14--16, lines 420--461.
 \(\ell=2,n=0\) Schwarzschild result reported by Cavalcante and Carneiro da
 Cunha (Table I, page 6), with \(M=1\), \(e^{-i\omega t}\), and
 \(\operatorname{Im}\omega<0\). The manuscript now also defines
-\(\Delta_{\mathrm{rel}}(\omega_1,\omega_2)=|\omega_1-\omega_2|/|\omega_2|\),
+Δrel(ω₁, ω₂) = |ω₁ − ω₂|/|ω₂|,
 where \(\omega_2\) is the reference value.
 The revised methods give the actual implementation settings: Taylor order 96,
 continued-fraction/Gaussian-elimination depth 240, IEEE-754 double precision,
@@ -166,8 +166,9 @@ pages 26--27, lines 678--708.
 > complete derivation is supplied.
 
 **Response:** We agreed with the referee's conditional phrase “unless a more
-complete derivation is supplied” and supplied that derivation. The revision now
-uses the general sourced gauge-invariant odd-parity formalism for spherical
+complete derivation is supplied” and supplied a more complete gauge-invariant
+derivation under an explicit inverse-Cowling closure. The revision now uses the
+general sourced gauge-invariant odd-parity formalism for spherical
 backgrounds, includes the effective-source contribution, and replaces the old
 lapse-substitution potential in both numerical solvers. The master variable is
 gauge invariant by construction, while the inverse-Cowling closure remains an
@@ -205,13 +206,13 @@ page 25, lines 633--655; conclusion, pages 26--27, lines 696--703.
 > the paper.
 
 **Response:** We addressed the underlying concern more fully than the requested
-disclaimer: the lapse-substitution toy model has been removed. Revised
-Section 2.1 begins with the general sourced gauge-invariant odd-parity equation for the
-effective KS background, displays the density/pressure terms missing from the
-toy model, and gives the explicit correction relative to the old potential.
-Immediately after the result we impose an explicitly additional
-inverse-Cowling closure, whereas a theory that dynamically quantizes nonspherical
-source modes could add source terms or couplings.
+disclaimer: the lapse-substitution toy model has been removed as the working
+axial model and is retained only as the explicitly labelled comparison
+potential in Equation (17). Revised Section 2.1 starts from the general sourced
+gauge-invariant odd-parity equation, imposes the additional inverse-Cowling
+closure \(L_a=L=0\), derives the potential in Equation (16), and immediately
+states that the resulting axial frequencies are conditional model results
+rather than unique predictions of a nonspherical KS quantum theory.
 
 **Changes in the manuscript:** Section 2.1, pages 5--7, lines 149--208.
 
@@ -367,5 +368,5 @@ parent output directory already existed. The fast test suite passes 8/8 checks, 
 new axial potential, and the complete validation suite passes,
 with the worst spectral--Leaver catalogue difference
 \(1.202\times10^{-5}\) on the deliberately exploratory axial
-\(\ell=2,n=2,a/M=0.5\) row. Both the clean and marked 30-page manuscripts
-compile independently.
+\(\ell=2,n=2,a/M=0.5\) row. The clean 30-page manuscript and the marked
+31-page manuscript compile independently.
