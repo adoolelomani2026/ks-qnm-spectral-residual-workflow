@@ -219,7 +219,7 @@ def write_run_metadata(output: Path, source_commit: str, source_tree_status_at_s
         "maximum_continuation_distance": MAX_CONTINUATION_DISTANCE,
         "backward_error_acceptance_threshold": BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
         "source_commit_used_for_regeneration": source_commit,
-        "revision_tag": "cqg-r2-final-v2",
+        "revision_tag": "cqg-r2-final-v3",
         "source_tree_status_at_regeneration_start": source_tree_status_at_start,
         "git_worktree_status_after_regeneration": "dirty" if git_value("status", "--porcelain") else "clean",
         "backward_error_definition": (

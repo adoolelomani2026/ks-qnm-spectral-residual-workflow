@@ -36,5 +36,5 @@ Manual actions still required before upload:
 1. Verify the 3 September 2026 deadline in the authenticated Author Centre.
 2. Confirm author details and whether double-anonymous review is enabled.
 3. Apply the journal's required file designations during upload.
-4. Confirm that the public `cqg-r2-final-v2` release is the version cited in the
+4. Confirm that the public `cqg-r2-final-v3` release is the version cited in the
    manuscript.
