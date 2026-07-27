@@ -27,16 +27,16 @@ FIGURE_MAP = {
     "figure1_spectral_convergence.png": "spectral_convergence_to_cf.png",
     "figure2_mode_trajectories_gravitational_l2.png":
         "mode_trajectories_gravitational_l2.png",
-    "figure2a_axial_potential_comparison.png": "axial_potential_comparison.png",
-    "figure3_catalogue_l2_fractional_shifts.png":
+    "figure3_axial_potential_comparison.png": "axial_potential_comparison.png",
+    "figure4_catalogue_l2_fractional_shifts.png":
         "catalogue_l2_fractional_shifts.png",
-    "figure4_catalogue_l2_spectroscopic_ratios.png":
+    "figure5_catalogue_l2_spectroscopic_ratios.png":
         "catalogue_l2_spectroscopic_ratios.png",
-    "figure5_scalar_l2_pseudospectrum_contours.png":
+    "figure6_scalar_l2_pseudospectrum_contours.png":
         "scalar_l2_pseudospectrum_contours.png",
-    "figure6_scalar_l2_pseudospectrum_sensitivity.png":
+    "figure7_scalar_l2_pseudospectrum_sensitivity.png":
         "scalar_l2_pseudospectrum_sensitivity.png",
-    "figure7_scalar_l2_pseudospectrum_resolution_check.png":
+    "figure8_scalar_l2_pseudospectrum_resolution_check.png":
         "scalar_l2_pseudospectrum_resolution_check.png",
 }
 
