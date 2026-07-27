@@ -269,7 +269,7 @@ pages 16--18, lines 462--485.
 ### Referee 2, Comment 4
 
 > In Section 3.5, the text highlights a 4.83% decrease in the quality factor
-> \(Q=\operatorname{Re}(\omega)/(2|-\operatorname{Im}(\omega)|)\) as a key
+> Q = Re(ω)/[2|Im(ω)|] as a key
 > physical insight for the scalar fundamental branch. To complement this
 > discussion, the author may consider adding a small inset or an extra panel to
 > Figure 3 or 4 that explicitly plots \(Q\) versus \(a/M\). This will provide a
