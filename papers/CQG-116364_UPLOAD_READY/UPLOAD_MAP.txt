@@ -21,6 +21,3 @@ CQG-116364 FINAL UPLOAD SET
 
 Before submitting, update the revised manuscript title in the CQG Author
 Centre and confirm the requested file designations and anonymization setting.
-
-Final package commit: 84b51c6bb37eac100e22336a6a26c0a191768a8f
-Local release tag: cqg-r2-final

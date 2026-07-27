@@ -55,7 +55,7 @@ Strategic spine:
 | Local final-preflight tag `cqg-r2-final` at the resubmission-package commit | Editorial | Complete; remote push remains pending author approval |
 | Final-preflight candidate-score notation and mathematical audit | Reproducibility | Complete; distances, shortlist, `sigma_best`, pre-refinement residual, equilibration, eigenvector mapping, normalization, phase invariance, and raw backward-error gate stated explicitly |
 | Final-preflight confidence and continued-fraction terminology | Claim discipline | Complete; robust/cross-validated/exploratory/conditional labels synchronized and collocation-independent wording used |
-| Final-preflight external-reference and AI-disclosure audit | Editorial integrity | Complete; no persistent identifier found for the external work as of 20 July 2026; exact public commit retained; exact Codex model identifier verified from session metadata |
+| Final-preflight external-reference and AI-disclosure audit | Editorial integrity | Complete; no persistent identifier found for the external work as of 20 July 2026; exact public commit retained; general AI-use disclosure included |
 | Fresh-clone bootstrap and command audit | Reproducibility | Complete; every documented generator and test passed with no pre-existing `outputs/` tree, and recursive output-directory creation was fixed |
 
 ## Submission files
