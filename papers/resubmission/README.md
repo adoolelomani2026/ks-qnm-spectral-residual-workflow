@@ -1,6 +1,6 @@
 # CQG-116364 resubmission package
 
-Prepared on 27 July 2026.
+Prepared on 28 July 2026.
 
 This build replaces the earlier lapse-substitution axial proxy with a
 gauge-invariant sourced odd-parity construction under an explicitly added
@@ -36,5 +36,5 @@ Manual actions still required before upload:
 1. Verify the 3 September 2026 deadline in the authenticated Author Centre.
 2. Confirm author details and whether double-anonymous review is enabled.
 3. Apply the journal's required file designations during upload.
-4. Confirm that the public `cqg-r2-final-v3` release is the version cited in the
+4. Confirm that the public `cqg-r2-final-v4` release is the version cited in the
    manuscript.
