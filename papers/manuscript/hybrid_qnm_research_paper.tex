@@ -1059,7 +1059,7 @@ potentials vanish.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figures/figure2a_axial_potential_comparison.png}
+\includegraphics[width=\linewidth]{figures/figure3_axial_potential_comparison.png}
 \caption{Left: inverse-Cowling axial potential (solid) and the explicitly
 defined lapse-substitution comparison potential (dashed) for \(\ell=2\);
 circles mark the inverse-Cowling potential peaks and the vertical line marks
@@ -1139,7 +1139,7 @@ scalar comparison above does not.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figures/figure3_catalogue_l2_fractional_shifts.png}
+\includegraphics[width=\linewidth]{figures/figure4_catalogue_l2_fractional_shifts.png}
 \caption{Schwarzschild-relative trends over the sampled interval for the
 \(\ell=2\) branches. Solid curves show scalar modes and dashed curves show the
 gauge-invariant inverse-Cowling axial modes.  The latter are conditional on the
@@ -1210,7 +1210,7 @@ collects these ratios and the fundamental \(Q(a/M)\) curve.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figures/figure4_catalogue_l2_spectroscopic_ratios.png}
+\includegraphics[width=\linewidth]{figures/figure5_catalogue_l2_spectroscopic_ratios.png}
 \caption{Scalar \(\ell=2\) dimensionless spectroscopy diagnostics.  The left
 panel shows Schwarzschild-relative changes in \(\omega_0/\omega_1\),
 \(\omega_0/\omega_2\), and \(2Q\).  The right panel directly plots
@@ -1411,7 +1411,7 @@ contains the new information supplied by the pseudospectrum.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figures/figure5_scalar_l2_pseudospectrum_contours.png}
+\includegraphics[width=\linewidth]{figures/figure6_scalar_l2_pseudospectrum_contours.png}
 \caption{Finite-dimensional scalar \(\ell=2,n=0\) singular-value pseudospectral contours for the relative residual \(\eta_N=\sigma_{\min}(P_N)/\sigma_{\max}(P_N)\) at \(N=64\). White crosses mark the residual-minimized QNM locations. The panels show that the local small-\(\eta_N\) basin broadens as \(a/M\) increases.}
 \label{fig:pseudocontours}
 \end{figure}
@@ -1433,7 +1433,7 @@ These diagnostics are plotted in Figure~\ref{fig:pseudosensitivity}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figures/figure6_scalar_l2_pseudospectrum_sensitivity.png}
+\includegraphics[width=\linewidth]{figures/figure7_scalar_l2_pseudospectrum_sensitivity.png}
 \caption{Scalar \(\ell=2,n=0\) singular-value pseudospectral diagnostics at \(N=64\). Left: the normalized singular-value quantiles change with \(a/M\). Right: fixed-threshold contour area fractions also grow; the deepest endpoint contour is window-limited and is used only as a local diagnostic.}
 \label{fig:pseudosensitivity}
 \end{figure}
@@ -1442,7 +1442,7 @@ The sign of the quantile trend is stable under the tested spectral sizes. As sho
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.82\linewidth]{figures/figure7_scalar_l2_pseudospectrum_resolution_check.png}
+\includegraphics[width=0.82\linewidth]{figures/figure8_scalar_l2_pseudospectrum_resolution_check.png}
 \caption{Finite-\(N\) check for the scalar \(\ell=2,n=0\) singular-value pseudospectral trend. The plotted quantity is the increase in \(-q_{10}(\log_{10}\eta_N)\) relative to the Schwarzschild value at the same \(N\). The successive increase across the sampled \(a/M\) grid is stable for \(N=32,48,64\), although the absolute contour levels remain resolution dependent.}
 \label{fig:pseudoresolution}
 \end{figure}
@@ -1718,14 +1718,14 @@ The author declares no competing interests.
 \noindent\textbf{Data availability.}
 The numerical data generated in this study, including catalogue rows,
 spectroscopy diagnostics, and scalar pseudospectrum grids, are preserved in
-release \texttt{cqg-r2-final-v3} at
-\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow/releases/tag/cqg-r2-final-v3}.
+release \texttt{cqg-r2-final-v4} at
+\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow/releases/tag/cqg-r2-final-v4}.
 
 \noindent\textbf{Code availability.}
 The code used to generate the spectral results, continued-fraction validation,
 catalogue tables, pseudospectrum diagnostics, and figures is preserved in the
 same tagged release:
-\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow/releases/tag/cqg-r2-final-v3}.
+\url{https://github.com/adoolelomani2026/ks-qnm-spectral-residual-workflow/releases/tag/cqg-r2-final-v4}.
 
 \noindent\textbf{Author contribution.}
 Adel H. Al-Yoorby conceived the study, developed the numerical implementation, generated and analyzed the data, prepared the figures and tables, and wrote the manuscript.
@@ -1740,8 +1740,8 @@ Not applicable.
 Not applicable.
 
 \noindent\textbf{Use of AI tools.}
-OpenAI Codex, model identifier \texttt{gpt-5.6-sol}, was used during
-June--July 2026 to assist with code generation, debugging and refactoring,
+Artificial-intelligence tools were used during June--July 2026 to assist with
+code generation, debugging and refactoring,
 numerical-analysis scripting, algebraic cross-checks, literature discovery,
 manuscript drafting, language revision, and formatting. The author executed
 the calculations, checked cited claims against primary sources, independently
@@ -1793,7 +1793,7 @@ a spectral analysis,''
 \bibitem{BaticDutykhSukaitiCode2026}
 D. Batic, D. Dutykh, and M. E. Sukaiti,
 ``KS-quantum: reproducibility repository,'' commit
-\nolinkurl{f53435ebdb8d1124d13bee75fa54972ac1613a03}, accessed 20 July 2026.
+\nolinkurl{f53435ebdb8d1124d13bee75fa54972ac1613a03}, accessed 28 July 2026.
 \url{https://github.com/dutykh/KS-quantum/tree/f53435ebdb8d1124d13bee75fa54972ac1613a03}
 
 \bibitem{Vishveshwara1970}

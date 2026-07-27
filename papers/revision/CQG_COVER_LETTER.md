@@ -1,6 +1,6 @@
 # Cover letter
 
-27 July 2026
+28 July 2026
 
 Dear Editors of *Classical and Quantum Gravity*,
 

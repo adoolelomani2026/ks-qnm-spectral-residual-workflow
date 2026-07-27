@@ -357,8 +357,8 @@ pseudospectral endpoint diagnostic was rerun for grids \(81^2,121^2,161^2\),
 half-widths \(0.020,0.025,0.030\), and \(N=32,48,64\); its endpoint change is
 positive in every test and spans \(0.1002\)--\(0.1647\), so the abstract now
 states the robust sign rather than a single window-dependent decimal.
-The manuscript identifies OpenAI Codex, model identifier `gpt-5.6-sol`, and
-lists the tasks for which it was used, together with an explicit
+The manuscript transparently states that artificial-intelligence tools were
+used and lists the tasks for which they were used, together with an explicit
 author-responsibility statement.
 
 Every documented generator and test command was also run successfully from a
