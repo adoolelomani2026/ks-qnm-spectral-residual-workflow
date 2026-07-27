@@ -17,7 +17,7 @@
   "maximum_continuation_distance": 0.2,
   "backward_error_acceptance_threshold": 1e-08,
   "source_commit_used_for_regeneration": "87b01f9a4b12d3012159f3def6d9efdb54b33274",
-  "revision_tag": "cqg-r2-final",
+  "revision_tag": "cqg-r2-final-v2",
   "source_tree_status_at_regeneration_start": "clean",
   "git_worktree_status_after_regeneration": "dirty",
   "backward_error_definition": "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), evaluated on raw unscaled polynomial matrices",
