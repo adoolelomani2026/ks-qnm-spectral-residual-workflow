@@ -16,6 +16,8 @@ from .common import (
     ELL,
     FINAL_SPECTRAL_N,
     MASS,
+    CANDIDATE_CLUSTER_TOLERANCE,
+    MAX_CONTINUATION_DISTANCE,
     SCHWARZSCHILD_SCALAR_L2,
     SCHWARZSCHILD_SCALAR_L2_OVERTONE_ESTIMATE,
     df_ks,
@@ -30,7 +32,7 @@ OVERTONE_PUBLICATION_N = CATALOGUE_SPECTRAL_N
 OVERTONE_EXPLORATORY_N = FINAL_SPECTRAL_N
 PENCIL_SCALE_FLOOR = 1.0e-300
 PENCIL_SCALE_LIMIT = 1.0e100
-CONDITION_WARNING_THRESHOLD = 1.0e14
+BACKWARD_ERROR_ACCEPTANCE_THRESHOLD = 1.0e-8
 
 
 @dataclass
@@ -64,8 +66,7 @@ class ModeResult:
     psd_min_eigenvalue: float
     matrix_dimension: int
     sparsity: float
-    condition_number: float
-    conditioning_warning: bool
+    backward_error: float = math.nan
     selection_score: float | None = None
     eigenvector_overlap: float | None = None
     branch_status: str = "tracked"
@@ -289,7 +290,7 @@ def physical_eigenpair_indices(values: Iterable[complex], exclude: list[complex]
             and value.imag < -0.02
             and value.real < 2.0
             and value.imag > -3.0
-            and all(abs(value - old) > 1.0e-7 for old in exclude)
+            and all(abs(value - old) > CANDIDATE_CLUSTER_TOLERANCE for old in exclude)
         ):
             indices.append(index)
     return indices
@@ -314,6 +315,27 @@ def select_tracked_mode(
         indices = [index for index, value in enumerate(values) if np.isfinite(value)]
     if not indices:
         raise RuntimeError("No finite eigenvalues found.")
+
+    # Collapse numerically duplicated generalized roots before scoring.  For
+    # each cluster retain the representative with the smallest raw-polynomial
+    # singular-value residual.
+    clustered: list[int] = []
+    for index in sorted(indices, key=lambda item: (values[item].real, values[item].imag)):
+        matches = [old for old in clustered if abs(values[index] - values[old]) <= CANDIDATE_CLUSTER_TOLERANCE]
+        if not matches:
+            clustered.append(index)
+        elif residual_norm(problem, complex(values[index])) < residual_norm(problem, complex(values[matches[0]])):
+            clustered[clustered.index(matches[0])] = index
+    indices = clustered
+
+    if previous_omega is not None:
+        continued = [index for index in indices if abs(values[index] - previous_omega) <= MAX_CONTINUATION_DISTANCE]
+        if not continued:
+            raise RuntimeError(
+                f"No candidate lies within the continuation distance {MAX_CONTINUATION_DISTANCE:g} "
+                f"of {previous_omega!r}."
+            )
+        indices = continued
 
     target_scale = max(abs(target), 0.1)
     if previous_omega is None:
@@ -354,13 +376,13 @@ def select_tracked_mode(
             }
         )
 
-    residual_scale = min(candidate["residual_norm"] for candidate in candidates) + 1.0e-30
+    sigma_best = min(candidate["residual_norm"] for candidate in candidates) + 1.0e-30
     best = None
     best_score = math.inf
     for candidate in candidates:
         overlap = candidate["overlap"]
         overlap_term = 0.0 if overlap is None else (1.0 - overlap)
-        residual_term = min(candidate["residual_norm"] / residual_scale, 100.0) * 1.0e-3
+        residual_term = min(candidate["residual_norm"] / sigma_best, 100.0) * 1.0e-3
         score = (
             float(candidate["freq_term"])
             + 0.45 * float(candidate["continuity_term"])
@@ -407,6 +429,29 @@ def residual_norm(problem: SpectralProblem, omega: complex) -> float:
     return float(singular_values[-1])
 
 
+def polynomial_backward_error(problem: SpectralProblem, omega: complex) -> float:
+    """Normwise backward error of the raw quadratic matrix polynomial.
+
+    This is the standard scale-aware residual
+
+        sigma_min(P(omega)) /
+        (||A0||_2 + |omega| ||A1||_2 + |omega|^2 ||A2||_2).
+
+    It is evaluated on the unscaled coefficient matrices.  Unlike
+    ``cond(P(omega))``, it remains an interpretable diagnostic at a frequency
+    where P is intentionally close to singular.
+    """
+
+    denominator = (
+        np.linalg.norm(problem.a0, 2)
+        + abs(omega) * np.linalg.norm(problem.a1, 2)
+        + abs(omega) ** 2 * np.linalg.norm(problem.a2, 2)
+    )
+    if denominator == 0.0:
+        return math.inf
+    return residual_norm(problem, omega) / float(denominator)
+
+
 def minimize_residual(problem: SpectralProblem, omega_initial: complex, radius: float = 0.02) -> tuple[complex, float]:
     bounds = [
         (omega_initial.real - radius, omega_initial.real + radius),
@@ -430,15 +475,12 @@ def minimize_residual(problem: SpectralProblem, omega_initial: complex, radius: 
 
 def residual_diagnostics(problem: SpectralProblem, omega: complex, tol: float = 1.0e-9) -> dict[str, float | int]:
     residual = residual_operator(problem, omega)
-    p = spectral_matrix(problem, omega)
     nnz = int(np.count_nonzero(np.abs(residual) > tol))
     total = residual.size
-    condition_number = float(np.linalg.cond(p))
     return {
         "matrix_dimension": problem.n,
         "sparsity": 1.0 - nnz / total,
-        "condition_number": condition_number,
-        "conditioning_warning": condition_number >= CONDITION_WARNING_THRESHOLD,
+        "backward_error": polynomial_backward_error(problem, omega),
         "hermiticity_error": float(np.linalg.norm(residual - residual.conj().T)),
         "psd_min_eigenvalue": float(np.linalg.eigvalsh(residual)[0].real),
     }
@@ -510,8 +552,7 @@ def run_spectral_study(a_values: list[float], sizes: list[int], baseline_targets
                         psd_min_eigenvalue=float(diagnostics["psd_min_eigenvalue"]),
                         matrix_dimension=int(diagnostics["matrix_dimension"]),
                         sparsity=float(diagnostics["sparsity"]),
-                        condition_number=float(diagnostics["condition_number"]),
-                        conditioning_warning=bool(diagnostics["conditioning_warning"]),
+                        backward_error=float(diagnostics["backward_error"]),
                         selection_score=selection.selection_score,
                         eigenvector_overlap=selection.eigenvector_overlap,
                         branch_status=branch_status,

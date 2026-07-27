@@ -30,7 +30,7 @@ and impose Leaver's minimal-solution condition through the continued fraction
     beta_0 - alpha_0 gamma_1 /
         (beta_1 - alpha_1 gamma_2 / (beta_2 - ...)) = 0.
 
-This is an independent validation layer in the numerical sense: it avoids
+This is a collocation-independent validation layer: it avoids
 Chebyshev collocation, waveform data, and residual minimization, while still
 sharing the same perturbation equation, compact coordinate, endpoint
 factorization, and potential model as the spectral solver.
@@ -64,6 +64,9 @@ DEFAULT_SPECTRAL_VALIDATION_N = 32
 DEFAULT_TAYLOR_ORDER = 96
 DEFAULT_CF_DEPTH = 240
 DEFAULT_VALIDATION_THRESHOLD = 1.0e-6
+DEFAULT_ROOT_TOLERANCE = 1.0e-11
+DEFAULT_ROOT_MAX_FUNCTION_EVALUATIONS = 1000
+DEFAULT_ROOT_RESIDUAL_TOLERANCE = 1.0e-7
 
 
 @dataclass
@@ -150,7 +153,7 @@ def frobenius_coefficient_series(
 
         sqrt(r^2-a^2) = sqrt(r_h^2 - a^2(1-s)^2)/(1-s),
 
-    so the coefficient construction remains independent of the Chebyshev
+    so the coefficient construction remains separate from the Chebyshev
     collocation machinery.
     """
 
@@ -194,10 +197,13 @@ def frobenius_coefficient_series(
             order,
         )
     elif perturbation_type == "gravitational":
-        inv_r3 = _mul(inv_r2, inv_r, order)
         potential_inner = _add(
-            _scale(inv_r2, ell * (ell + 1.0), order),
-            _scale(inv_r3, -6.0 * mass, order),
+            _add(
+                _scale(inv_r2, ell * (ell + 1.0), order),
+                _scale(_mul(_add(f_series, _scale(one, -1.0, order), order), inv_r2, order), 2.0, order),
+                order,
+            ),
+            _scale(_mul(fp_series, inv_r, order), -1.0, order),
             order,
         )
     else:
@@ -363,9 +369,17 @@ def solve_leaver_mode(
     order: int = DEFAULT_TAYLOR_ORDER,
     ell: int = ELL,
     perturbation_type: str = "scalar",
-    residual_tolerance: float = 1.0e-7,
+    residual_tolerance: float = DEFAULT_ROOT_RESIDUAL_TOLERANCE,
+    root_tolerance: float = DEFAULT_ROOT_TOLERANCE,
+    max_function_evaluations: int = DEFAULT_ROOT_MAX_FUNCTION_EVALUATIONS,
 ) -> tuple[complex, float]:
-    """Solve the continued-fraction root near an initial QNM guess."""
+    """Solve the continued-fraction root near an initial QNM guess.
+
+    SciPy's double-precision MINPACK ``hybr`` solver acts on the real and
+    imaginary residual components.  The explicit tolerance and function-call
+    ceiling are part of the reproducibility contract rather than library
+    defaults.
+    """
 
     def residual_components(params: np.ndarray) -> list[float]:
         omega = complex(float(params[0]), float(params[1]))
@@ -383,7 +397,8 @@ def solve_leaver_mode(
         residual_components,
         np.array([initial_guess.real, initial_guess.imag], dtype=float),
         method="hybr",
-        tol=1.0e-11,
+        tol=root_tolerance,
+        options={"maxfev": max_function_evaluations},
     )
     omega = complex(float(solution.x[0]), float(solution.x[1]))
     residual_abs = abs(

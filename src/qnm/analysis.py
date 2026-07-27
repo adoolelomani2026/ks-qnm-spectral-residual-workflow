@@ -426,7 +426,8 @@ def plot_l2_spectroscopic_ratios(ratio_rows: list[SpectroscopicRatioRow], output
         "real_to_damping_n0": "#2a9d8f",
     }
 
-    fig, axis = plt.subplots(figsize=(7.8, 4.2))
+    fig, axes = plt.subplots(1, 2, figsize=(10.8, 4.2))
+    ratio_axis, quality_axis = axes
     for ratio_name in selected_names:
         rows = sorted(
             [
@@ -442,7 +443,7 @@ def plot_l2_spectroscopic_ratios(ratio_rows: list[SpectroscopicRatioRow], output
             values = [100.0 * row.fractional_real_shift for row in rows]
         else:
             values = [100.0 * row.fractional_shift_abs for row in rows]
-        axis.plot(
+        ratio_axis.plot(
             [row.a for row in rows],
             values,
             marker="o",
@@ -451,11 +452,34 @@ def plot_l2_spectroscopic_ratios(ratio_rows: list[SpectroscopicRatioRow], output
             label=labels[ratio_name],
         )
 
-    axis.axhline(0.0, color="black", linewidth=0.8, alpha=0.35)
-    axis.set_xlabel(r"$a/M$")
-    axis.set_ylabel("Schwarzschild-relative ratio shift (%)")
-    axis.grid(alpha=0.25)
-    axis.legend(frameon=False, fontsize=8)
+    ratio_axis.axhline(0.0, color="black", linewidth=0.8, alpha=0.35)
+    ratio_axis.set_xlabel(r"$a/M$")
+    ratio_axis.set_ylabel("Schwarzschild-relative ratio shift (%)")
+    ratio_axis.grid(alpha=0.25)
+    ratio_axis.legend(frameon=False, fontsize=8)
+
+    quality_rows = sorted(
+        [
+            row
+            for row in ratio_rows
+            if row.perturbation_type == "scalar"
+            and row.ell == 2
+            and row.ratio_name == "real_to_damping_n0"
+        ],
+        key=lambda row: row.a,
+    )
+    quality_axis.plot(
+        [row.a for row in quality_rows],
+        [0.5 * row.value.real for row in quality_rows],
+        marker="o",
+        linewidth=2.0,
+        color="#6a4c93",
+        label=r"scalar, $n=0$ fundamental",
+    )
+    quality_axis.set_xlabel(r"$a/M$")
+    quality_axis.set_ylabel(r"$Q=\mathrm{Re}(\omega)/(2[-\mathrm{Im}(\omega)])$")
+    quality_axis.grid(alpha=0.25)
+    quality_axis.legend(frameon=False, fontsize=8)
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)
@@ -479,7 +503,9 @@ def plot_l2_fractional_shifts(trend_rows: list[PhysicsTrendRow], output: Path) -
             )
             if not rows:
                 continue
-            label = f"{perturbation_type}, n={overtone}"
+            sector = "scalar" if perturbation_type == "scalar" else "axial inverse-Cowling"
+            mode = {0: "fundamental", 1: "first overtone", 2: "second overtone"}[overtone]
+            label = rf"{sector}, $n={overtone}$ ({mode})"
             a_values = np.array([row.a for row in rows])
             axes[0].plot(
                 a_values,
@@ -558,7 +584,7 @@ def write_physics_report(
     lines = [
         "# Catalogue Physics Analysis",
         "",
-        "This report analyzes the Leaver-validated catalogue by comparing each KS",
+        "This report analyzes the continued-fraction-cross-validated catalogue by comparing each KS",
         "branch against its Schwarzschild endpoint at a/M=0.",
         "",
         "## Main Observations",
@@ -625,9 +651,8 @@ def write_physics_report(
         "## Interpretation Guardrails",
         "",
         "- The scalar sector is the cleanest physics target.",
-        "- The axial gravitational rows use a KS-lapse-deformed Regge-Wheeler model;",
-        "  they are useful phenomenological diagnostics, not a full gauge-invariant KS",
-        "  gravitational perturbation derivation.",
+        "- The axial rows use the gauge-invariant odd-parity equation under an added",
+        "  inverse-Cowling effective-source closure; they are conditional on that model.",
         "- Second overtones carry the largest validation and branch-selection uncertainty.",
         "- The endpoint shifts are catalogue diagnostics, not claims about detectability.",
     ]

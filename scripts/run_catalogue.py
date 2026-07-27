@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the Leaver-validated QNM catalogue generator from the repo root."""
+"""Run the continued-fraction-cross-validated QNM catalogue generator."""
 
 from __future__ import annotations
 

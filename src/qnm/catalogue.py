@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build scalar and axial-gravitational KS QNM catalogues.
+"""Build scalar and gauge-invariant inverse-Cowling axial KS QNM catalogues.
 
 The catalogue uses the Chebyshev spectral solver as the primary algorithm and
 keeps Leaver-style continued-fraction cross-validation enabled for every row.
@@ -35,18 +35,28 @@ from .leaver import (
     solve_leaver_mode,
 )
 from .spectral import build_spectral_problem, generalized_eigenvalues
+from .spectral import BACKWARD_ERROR_ACCEPTANCE_THRESHOLD, polynomial_backward_error
 
 
 MODE_LABELS = {
     0: "fundamental",
-    1: "first_overtone",
-    2: "second_overtone",
+    1: "first overtone",
+    2: "second overtone",
+}
+
+CONFIDENCE_TIERS = {
+    0: "robust_quantitative",
+    1: "validated_low_lying",
+    2: "exploratory_diagnostic",
 }
 
 LITERATURE_SOURCE = (
     "Berti-Cardoso-Starinets review/ringdown tables; "
     "rounded scalar references also agree with recent Schwarzschild tables"
 )
+SEED_PROVENANCE = {
+    ("scalar", 2, 0): "Cavalcante and da Cunha (2021), Table I",
+}
 CATALOGUE_CROSS_VALIDATION_THRESHOLD = 1.0e-4
 GRAVITATIONAL_LITERATURE_TOLERANCE = 5.0e-5
 SCALAR_LITERATURE_TOLERANCE = 5.0e-5
@@ -69,6 +79,7 @@ class CatalogueRow:
     literature_tolerance: float | None
     spectral_leaver_validation_passed: bool
     literature_validation_passed: bool | None
+    polynomial_backward_error: float = float("nan")
 
 
 def reference_targets(perturbation_type: str, ell: int) -> list[complex]:
@@ -79,6 +90,44 @@ def reference_targets(perturbation_type: str, ell: int) -> list[complex]:
             raise KeyError(f"Missing Schwarzschild reference target for {key}")
         targets.append(SCHWARZSCHILD_REFERENCES[key])
     return targets
+
+
+def write_schwarzschild_seeds(output: Path) -> None:
+    """Write every literature target used to identify the a/M=0 branches."""
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("w", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(
+            [
+                "perturbation_type",
+                "ell",
+                "overtone",
+                "seed_real",
+                "seed_imag",
+                "seed_kind",
+                "provenance",
+                "selection_role",
+            ]
+        )
+        for key in sorted(SCHWARZSCHILD_REFERENCES):
+            perturbation_type, ell, overtone = key
+            seed = SCHWARZSCHILD_REFERENCES[key]
+            provenance = SEED_PROVENANCE.get(
+                key, "Berti, Cardoso, and Starinets (2009) Schwarzschild tables"
+            )
+            writer.writerow(
+                [
+                    perturbation_type,
+                    ell,
+                    overtone,
+                    f"{seed.real:.15g}",
+                    f"{seed.imag:.15g}",
+                    "literature tracking target",
+                    provenance,
+                    "nearest distinct N=32 Chebyshev candidate; then continued-fraction refinement",
+                ]
+            )
 
 
 def select_modes(values: np.ndarray, targets: list[complex]) -> list[complex]:
@@ -123,6 +172,7 @@ def run_catalogue(
                 next_targets: list[complex] = []
 
                 for overtone, omega_spectral in zip(CATALOGUE_OVERTONES, spectral_modes):
+                    backward_error = polynomial_backward_error(problem, omega_spectral)
                     omega_leaver, cf_abs = solve_leaver_mode(
                         a,
                         omega_spectral,
@@ -156,8 +206,12 @@ def run_catalogue(
                             schwarzschild_literature=literature,
                             literature_relative_error=literature_error,
                             literature_tolerance=literature_tolerance if a == 0.0 else None,
-                            spectral_leaver_validation_passed=relative_difference < validation_threshold,
+                            spectral_leaver_validation_passed=(
+                                relative_difference < validation_threshold
+                                and backward_error < BACKWARD_ERROR_ACCEPTANCE_THRESHOLD
+                            ),
                             literature_validation_passed=literature_passed,
+                            polynomial_backward_error=backward_error,
                         )
                     )
                     next_targets.append(omega_leaver)
@@ -175,6 +229,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                 "ell",
                 "overtone",
                 "mode",
+                "confidence_tier",
                 "a_over_M",
                 "spectral_N",
                 "spectral_real",
@@ -183,6 +238,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                 "leaver_imag",
                 "spectral_leaver_relative_difference",
                 "continued_fraction_abs",
+                "polynomial_backward_error_raw",
                 "schwarzschild_literature_real",
                 "schwarzschild_literature_imag",
                 "literature_relative_error",
@@ -199,6 +255,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                     row.ell,
                     row.overtone,
                     row.mode,
+                    CONFIDENCE_TIERS[row.overtone],
                     row.a,
                     row.spectral_n,
                     row.omega_spectral.real,
@@ -207,6 +264,7 @@ def write_catalogue(output: Path, rows: list[CatalogueRow]) -> None:
                     row.omega_leaver.imag,
                     row.spectral_leaver_relative_difference,
                     row.continued_fraction_abs,
+                    row.polynomial_backward_error,
                     "" if row.schwarzschild_literature is None else row.schwarzschild_literature.real,
                     "" if row.schwarzschild_literature is None else row.schwarzschild_literature.imag,
                     "" if row.literature_relative_error is None else row.literature_relative_error,
@@ -227,20 +285,20 @@ def write_catalogue_report(output: Path, rows: list[CatalogueRow]) -> None:
     lines = [
         "# QNM Catalogue Report",
         "",
-        "This is the Leaver-validated catalogue. It extends the scalar Chebyshev spectral",
-        "workflow to the axial gravitational Regge-Wheeler-type sector while preserving",
-        "the scalar sector.",
+        "This low-lying catalogue uses the scalar sector as the least assumption-dependent physics result",
+        "and a gauge-invariant odd-parity sector under an explicit frozen-source closure.",
         "",
         "## Scope",
         "",
         "- Perturbation types: scalar, gravitational.",
         "- Multipoles: ell = 2, 3, 4.",
         "- Modes: fundamental, first overtone, second overtone.",
+        "- Confidence tiers: n=0 robust quantitative; n=1 validated low-lying; n=2 exploratory diagnostic.",
         "- Deformations: a/M = " + ", ".join(f"{a:g}" for a in A_VALUES) + ".",
         "- Spectral comparison size: N = " + str(spectral_n) + ".",
         "",
-        "For a/M > 0 the gravitational potential is the KS-lapse-deformed axial",
-        "Regge-Wheeler model, `V=f_a(r)[ell(ell+1)/r^2 - 6M/r^3]`.",
+        "For a/M > 0 the gravitational potential is the gauge-invariant frozen-source form",
+        "`V=f_a[ell(ell+1)/r^2+2(f_a-1)/r^2-f_a'/r]`.",
         "",
         "## Validation",
         "",
@@ -252,7 +310,7 @@ def write_catalogue_report(output: Path, rows: list[CatalogueRow]) -> None:
         "The automated catalogue validation fails if any spectral/Leaver relative",
         f"difference exceeds `{CATALOGUE_CROSS_VALIDATION_THRESHOLD:.1e}`. Literature checks use",
         "rounded table tolerances because several source tables report six significant figures.",
-        "The Leaver solver is independent of Chebyshev collocation, matrix-pencil data,",
+        "The Leaver solver is collocation-independent: it uses no Chebyshev grid, matrix-pencil data,",
         "and residual minimization, but it intentionally shares the same perturbation",
         "equation, compact coordinate, endpoint factorization, and potential model.",
         "The continued-fraction residual is reported row-by-row; high-deformation second",
@@ -337,11 +395,17 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("outputs/results/qnm_catalogue.csv"))
     parser.add_argument("--figures-dir", type=Path, default=Path("outputs/figures"))
     parser.add_argument("--report", type=Path, default=Path("outputs/results/qnm_catalogue_report.md"))
+    parser.add_argument(
+        "--seeds-output",
+        type=Path,
+        default=Path("outputs/results/schwarzschild_branch_seeds.csv"),
+    )
     parser.add_argument("--spectral-n", type=int, default=CATALOGUE_SPECTRAL_N)
     args = parser.parse_args()
 
     rows = run_catalogue(spectral_n=args.spectral_n)
     write_catalogue(args.output, rows)
+    write_schwarzschild_seeds(args.seeds_output)
     write_catalogue_report(args.report, rows)
     outputs = plot_mode_trajectories(rows, args.figures_dir)
     assert_catalogue_validation(rows)
@@ -349,6 +413,7 @@ def main() -> None:
     worst = max(rows, key=lambda row: row.spectral_leaver_relative_difference)
     print(f"Wrote catalogue: {args.output}")
     print(f"Wrote report: {args.report}")
+    print(f"Wrote Schwarzschild seed table: {args.seeds_output}")
     print("Wrote trajectory figures:")
     for output in outputs:
         print(f"  {output}")

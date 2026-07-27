@@ -385,7 +385,7 @@ def plot_pseudospectrum_sensitivity(
         a_values,
         [-row.quantiles[0.10] for row in rows],
         marker="o",
-        label=r"$-Q_{10}[\log_{10}\eta]$",
+        label=r"$-q_{10}[\log_{10}\eta]$",
     )
     axes[0].plot(
         a_values,
@@ -394,7 +394,7 @@ def plot_pseudospectrum_sensitivity(
         label=r"$-Q_{50}[\log_{10}\eta]$",
     )
     axes[0].set_xlabel(r"$a/M$")
-    axes[0].set_ylabel("local pseudospectral susceptibility")
+    axes[0].set_ylabel("normalized singular-value quantile")
     axes[0].grid(alpha=0.25)
     axes[0].legend(frameon=False, fontsize=8)
 
@@ -431,7 +431,7 @@ def plot_resolution_check(
         )
     axis.axhline(0.0, color="black", linewidth=0.8, alpha=0.35)
     axis.set_xlabel(r"$a/M$")
-    axis.set_ylabel(fr"$\Delta[-Q_{{{int(100 * quantile)}}}(\log_{{10}}\eta)]$")
+    axis.set_ylabel(fr"$\Delta[-q_{{{int(100 * quantile)}}}(\log_{{10}}\eta)]$")
     axis.grid(alpha=0.25)
     axis.legend(frameon=False, fontsize=8)
     fig.savefig(output, dpi=220)
@@ -450,14 +450,14 @@ def write_report(
     endpoint = rows[-1]
     threshold = thresholds[0]
     area_factor = endpoint.threshold_areas[threshold] / schwarzschild.threshold_areas[threshold]
-    susceptibility_gain = (-endpoint.quantiles[0.10]) - (-schwarzschild.quantiles[0.10])
+    quantile_gain = (-endpoint.quantiles[0.10]) - (-schwarzschild.quantiles[0.10])
     center_error = max(row.center_leaver_relative_difference for row in rows)
     endpoint_boundary_touch = endpoint.threshold_boundary_touches[threshold]
     resolution_lines = []
     for spectral_n in sorted({row.spectral_n for row in resolution_summaries}):
         n_rows = sorted([row for row in resolution_summaries if row.spectral_n == spectral_n], key=lambda row: row.a)
         gain = (-n_rows[-1].quantiles[0.10]) - (-n_rows[0].quantiles[0.10])
-        resolution_lines.append(f"- N={spectral_n}: Q10 susceptibility gain from a/M=0 to 1 is {gain:.3f}.")
+        resolution_lines.append(f"- N={spectral_n}: endpoint change in -q10 from a/M=0 to 1 is {gain:.3f}.")
 
     lines = [
         "# Scalar Fundamental Pseudospectrum Upgrade Report",
@@ -470,8 +470,8 @@ def write_report(
         "- Validated generated products live under `outputs/results/` and `outputs/figures/`.",
         "- Manuscript sources live under `papers/manuscript/`.",
         "- The existing pipeline safely supports scalar-sector extensions because the scalar",
-        "  Chebyshev and Leaver branches are already cross-validated. The phenomenological",
-        "  axial sector was not extended in this upgrade.",
+        "  Chebyshev and Leaver branches are already cross-validated. The gauge-invariant",
+        "  frozen-source axial sector was not included in this scalar diagnostic.",
         "",
         "## Upgrade Selection",
         "",
@@ -480,7 +480,7 @@ def write_report(
         "| Pseudospectrum and spectral instability | high: connects the residual workflow to QNM instability literature | high: uses existing P_N(omega) and sigma_min machinery | selected |",
         "| Exceptional points or branch interactions | potentially high, but needs denser branch/eigenvector tracking and stronger mathematical evidence | medium | deferred |",
         "| Literature-matched KS benchmarking | useful, but incremental after the Konoplya side comparison | high | secondary future work |",
-        "| Gauge-invariant gravitational sector | very high, but requires a new perturbation derivation beyond the current codebase | low for this iteration | deferred |",
+        "| Gauge-invariant frozen-source axial sector | derived separately; not needed for this scalar diagnostic | low for this analysis | implemented outside this diagnostic |",
         "| Spectroscopy/detectability | useful, but risks unsupported detector claims without a full waveform/noise model | medium | deferred |",
         "",
         "## What Was Attempted",
@@ -519,11 +519,11 @@ def write_report(
         f"- Main grid: N={endpoint.spectral_n}, grid={endpoint.grid_size}x{endpoint.grid_size}, "
         f"half-width={endpoint.half_width:g} in both Re(M omega) and Im(M omega).",
         f"- Maximum center-to-Leaver relative difference: {center_error:.3e}.",
-        f"- The 10% quantile susceptibility, -Q10(log10 eta), increases by {susceptibility_gain:.3f} "
+        f"- The normalized singular-value statistic -q10(log10 eta) increases by {quantile_gain:.3f} "
         "from a/M=0 to a/M=1.",
         f"- The area fraction satisfying log10(eta)<={threshold:g} grows by a factor {area_factor:.2f} "
         "from Schwarzschild to a/M=1.",
-        "- The sign of the Q10 susceptibility trend is stable across N=32, 48, and 64.",
+        "- The sign of the q10 endpoint change is stable across N=32, 48, and 64.",
         "- The contour-area diagnostic is secondary to the quantile diagnostic because fixed",
         "  epsilon contour areas depend more strongly on N and on the chosen plotting window.",
         "",
@@ -537,7 +537,7 @@ def write_report(
         f"{endpoint_boundary_touch}. The reported area factor is therefore a finite-window diagnostic,",
         "  not a global contour area.",
         "- Absolute contour levels shift with Chebyshev size N, so the finite-N robustness check",
-        "  uses the sign and monotonicity of the Q10 susceptibility gain rather than exact equality",
+        "  uses the sign and sampled-grid behavior of the q10 endpoint change rather than exact equality",
         "  of epsilon-contour areas.",
         "",
         "## Publishable Claim",
@@ -553,7 +553,7 @@ def write_report(
         "- This is not a proof about the infinite-dimensional KS wave operator.",
         "- Absolute epsilon-contour values depend on N and on the chosen operator normalization.",
         "- The result is local to the scalar ell=2 fundamental branch and should not be",
-        "  generalized to overtones or the phenomenological axial sector without separate checks.",
+        "  generalized to overtones or the frozen-source axial sector without separate checks.",
         "- The analysis is not a detector forecast.",
         "",
         "## Realistic Journal Target",

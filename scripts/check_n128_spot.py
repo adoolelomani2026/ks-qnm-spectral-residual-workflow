@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Run scalar ell=2 fundamental N=128 spot checks.
 
-This is a submission-facing numerical check for the ill-conditioned
-publication-facing spectral pencils.  It deliberately tests only the strongest
+This is a submission-facing high-resolution numerical check.  It deliberately
+tests only the strongest
 scalar branch at the two endpoints a/M=0 and a/M=1.
 """
 
@@ -41,7 +41,7 @@ class SpotRow:
     omega: complex
     leaver_omega: complex
     residual_norm: float
-    condition_number: float
+    backward_error: float
     delta_from_n96: float
     relative_delta_from_n96: float
     delta_from_leaver: float
@@ -69,7 +69,7 @@ def compute_branch(a: float) -> list[SpotRow]:
         )
         omega, residual_norm = minimize_residual(problem, selection.omega, radius=0.006)
         diagnostics = residual_diagnostics(problem, omega)
-        provisional[n] = (omega, residual_norm, float(diagnostics["condition_number"]))
+        provisional[n] = (omega, residual_norm, float(diagnostics["backward_error"]))
 
         previous_omega = omega
         previous_shape = selection.shape
@@ -81,7 +81,7 @@ def compute_branch(a: float) -> list[SpotRow]:
 
     rows: list[SpotRow] = []
     for n in SPOT_SIZES:
-        omega, residual_norm, condition_number = provisional[n]
+        omega, residual_norm, backward_error = provisional[n]
         delta_from_n96 = abs(omega - n96_omega)
         delta_from_leaver = abs(omega - leaver_omega)
         rows.append(
@@ -91,7 +91,7 @@ def compute_branch(a: float) -> list[SpotRow]:
                 omega=omega,
                 leaver_omega=leaver_omega,
                 residual_norm=residual_norm,
-                condition_number=condition_number,
+                backward_error=backward_error,
                 delta_from_n96=delta_from_n96,
                 relative_delta_from_n96=delta_from_n96 / abs(n96_omega),
                 delta_from_leaver=delta_from_leaver,
@@ -118,7 +118,7 @@ def write_csv(path: Path, rows: list[SpotRow]) -> None:
                 "delta_from_leaver",
                 "relative_delta_from_leaver",
                 "residual_norm",
-                "condition_number",
+                "polynomial_backward_error_raw",
             ]
         )
         for row in rows:
@@ -135,7 +135,7 @@ def write_csv(path: Path, rows: list[SpotRow]) -> None:
                     row.delta_from_leaver,
                     row.relative_delta_from_leaver,
                     row.residual_norm,
-                    row.condition_number,
+                    row.backward_error,
                 ]
             )
 
@@ -148,7 +148,7 @@ def write_report(path: Path, rows: list[SpotRow]) -> None:
         "",
         "This report tests the scalar `ell=2,n=0` fundamental branch at the",
         "Schwarzschild and endpoint-deformed cases, `a/M=0` and `a/M=1`.",
-        "It is a robustness check for the high-condition-number spectral pencils,",
+        "It is a robustness check for the compactified spectral pencils,",
         "not a claim of additional significant digits.",
         "",
         "## Endpoint Differences",
@@ -167,12 +167,12 @@ def write_report(path: Path, rows: list[SpotRow]) -> None:
             "## Interpretation",
             "",
             "- The `N=128` endpoint frequencies remain within `5e-10` of the",
-            "  `N=96` publication-facing values for the tested scalar fundamental branch.",
+            "  reported `N=96` values for the tested scalar fundamental branch.",
             "- The movement is small compared with the displayed table precision and does",
             "  not change any catalogue trend, percent shift, or physics conclusion.",
             "- The `N=96 -> N=128` movement is not used as a claim of extra digits because",
             "  the high-`N` sequence is on a double-precision plateau for these",
-            "  ill-conditioned compactified pencils.",
+            "  roundoff-sensitive compactified differentiation matrices and pencils.",
         ]
     )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")

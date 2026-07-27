@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -41,11 +42,19 @@ from qnm.catalogue import (
     run_catalogue,
     write_catalogue,
     write_catalogue_report,
+    write_schwarzschild_seeds,
 )
-from qnm.common import A_VALUES, FINAL_SPECTRAL_N, SCHWARZSCHILD_SCALAR_L2, SPECTRAL_SIZES
+from qnm.common import (
+    A_VALUES,
+    CANDIDATE_CLUSTER_TOLERANCE,
+    FINAL_SPECTRAL_N,
+    MAX_CONTINUATION_DISTANCE,
+    SCHWARZSCHILD_SCALAR_L2,
+    SPECTRAL_SIZES,
+)
 from qnm.leaver import assert_leaver_validation, run_leaver_validation, write_leaver_comparison
 from qnm.spectral import (
-    CONDITION_WARNING_THRESHOLD,
+    BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
     ModeResult,
     OVERTONE_PUBLICATION_N,
     run_self_tests,
@@ -61,8 +70,8 @@ def publication_mode_rows(rows: list[ModeResult]) -> list[ModeResult]:
     """Rows safe for headline tables.
 
     Fundamentals use the high-resolution tracked branch. The first overtone is
-    frozen at the Leaver-validated catalogue grid until high-N overtone branch
-    tracking has stronger independent validation.
+    frozen as cross-validated low-lying first overtones at N=32 until high-N overtone branch
+    tracking has stronger collocation-independent validation.
     """
 
     selected = [
@@ -99,8 +108,7 @@ def write_spectral_results(
                 "schwarzschild_reference_relative_error",
                 "matrix_dimension",
                 "sparsity",
-                "condition_number",
-                "conditioning_warning",
+                "polynomial_backward_error_raw",
                 "residual_norm",
                 "hermiticity_error",
                 "psd_min_eigenvalue",
@@ -132,8 +140,7 @@ def write_spectral_results(
                     ref_error,
                     row.matrix_dimension,
                     row.sparsity,
-                    row.condition_number,
-                    row.conditioning_warning,
+                    row.backward_error,
                     row.residual_norm,
                     row.hermiticity_error,
                     row.psd_min_eigenvalue,
@@ -164,8 +171,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                 "residual_norm",
                 "matrix_dimension",
                 "sparsity",
-                "condition_number",
-                "conditioning_warning",
+                "polynomial_backward_error_raw",
                 "branch_status",
                 "selection_score",
                 "eigenvector_overlap",
@@ -186,8 +192,7 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
                     row.residual_norm,
                     row.matrix_dimension,
                     row.sparsity,
-                    row.condition_number,
-                    row.conditioning_warning,
+                    row.backward_error,
                     row.branch_status,
                     "" if row.selection_score is None else row.selection_score,
                     "" if row.eigenvector_overlap is None else row.eigenvector_overlap,
@@ -195,7 +200,13 @@ def write_convergence_table(output: Path, rows: list[ModeResult]) -> None:
             )
 
 
-def write_run_metadata(output: Path) -> None:
+def write_run_metadata(output: Path, source_commit: str, source_tree_status_at_start: str) -> None:
+    def git_value(*args: str) -> str:
+        result = subprocess.run(
+            ["git", *args], cwd=ROOT_DIR, check=False, capture_output=True, text=True
+        )
+        return result.stdout.strip() if result.returncode == 0 else "unavailable"
+
     metadata = {
         "python": sys.version.split()[0],
         "numpy": np.__version__,
@@ -204,10 +215,21 @@ def write_run_metadata(output: Path) -> None:
         "spectral_sizes": SPECTRAL_SIZES,
         "final_spectral_n_for_fundamentals": FINAL_SPECTRAL_N,
         "publication_overtone_n": OVERTONE_PUBLICATION_N,
-        "condition_warning_threshold": CONDITION_WARNING_THRESHOLD,
+        "candidate_cluster_tolerance": CANDIDATE_CLUSTER_TOLERANCE,
+        "maximum_continuation_distance": MAX_CONTINUATION_DISTANCE,
+        "backward_error_acceptance_threshold": BACKWARD_ERROR_ACCEPTANCE_THRESHOLD,
+        "source_commit_used_for_regeneration": source_commit,
+        "revision_tag": "cqg-r2-final",
+        "source_tree_status_at_regeneration_start": source_tree_status_at_start,
+        "git_worktree_status_after_regeneration": "dirty" if git_value("status", "--porcelain") else "clean",
+        "backward_error_definition": (
+            "sigma_min(P)/(||A0||_2+|omega|||A1||_2+|omega|^2||A2||_2), "
+            "evaluated on raw unscaled polynomial matrices"
+        ),
         "note": (
-            "Publication-facing spectral_results.csv freezes first overtones at "
-            "the Leaver-validated reference grid. exploratory_spectral_results.csv "
+            "Reported spectral_results.csv freezes first overtones at "
+            "the cross-validated low-lying first-overtone reference grid at N=32. "
+            "exploratory_spectral_results.csv "
             "contains tracked high-N overtone rows for diagnostics."
         ),
     }
@@ -234,10 +256,16 @@ def plot_convergence(rows: list[ModeResult], output: Path) -> None:
 
 
 def run_pipeline(base_dir: Path) -> None:
+    source_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT_DIR, check=True, capture_output=True, text=True
+    ).stdout.strip()
+    source_tree_status_at_start = "dirty" if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ROOT_DIR, check=True, capture_output=True, text=True
+    ).stdout.strip() else "clean"
     results_dir = base_dir / "outputs" / "results"
     figures_dir = base_dir / "outputs" / "figures"
-    results_dir.mkdir(exist_ok=True)
-    figures_dir.mkdir(exist_ok=True)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
 
     tests = run_self_tests()
     failed = [test for test in tests if not test.passed]
@@ -259,8 +287,9 @@ def run_pipeline(base_dir: Path) -> None:
     write_leaver_comparison(results_dir / "leaver_comparison.csv", leaver_rows)
     write_catalogue(results_dir / "qnm_catalogue.csv", catalogue_rows)
     write_catalogue_report(results_dir / "qnm_catalogue_report.md", catalogue_rows)
+    write_schwarzschild_seeds(results_dir / "schwarzschild_branch_seeds.csv")
     physics_outputs = write_physics_analysis(results_dir, figures_dir, catalogue_rows)
-    write_run_metadata(results_dir / "run_metadata.json")
+    write_run_metadata(results_dir / "run_metadata.json", source_commit, source_tree_status_at_start)
     plot_convergence(spectral_rows, figures_dir / "spectral_convergence.png")
     trajectory_plots = plot_mode_trajectories(catalogue_rows, figures_dir)
 
@@ -274,6 +303,7 @@ def run_pipeline(base_dir: Path) -> None:
     print(f"Leaver comparison CSV: {results_dir / 'leaver_comparison.csv'}")
     print(f"QNM catalogue CSV: {results_dir / 'qnm_catalogue.csv'}")
     print(f"QNM catalogue report: {results_dir / 'qnm_catalogue_report.md'}")
+    print(f"Schwarzschild branch seeds: {results_dir / 'schwarzschild_branch_seeds.csv'}")
     print(f"Catalogue physics report: {physics_outputs['report']}")
     print(f"Publication spectral CSV: {results_dir / 'spectral_results.csv'}")
     print(f"Exploratory spectral CSV: {results_dir / 'exploratory_spectral_results.csv'}")

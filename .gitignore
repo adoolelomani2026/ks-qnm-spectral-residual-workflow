@@ -18,6 +18,27 @@ __pycache__/
 outputs/layout_reference/
 outputs/paper_previews/
 
+# Local reviewer downloads and disposable preflight/build diagnostics.
+Your manuscript CQG-116364 - Major revisions required.zip
+Your manuscript CQG-116364 - Major revisions required/
+outputs/results/preflight_*/
+outputs/results/preflight_*
+outputs/results/*_preflight.*
+outputs/results/marked_page-*.png
+outputs/results/*_stdout.txt
+outputs/results/*_stderr.txt
+outputs/results/*.pid
+outputs/results/marked_manuscript_text*.txt
+outputs/results/boonserm_page3.png
+papers/manuscript/compile*.txt
+papers/manuscript/marked*.txt
+papers/manuscript/preflight_*.pdf
+papers/resubmission/source/source_compile*.txt
+papers/resubmission/source/source_preflight.pdf
+marked1.txt
+papers/revision/marked_manuscript_text.txt
+papers/revision/references/
+
 # Archived exploratory material and private revision notes kept locally.
 legacy/
 papers/proposal/

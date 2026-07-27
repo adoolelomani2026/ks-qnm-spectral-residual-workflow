@@ -17,12 +17,14 @@ CATALOGUE_SPECTRAL_N = 32
 PERTURBATION_TYPES = ["scalar", "gravitational"]
 CATALOGUE_ELL_VALUES = [2, 3, 4]
 CATALOGUE_OVERTONES = [0, 1, 2]
+CANDIDATE_CLUSTER_TOLERANCE = 1.0e-7
+MAX_CONTINUATION_DISTANCE = 0.20
 
-SCHWARZSCHILD_SCALAR_L2 = 0.483643872224 - 0.096758776024j
+SCHWARZSCHILD_SCALAR_L2 = 0.483643872211 - 0.096758775978j
 # Used only as an initial tracking target for the first overtone branch.
 SCHWARZSCHILD_SCALAR_L2_OVERTONE_ESTIMATE = 0.46385058 - 0.29560394j
 SCHWARZSCHILD_REFERENCES = {
-    ("scalar", 2, 0): 0.483643872224 - 0.096758776024j,
+    ("scalar", 2, 0): 0.483643872211 - 0.096758775978j,
     ("scalar", 2, 1): 0.463850579020 - 0.295603936988j,
     ("scalar", 2, 2): 0.430544 - 0.508558j,
     ("scalar", 3, 0): 0.675366 - 0.096500j,
@@ -60,14 +62,26 @@ def scalar_potential(r: np.ndarray, ell: int, a: float, mass: float = MASS) -> n
 
 
 def regge_wheeler_potential(r: np.ndarray, ell: int, a: float, mass: float = MASS) -> np.ndarray:
-    """Axial Regge-Wheeler-type potential using the KS lapse.
+    """Gauge-invariant axial potential in the added KS inverse-Cowling closure.
 
     For a=0 this is the standard Schwarzschild axial gravitational potential.
-    For a>0 it is used as the KS lapse-deformed Regge-Wheeler validation model.
+    For a>0 it follows from the general odd-parity master equation for a
+    spherically symmetric Einstein background with effective anisotropic
+    stress, after setting the gauge-invariant axial source current to zero:
+
+        V = f [ell(ell+1)/r^2 - 6m/r^3 + 4 pi (rho-p_r)]
+          = f [ell(ell+1)/r^2 + 2(f-1)/r^2 - f'/r].
+
+    The second equality uses f=1-2m/r and g_tt g_rr=-1, which implies
+    p_r=-rho for the effective KS source.
     """
 
     f = f_ks(r, a, mass)
-    return f * (ell * (ell + 1.0) / (r * r) - 6.0 * mass / (r * r * r))
+    return f * (
+        ell * (ell + 1.0) / (r * r)
+        + 2.0 * (f - 1.0) / (r * r)
+        - df_ks(r, a, mass) / r
+    )
 
 
 def perturbation_potential(
@@ -98,11 +112,21 @@ def select_physical_mode(values, target: complex, exclude: list[complex] | None 
         and value.imag < -0.02
         and value.real < 2.0
         and value.imag > -3.0
-        and all(abs(value - old) > 1.0e-7 for old in exclude)
+        and all(abs(value - old) > CANDIDATE_CLUSTER_TOLERANCE for old in exclude)
     ]
     if not candidates:
         finite = [complex(value) for value in values if np.isfinite(value)]
         if not finite:
             raise RuntimeError("No finite eigenvalues found.")
         candidates = finite
-    return min(candidates, key=lambda value: abs(value - target))
+    candidates.sort(key=lambda value: abs(value - target))
+    clustered: list[complex] = []
+    for candidate in candidates:
+        if all(abs(candidate - retained) > CANDIDATE_CLUSTER_TOLERANCE for retained in clustered):
+            clustered.append(candidate)
+    if abs(clustered[0] - target) > MAX_CONTINUATION_DISTANCE:
+        raise RuntimeError(
+            f"No candidate lies within the continuation distance {MAX_CONTINUATION_DISTANCE:g} "
+            f"of target {target!r}."
+        )
+    return clustered[0]
